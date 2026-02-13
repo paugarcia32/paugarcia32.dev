@@ -28,19 +28,42 @@ pnpm build
 # Preview production build
 pnpm preview
 
-# Lint code
+# Lint code with Biome
 pnpm lint
 
-# Fix linting issues
+# Lint, format, and organize imports (auto-fix)
 pnpm lint:fix
+
+# Format code only
+pnpm format
 ```
 
 ## Code Style
 
-ESLint is configured with strict rules:
-- **Semicolons**: Required (`semi: error`)
-- **Quotes**: Double quotes required, template literals allowed
-- TypeScript triple-slash references are disabled
+Biome is used for linting and formatting with these rules:
+- **Semicolons**: Always required
+- **Quotes**: Double quotes for strings
+- **Indentation**: 2 spaces
+- **Import organization**: Automatically organized on save/fix
+- **Tailwind directives**: Supported in CSS files
+
+Special configurations:
+- Astro files have `noUnusedVariables` disabled (variables used in templates appear unused to the linter)
+- CSS files support Tailwind `@apply` directives
+
+## Editor Setup
+
+### Zed
+
+The project includes Zed configuration in `.zed/settings.json`:
+- Biome is configured as the language server for formatting and linting
+- Format-on-save is enabled
+- Prettier is explicitly disabled
+- Code actions include auto-fix and import organization
+
+Recommended extensions (in `.zed/extensions.json`):
+- `biome` - Biome language server
+- `astro` - Astro language support
 
 ## Architecture
 
