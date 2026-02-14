@@ -1,0 +1,168 @@
+---
+import { getCollection } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import ArrowCard from "@components/ArrowCard.astro";
+import { getAllTags, getContentByTag, dateRange } from "@lib/utils";
+
+export const getStaticPaths = (async () => {
+  const blogPosts = await getCollection("blog", ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+  const projects = await getCollection("projects", ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+  const allWork = await getCollection("work");
+
+  const allTags = getAllTags(blogPosts, projects, allWork);
+
+  return Array.from(allTags.entries()).map(([slug, displayName]) => ({
+    params: { tag: slug },
+    props: {
+      tag: displayName,
+      slug,
+      blogPosts,
+      projects,
+      allWork,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { tag, blogPosts, projects, allWork } = Astro.props;
+
+// Get all content with this tag
+const taggedContent = getContentByTag(tag, blogPosts, projects, allWork);
+
+// Separate by type
+const blogContent = taggedContent.filter((item) => item.type === "blog");
+const projectContent = taggedContent.filter((item) => item.type === "project");
+const workContent = taggedContent.filter((item) => item.type === "work");
+---
+
+<PageLayout
+  title={`Tag: ${tag}`}
+  description={`All content tagged with "${tag}"`}
+>
+  <Container>
+    <div class="space-y-10">
+      <!-- Header -->
+      <div class="animate space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🏷️</span>
+          <h1 class="font-semibold text-black dark:text-white">
+            {tag}
+          </h1>
+        </div>
+        <p class="text-sm text-black/60 dark:text-white/60">
+          {taggedContent.length} item{taggedContent.length !== 1 ? "s" : ""} tagged
+          with "{tag}"
+        </p>
+      </div>
+
+      <!-- Blog Posts Section -->
+      {
+        blogContent.length > 0 && (
+          <section class="animate space-y-4">
+            <div class="font-semibold text-black dark:text-white">
+              Blog Posts ({blogContent.length})
+            </div>
+            <ul class="flex flex-col gap-4">
+              {blogContent.map((item) => (
+                <li>
+                  <ArrowCard entry={item.entry as any} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <!-- Projects Section -->
+      {
+        projectContent.length > 0 && (
+          <section class="animate space-y-4">
+            <div class="font-semibold text-black dark:text-white">
+              Projects ({projectContent.length})
+            </div>
+            <ul class="flex flex-col gap-4">
+              {projectContent.map((item) => (
+                <li>
+                  <ArrowCard entry={item.entry as any} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <!-- Work Experience Section -->
+      {
+        workContent.length > 0 && (
+          <section class="animate space-y-4">
+            <div class="font-semibold text-black dark:text-white">
+              Work Experience ({workContent.length})
+            </div>
+            <ul class="flex flex-col gap-4">
+              {workContent.map((item) => {
+                const position = item.entry as any;
+                const companyFolder = position.id.split("/")[0];
+                const companyEntry = allWork.find(
+                  (entry) =>
+                    entry.id.startsWith(companyFolder + "/") &&
+                    entry.data.type === "company"
+                );
+                const companyName =
+                  companyEntry?.data.type === "company"
+                    ? companyEntry.data.company
+                    : companyFolder;
+
+                return (
+                  <li>
+                    <a
+                      href={`/work#${companyFolder}`}
+                      class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out"
+                    >
+                      <div class="flex flex-col flex-1 truncate">
+                        <div class="font-semibold">{position.data.role}</div>
+                        <div class="text-sm text-black/60 dark:text-white/60">
+                          {companyName} · {dateRange(position.data.dateStart, position.data.dateEnd)}
+                        </div>
+                      </div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        class="absolute top-1/2 right-2 -translate-y-1/2 size-5 stroke-2 fill-none stroke-current"
+                      >
+                        <line
+                          x1="5"
+                          y1="12"
+                          x2="19"
+                          y2="12"
+                          class="translate-x-3 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"
+                        />
+                        <polyline
+                          points="12 5 19 12 12 19"
+                          class="-translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-in-out"
+                        />
+                      </svg>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )
+      }
+
+      <!-- Empty State -->
+      {
+        taggedContent.length === 0 && (
+          <div class="animate text-center text-black/40 dark:text-white/40">
+            <p>No content found with this tag.</p>
+          </div>
+        )
+      }
+    </div>
+  </Container>
+</PageLayout>

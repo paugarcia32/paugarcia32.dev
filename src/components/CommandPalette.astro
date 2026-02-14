@@ -269,7 +269,7 @@
 
   interface SearchItem {
     id: string;
-    type: "blog" | "work" | "project";
+    type: "blog" | "work" | "project" | "tag";
     title: string;
     description: string;
     excerpt: string;
@@ -291,13 +291,14 @@
   const CHORD_TIMEOUT = 1000; // 1 second for chord completion
   let chordTimeoutId: number | undefined;
 
-  const dialog = document.getElementById("command-palette") as HTMLDialogElement;
-  const searchInput = document.getElementById("search-input") as HTMLInputElement;
-  const searchResults = document.getElementById("search-results") as HTMLDivElement;
-  const chordToast = document.getElementById("chord-toast") as HTMLDivElement;
-  const shortcutsHelpModal = document.getElementById("shortcuts-help-modal") as HTMLDialogElement;
-  const shortcutsHelpBtn = document.getElementById("shortcuts-help-btn") as HTMLButtonElement;
-  const closeShortcutsHelpBtn = document.getElementById("close-shortcuts-help") as HTMLButtonElement;
+  // DOM element references (will be initialized in init())
+  let dialog: HTMLDialogElement;
+  let searchInput: HTMLInputElement;
+  let searchResults: HTMLDivElement;
+  let chordToast: HTMLDivElement;
+  let shortcutsHelpModal: HTMLDialogElement;
+  let shortcutsHelpBtn: HTMLButtonElement;
+  let closeShortcutsHelpBtn: HTMLButtonElement;
 
   // Fetch search index (lazy load on first open)
   async function loadSearchIndex() {
@@ -312,6 +313,7 @@
         keys: [
           { name: "title", weight: 0.5 },
           { name: "description", weight: 0.3 },
+          { name: "tags", weight: 0.4 },
           { name: "excerpt", weight: 0.2 },
           { name: "company", weight: 0.3 },
           { name: "role", weight: 0.3 },
@@ -349,10 +351,12 @@
       blog: FuseResult<SearchItem>[];
       work: FuseResult<SearchItem>[];
       project: FuseResult<SearchItem>[];
+      tag: FuseResult<SearchItem>[];
     } = {
       blog: [],
       work: [],
       project: [],
+      tag: [],
     };
 
     for (const result of results) {
@@ -374,6 +378,8 @@
         return "Work";
       case "project":
         return "Projects";
+      case "tag":
+        return "Tags";
       default:
         return type;
     }
@@ -388,6 +394,8 @@
         return "💼";
       case "project":
         return "🚀";
+      case "tag":
+        return "🏷️";
       default:
         return "📄";
     }
@@ -690,6 +698,15 @@
 
   // Initialize
   function init() {
+    // Get fresh DOM element references
+    dialog = document.getElementById("command-palette") as HTMLDialogElement;
+    searchInput = document.getElementById("search-input") as HTMLInputElement;
+    searchResults = document.getElementById("search-results") as HTMLDivElement;
+    chordToast = document.getElementById("chord-toast") as HTMLDivElement;
+    shortcutsHelpModal = document.getElementById("shortcuts-help-modal") as HTMLDialogElement;
+    shortcutsHelpBtn = document.getElementById("shortcuts-help-btn") as HTMLButtonElement;
+    closeShortcutsHelpBtn = document.getElementById("close-shortcuts-help") as HTMLButtonElement;
+
     // Global keyboard shortcut
     document.addEventListener("keydown", handleGlobalKeydown);
 

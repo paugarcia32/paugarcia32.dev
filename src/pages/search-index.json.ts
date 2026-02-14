@@ -1,9 +1,10 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import type { APIRoute } from "astro";
+import { getAllTags } from "@lib/utils";
 
 interface SearchItem {
   id: string;
-  type: "blog" | "work" | "project";
+  type: "blog" | "work" | "project" | "tag";
   title: string;
   description: string;
   excerpt: string;
@@ -52,6 +53,7 @@ export const GET: APIRoute = async () => {
       excerpt: extractExcerpt(post.body),
       url: `/blog/${post.slug}`,
       date: post.data.date.toISOString(),
+      tags: post.data.tags,
     });
   }
 
@@ -69,6 +71,7 @@ export const GET: APIRoute = async () => {
       excerpt: extractExcerpt(project.body),
       url: `/projects/${project.slug}`,
       date: project.data.date.toISOString(),
+      tags: project.data.tags,
     });
   }
 
@@ -105,10 +108,29 @@ export const GET: APIRoute = async () => {
       date: position.data.dateStart.toISOString(),
       company: companyName,
       role: position.data.role,
+      tags: position.data.tags,
     });
   }
 
-  // Sort by date (most recent first)
+  // Add tag search items
+  const allTags = getAllTags(blogPosts, projects, allWork);
+  for (const [slug, displayName] of allTags) {
+    // Count how many items have this tag
+    const count = searchItems.filter((item) =>
+      item.tags?.some((tag) => tag.toLowerCase() === displayName.toLowerCase()),
+    ).length;
+
+    searchItems.push({
+      id: `tag-${slug}`,
+      type: "tag",
+      title: displayName,
+      description: `View all content tagged with "${displayName}" (${count} item${count !== 1 ? "s" : ""})`,
+      excerpt: `Tag: ${displayName}`,
+      url: `/tags/${slug}`,
+    });
+  }
+
+  // Sort by date (most recent first) - tags without dates go to the end
   searchItems.sort((a, b) => {
     if (!a.date || !b.date) return 0;
     return new Date(b.date).getTime() - new Date(a.date).getTime();

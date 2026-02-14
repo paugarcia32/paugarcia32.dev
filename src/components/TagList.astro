@@ -1,0 +1,54 @@
+---
+import { slugifyTag } from "@lib/utils";
+
+type Props = {
+  tags: string[];
+  class?: string;
+  clickable?: boolean;
+};
+
+const { tags, class: className, clickable = true } = Astro.props;
+---
+
+{
+  tags && tags.length > 0 && (
+    <div class={`flex flex-wrap gap-1.5 ${className || ""}`}>
+      {tags.map((tag) =>
+        clickable ? (
+          <a
+            href={`/tags/${slugifyTag(tag)}`}
+            class="tag-link inline-flex items-center rounded-full border border-black/10 bg-black/5 px-2 py-0.5 text-xs text-black/70 transition-colors duration-200 hover:border-black/20 hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:border-white/20 dark:hover:bg-white/10 dark:hover:text-white"
+          >
+            {tag}
+          </a>
+        ) : (
+          <span class="inline-flex items-center rounded-full border border-black/10 bg-black/5 px-2 py-0.5 text-xs text-black/70 dark:border-white/10 dark:bg-white/5 dark:text-white/70">
+            {tag}
+          </span>
+        )
+      )}
+    </div>
+  )
+}
+
+{clickable && (
+  <script>
+    // Prevent tag clicks from triggering parent link
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.tag-link')) {
+        e.stopPropagation();
+      }
+    });
+
+    // Reinitialize after view transitions
+    document.addEventListener('astro:after-swap', () => {
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('.tag-link')) {
+          e.stopPropagation();
+        }
+      });
+    });
+  </script>
+)}

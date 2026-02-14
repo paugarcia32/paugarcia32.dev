@@ -88,7 +88,7 @@ export function getTotalDuration(
   return parts.length > 0 ? parts.join(" and ") : "Less than a month";
 }
 
-type WorkPosition = CollectionEntry<"work"> & {
+export type WorkPosition = CollectionEntry<"work"> & {
   data: { type: "position" };
 };
 
@@ -161,4 +161,126 @@ export function groupPositionsByCompany(
         new Date(aLatest.data.dateStart).valueOf()
       );
     });
+}
+
+// Tag utility functions
+
+/**
+ * Normalizes a tag string for use in URLs
+ * Converts to lowercase, replaces spaces with hyphens, removes special characters
+ */
+export function slugifyTag(tag: string): string {
+  return tag
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+}
+
+/**
+ * Extracts all unique tags from blog posts, projects, and work positions
+ * Returns a Map of slug -> displayName
+ * First occurrence's casing is preserved for display
+ */
+export function getAllTags(
+  blog: CollectionEntry<"blog">[],
+  projects: CollectionEntry<"projects">[],
+  work: CollectionEntry<"work">[],
+): Map<string, string> {
+  const tagMap = new Map<string, string>();
+
+  // Helper to add tags from an entry
+  const addTags = (tags?: string[]) => {
+    if (!tags) return;
+    for (const tag of tags) {
+      const slug = slugifyTag(tag);
+      if (!tagMap.has(slug)) {
+        tagMap.set(slug, tag); // Preserve first occurrence's casing
+      }
+    }
+  };
+
+  // Extract tags from blog posts
+  for (const post of blog) {
+    addTags(post.data.tags);
+  }
+
+  // Extract tags from projects
+  for (const project of projects) {
+    addTags(project.data.tags);
+  }
+
+  // Extract tags from work positions only
+  for (const entry of work) {
+    if (entry.data.type === "position") {
+      addTags(entry.data.tags);
+    }
+  }
+
+  return tagMap;
+}
+
+export interface TaggedContent {
+  type: "blog" | "project" | "work";
+  entry:
+    | CollectionEntry<"blog">
+    | CollectionEntry<"projects">
+    | WorkPosition;
+  date: Date;
+}
+
+/**
+ * Filters all content that has a specific tag
+ * Returns an array of tagged content sorted by date (most recent first)
+ */
+export function getContentByTag(
+  tag: string,
+  blog: CollectionEntry<"blog">[],
+  projects: CollectionEntry<"projects">[],
+  work: CollectionEntry<"work">[],
+): TaggedContent[] {
+  const targetSlug = slugifyTag(tag);
+  const results: TaggedContent[] = [];
+
+  // Helper to check if tags include the target tag
+  const hasTag = (tags?: string[]): boolean => {
+    if (!tags) return false;
+    return tags.some((t) => slugifyTag(t) === targetSlug);
+  };
+
+  // Filter blog posts
+  for (const post of blog) {
+    if (hasTag(post.data.tags)) {
+      results.push({
+        type: "blog",
+        entry: post,
+        date: post.data.date,
+      });
+    }
+  }
+
+  // Filter projects
+  for (const project of projects) {
+    if (hasTag(project.data.tags)) {
+      results.push({
+        type: "project",
+        entry: project,
+        date: project.data.date,
+      });
+    }
+  }
+
+  // Filter work positions
+  for (const entry of work) {
+    if (entry.data.type === "position" && hasTag(entry.data.tags)) {
+      results.push({
+        type: "work",
+        entry: entry as WorkPosition,
+        date: entry.data.dateStart,
+      });
+    }
+  }
+
+  // Sort by date, most recent first
+  return results.sort((a, b) => b.date.getTime() - a.date.getTime());
 }
