@@ -12,7 +12,7 @@ import { SITE } from "@consts";
           {SITE.NAME}
         </div>
       </Link>
-      <nav class="flex gap-1">
+      <nav class="flex items-center gap-1">
         <Link href="/blog">
           blog
         </Link>
@@ -28,7 +28,48 @@ import { SITE } from "@consts";
         <Link href="/projects">
           projects
         </Link>
+        <span class="mx-1">
+          {`/`}
+        </span>
+        <button
+          id="search-button"
+          aria-label="Search"
+          class="flex items-center gap-1.5 rounded-md px-2 py-1 text-sm transition-colors duration-300 hover:bg-black/5 dark:hover:bg-white/5"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <span class="hidden sm:inline text-black/60 dark:text-white/60">⌘K</span>
+        </button>
       </nav>
     </div>
   </Container>
 </header>
+
+<script>
+  function init() {
+    const searchButton = document.getElementById("search-button");
+    const dialog = document.getElementById("command-palette") as HTMLDialogElement;
+
+    searchButton?.addEventListener("click", () => {
+      dialog?.showModal();
+      const searchInput = document.getElementById("search-input") as HTMLInputElement;
+      searchInput?.focus();
+    });
+  }
+
+  // Handle Astro view transitions
+  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("astro:after-swap", init);
+</script>

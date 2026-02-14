@@ -1,0 +1,377 @@
+---
+// No props needed - this is a global component
+---
+
+<dialog
+  id="command-palette"
+  class="fixed inset-0 z-[60] m-0 h-full w-full max-w-none bg-transparent p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm"
+>
+  <div
+    class="flex h-full items-start justify-center px-4 pt-[15vh]"
+    id="palette-container"
+  >
+    <div
+      class="w-full max-w-2xl overflow-hidden rounded-lg border border-black/15 bg-white shadow-2xl dark:border-white/20 dark:bg-stone-900"
+    >
+      <!-- Search Input -->
+      <div class="border-b border-black/15 p-4 dark:border-white/20">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search blog posts, projects, and work..."
+          autocomplete="off"
+          class="w-full bg-transparent text-base outline-none placeholder:text-black/40 dark:placeholder:text-white/40"
+        />
+      </div>
+
+      <!-- Results Container -->
+      <div
+        id="search-results"
+        class="max-h-[60vh] overflow-y-auto overscroll-contain"
+      >
+        <!-- Results will be rendered here -->
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="flex items-center justify-between border-t border-black/15 px-4 py-3 text-xs text-black/60 dark:border-white/20 dark:text-white/60"
+      >
+        <div class="flex gap-4">
+          <span class="flex items-center gap-1">
+            <kbd
+              class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
+              >↑↓</kbd
+            > navigate
+          </span>
+          <span class="flex items-center gap-1">
+            <kbd
+              class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
+              >↵</kbd
+            > select
+          </span>
+          <span class="flex items-center gap-1">
+            <kbd
+              class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
+              >esc</kbd
+            > close
+          </span>
+        </div>
+        <div class="text-black/40 dark:text-white/40">
+          <kbd
+            class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
+            >⌘K</kbd
+          > or <kbd
+            class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
+            >Ctrl+K</kbd
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import Fuse, { type FuseResult } from "fuse.js";
+
+  interface SearchItem {
+    id: string;
+    type: "blog" | "work" | "project";
+    title: string;
+    description: string;
+    excerpt: string;
+    url: string;
+    date?: string;
+    company?: string;
+    role?: string;
+    tags?: string[];
+  }
+
+  let searchData: SearchItem[] = [];
+  let fuse: Fuse<SearchItem> | null = null;
+  let selectedIndex = 0;
+  let debounceTimer: number;
+
+  const dialog = document.getElementById("command-palette") as HTMLDialogElement;
+  const searchInput = document.getElementById("search-input") as HTMLInputElement;
+  const searchResults = document.getElementById("search-results") as HTMLDivElement;
+
+  // Fetch search index (lazy load on first open)
+  async function loadSearchIndex() {
+    if (searchData.length > 0) return; // Already loaded
+
+    try {
+      const response = await fetch("/search-index.json");
+      searchData = await response.json();
+
+      // Initialize Fuse.js
+      fuse = new Fuse(searchData, {
+        keys: [
+          { name: "title", weight: 0.5 },
+          { name: "description", weight: 0.3 },
+          { name: "excerpt", weight: 0.2 },
+          { name: "company", weight: 0.3 },
+          { name: "role", weight: 0.3 },
+        ],
+        threshold: 0.4,
+        ignoreLocation: true,
+        minMatchCharLength: 2,
+      });
+    } catch (error) {
+      console.error("Failed to load search index:", error);
+    }
+  }
+
+  // Render empty state
+  function renderEmptyState() {
+    searchResults.innerHTML = `
+      <div class="p-8 text-center text-black/40 dark:text-white/40">
+        <p>Start typing to search...</p>
+      </div>
+    `;
+  }
+
+  // Render no results state
+  function renderNoResults() {
+    searchResults.innerHTML = `
+      <div class="p-8 text-center text-black/40 dark:text-white/40">
+        <p>No results found</p>
+      </div>
+    `;
+  }
+
+  // Group results by type
+  function groupResults(results: FuseResult<SearchItem>[]) {
+    const grouped: {
+      blog: FuseResult<SearchItem>[];
+      work: FuseResult<SearchItem>[];
+      project: FuseResult<SearchItem>[];
+    } = {
+      blog: [],
+      work: [],
+      project: [],
+    };
+
+    for (const result of results) {
+      const type = result.item.type;
+      if (grouped[type].length < 5) {
+        grouped[type].push(result);
+      }
+    }
+
+    return grouped;
+  }
+
+  // Get type label
+  function getTypeLabel(type: string): string {
+    switch (type) {
+      case "blog":
+        return "Blog";
+      case "work":
+        return "Work";
+      case "project":
+        return "Projects";
+      default:
+        return type;
+    }
+  }
+
+  // Get type icon
+  function getTypeIcon(type: string): string {
+    switch (type) {
+      case "blog":
+        return "📝";
+      case "work":
+        return "💼";
+      case "project":
+        return "🚀";
+      default:
+        return "📄";
+    }
+  }
+
+  // Render search results
+  function renderResults(query: string) {
+    if (!fuse || !query.trim()) {
+      renderEmptyState();
+      selectedIndex = 0;
+      return;
+    }
+
+    const results = fuse.search(query, { limit: 15 });
+
+    if (results.length === 0) {
+      renderNoResults();
+      selectedIndex = 0;
+      return;
+    }
+
+    const grouped = groupResults(results);
+    let html = "";
+    let totalResults = 0;
+
+    // Render each group
+    for (const [type, items] of Object.entries(grouped)) {
+      if (items.length === 0) continue;
+
+      html += `
+        <div class="border-b border-black/10 dark:border-white/10 last:border-0">
+          <div class="sticky top-0 bg-stone-100 px-4 py-2 text-xs font-medium uppercase tracking-wide text-black/60 dark:bg-stone-800 dark:text-white/60">
+            ${getTypeIcon(type)} ${getTypeLabel(type)}
+          </div>
+          <div>
+      `;
+
+      for (const result of items) {
+        const item = result.item;
+        const subtitle =
+          type === "work" && item.company
+            ? item.company
+            : item.description.length > 100
+              ? item.description.substring(0, 100) + "..."
+              : item.description;
+
+        html += `
+          <a
+            href="${item.url}"
+            class="search-result-item flex cursor-pointer flex-col gap-1 border-b border-black/5 px-4 py-3 transition-colors duration-150 last:border-0 hover:bg-black/5 dark:border-white/5 dark:hover:bg-white/5"
+            data-index="${totalResults}"
+          >
+            <div class="font-medium">${item.title}</div>
+            <div class="text-sm text-black/60 dark:text-white/60">${subtitle}</div>
+          </a>
+        `;
+        totalResults++;
+      }
+
+      html += `
+          </div>
+        </div>
+      `;
+    }
+
+    searchResults.innerHTML = html;
+
+    // Reset selection
+    selectedIndex = 0;
+    updateSelection();
+  }
+
+  // Update visual selection
+  function updateSelection() {
+    const items = searchResults.querySelectorAll(".search-result-item");
+    items.forEach((item, index) => {
+      if (index === selectedIndex) {
+        item.classList.add("bg-black/10", "dark:bg-white/10");
+        item.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      } else {
+        item.classList.remove("bg-black/10", "dark:bg-white/10");
+      }
+    });
+  }
+
+  // Navigate selection
+  function navigateSelection(direction: "up" | "down") {
+    const items = searchResults.querySelectorAll(".search-result-item");
+    const total = items.length;
+
+    if (total === 0) return;
+
+    if (direction === "down") {
+      selectedIndex = (selectedIndex + 1) % total;
+    } else {
+      selectedIndex = (selectedIndex - 1 + total) % total;
+    }
+
+    updateSelection();
+  }
+
+  // Select current item
+  function selectCurrentItem() {
+    const items = searchResults.querySelectorAll(".search-result-item");
+    const currentItem = items[selectedIndex] as HTMLAnchorElement;
+    if (currentItem) {
+      window.location.href = currentItem.href;
+    }
+  }
+
+  // Open dialog
+  async function openPalette() {
+    await loadSearchIndex();
+    dialog.showModal();
+    searchInput.value = "";
+    renderEmptyState();
+    searchInput.focus();
+  }
+
+  // Close dialog
+  function closePalette() {
+    dialog.close();
+    searchInput.value = "";
+    selectedIndex = 0;
+  }
+
+  // Input handler with debouncing
+  function handleInput() {
+    clearTimeout(debounceTimer);
+    debounceTimer = window.setTimeout(() => {
+      renderResults(searchInput.value);
+    }, 150);
+  }
+
+  // Keyboard handler
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      closePalette();
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      navigateSelection("down");
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      navigateSelection("up");
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      selectCurrentItem();
+    }
+  }
+
+  // Global keyboard shortcut
+  function handleGlobalKeydown(e: KeyboardEvent) {
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      e.preventDefault();
+      openPalette();
+    }
+  }
+
+  // Click on backdrop to close
+  function handleDialogClick(e: MouseEvent) {
+    if (e.target === dialog) {
+      closePalette();
+    }
+  }
+
+  // Initialize
+  function init() {
+    // Global keyboard shortcut
+    document.addEventListener("keydown", handleGlobalKeydown);
+
+    // Dialog event listeners
+    searchInput?.addEventListener("input", handleInput);
+    searchInput?.addEventListener("keydown", handleKeydown);
+    dialog?.addEventListener("click", handleDialogClick);
+  }
+
+  // Cleanup and reinitialize for view transitions
+  function cleanup() {
+    document.removeEventListener("keydown", handleGlobalKeydown);
+    searchInput?.removeEventListener("input", handleInput);
+    searchInput?.removeEventListener("keydown", handleKeydown);
+    dialog?.removeEventListener("click", handleDialogClick);
+  }
+
+  // Handle Astro view transitions
+  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("astro:after-swap", () => {
+    cleanup();
+    init();
+  });
+</script>
