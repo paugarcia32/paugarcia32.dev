@@ -1,6 +1,3 @@
 {
-  "recommendations": [
-    "biome",
-    "astro"
-  ]
+  "recommendations": ["biome", "astro"]
 }

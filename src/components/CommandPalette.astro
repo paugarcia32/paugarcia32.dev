@@ -40,6 +40,12 @@
           <span class="flex items-center gap-1">
             <kbd
               class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
+              >1-9</kbd
+            > quick select
+          </span>
+          <span class="flex items-center gap-1">
+            <kbd
+              class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
               >↑↓</kbd
             > navigate
           </span>
@@ -56,15 +62,203 @@
             > close
           </span>
         </div>
-        <div class="text-black/40 dark:text-white/40">
-          <kbd
-            class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
-            >⌘K</kbd
-          > or <kbd
-            class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
-            >Ctrl+K</kbd
+        <div class="flex items-center gap-3 text-black/40 dark:text-white/40">
+          <button
+            id="shortcuts-help-btn"
+            type="button"
+            class="flex h-6 w-6 items-center justify-center rounded border border-black/15 transition-colors hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/5"
+            title="Keyboard shortcuts help"
           >
+            ?
+          </button>
+          <div>
+            <kbd
+              class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
+              >⌘K</kbd
+            > or <kbd
+              class="rounded border border-black/15 px-1.5 py-0.5 dark:border-white/20"
+              >Ctrl+K</kbd
+            >
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<!-- Chord Toast Feedback -->
+<div
+  id="chord-toast"
+  class="pointer-events-none fixed bottom-4 right-4 z-50 hidden translate-y-2 rounded-lg border border-black/15 bg-white px-3 py-2 text-sm opacity-0 shadow-lg transition-all duration-200 dark:border-white/20 dark:bg-stone-900"
+>
+  <span class="font-medium">g</span> + <span
+    class="text-black/40 dark:text-white/40">p/w/b/h</span
+  >
+</div>
+
+<!-- Shortcuts Help Modal -->
+<dialog
+  id="shortcuts-help-modal"
+  class="fixed inset-0 z-[70] m-0 h-full w-full max-w-none bg-transparent p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm"
+>
+  <div class="flex h-full items-start justify-center px-4 pt-[15vh]">
+    <div
+      class="w-full max-w-xl overflow-hidden rounded-lg border border-black/15 bg-white shadow-2xl dark:border-white/20 dark:bg-stone-900"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center justify-between border-b border-black/15 px-6 py-4 dark:border-white/20"
+      >
+        <h2 class="text-lg font-semibold">Keyboard Shortcuts</h2>
+        <button
+          id="close-shortcuts-help"
+          type="button"
+          class="flex h-6 w-6 items-center justify-center rounded text-black/40 transition-colors hover:bg-black/5 hover:text-black/80 dark:text-white/40 dark:hover:bg-white/5 dark:hover:text-white/80"
+          title="Close"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="max-h-[60vh] overflow-y-auto p-6">
+        <!-- Global Shortcuts -->
+        <section class="mb-6">
+          <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-black/60 dark:text-white/60">
+            Global Shortcuts
+          </h3>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Open command palette</span>
+              <div class="flex gap-1">
+                <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >⌘K</kbd
+                > or <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >Ctrl+K</kbd
+                >
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Go to Projects</span>
+              <div class="flex gap-1">
+                <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >g</kbd
+                > then <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >p</kbd
+                >
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Go to Work</span>
+              <div class="flex gap-1">
+                <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >g</kbd
+                > then <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >w</kbd
+                >
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Go to Blog</span>
+              <div class="flex gap-1">
+                <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >g</kbd
+                > then <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >b</kbd
+                >
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Go to Home</span>
+              <div class="flex gap-1">
+                <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >g</kbd
+                > then <kbd
+                  class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                  >h</kbd
+                >
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Show keyboard shortcuts</span>
+              <kbd
+                class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                >?</kbd
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- Palette Shortcuts -->
+        <section class="mb-6">
+          <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-black/60 dark:text-white/60">
+            Palette Shortcuts
+          </h3>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Quick select result</span>
+              <kbd
+                class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                >1-9</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Navigate results</span>
+              <kbd
+                class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                >↑↓</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Select result</span>
+              <kbd
+                class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                >↵</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Close palette</span>
+              <kbd
+                class="rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20"
+                >Esc</kbd
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- Tips -->
+        <section>
+          <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-black/60 dark:text-white/60">
+            Tips
+          </h3>
+          <ul class="space-y-2 text-sm text-black/60 dark:text-white/60">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5">•</span>
+              <span>Global shortcuts work from anywhere on the site</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5">•</span>
+              <span>Press <kbd class="rounded border border-black/15 px-1 py-0.5 text-xs dark:border-white/20">g</kbd> twice quickly for chord shortcuts</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5">•</span>
+              <span>Number shortcuts (1-9) only appear for the first 9 results</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5">•</span>
+              <span>Chord shortcuts show a visual indicator in the bottom right</span>
+            </li>
+          </ul>
+        </section>
       </div>
     </div>
   </div>
@@ -91,9 +285,19 @@
   let selectedIndex = 0;
   let debounceTimer: number;
 
+  // Chord shortcut state
+  let lastKey: string | null = null;
+  let lastKeyTime: number = 0;
+  const CHORD_TIMEOUT = 1000; // 1 second for chord completion
+  let chordTimeoutId: number | undefined;
+
   const dialog = document.getElementById("command-palette") as HTMLDialogElement;
   const searchInput = document.getElementById("search-input") as HTMLInputElement;
   const searchResults = document.getElementById("search-results") as HTMLDivElement;
+  const chordToast = document.getElementById("chord-toast") as HTMLDivElement;
+  const shortcutsHelpModal = document.getElementById("shortcuts-help-modal") as HTMLDialogElement;
+  const shortcutsHelpBtn = document.getElementById("shortcuts-help-btn") as HTMLButtonElement;
+  const closeShortcutsHelpBtn = document.getElementById("close-shortcuts-help") as HTMLButtonElement;
 
   // Fetch search index (lazy load on first open)
   async function loadSearchIndex() {
@@ -230,12 +434,19 @@
               ? item.description.substring(0, 100) + "..."
               : item.description;
 
+        // Add number shortcut badge if within first 9 results
+        const shortcutBadge =
+          totalResults < 9
+            ? `<kbd class="absolute left-2 top-1/2 -translate-y-1/2 rounded border border-black/15 px-1.5 py-0.5 text-xs dark:border-white/20">${totalResults + 1}</kbd>`
+            : "";
+
         html += `
           <a
             href="${item.url}"
-            class="search-result-item flex cursor-pointer flex-col gap-1 border-b border-black/5 px-4 py-3 transition-colors duration-150 last:border-0 hover:bg-black/5 dark:border-white/5 dark:hover:bg-white/5"
+            class="search-result-item relative flex cursor-pointer flex-col gap-1 border-b border-black/5 ${totalResults < 9 ? "pl-12" : "px-4"} py-3 transition-colors duration-150 last:border-0 hover:bg-black/5 dark:border-white/5 dark:hover:bg-white/5"
             data-index="${totalResults}"
           >
+            ${shortcutBadge}
             <div class="font-medium">${item.title}</div>
             <div class="text-sm text-black/60 dark:text-white/60">${subtitle}</div>
           </a>
@@ -310,6 +521,38 @@
     selectedIndex = 0;
   }
 
+  // Show chord toast
+  function showChordToast() {
+    if (!chordToast) return;
+    chordToast.classList.remove("hidden", "opacity-0", "translate-y-2");
+    // Force reflow for animation
+    void chordToast.offsetHeight;
+    chordToast.classList.add("opacity-100", "translate-y-0");
+  }
+
+  // Hide chord toast
+  function hideChordToast() {
+    if (!chordToast) return;
+    chordToast.classList.remove("opacity-100", "translate-y-0");
+    chordToast.classList.add("opacity-0", "translate-y-2");
+    // Hide after animation completes
+    setTimeout(() => {
+      chordToast.classList.add("hidden");
+    }, 200);
+  }
+
+  // Open shortcuts help modal
+  function openShortcutsHelp() {
+    shortcutsHelpModal?.showModal();
+    // Remove focus from any focused element
+    (document.activeElement as HTMLElement)?.blur();
+  }
+
+  // Close shortcuts help modal
+  function closeShortcutsHelp() {
+    shortcutsHelpModal?.close();
+  }
+
   // Input handler with debouncing
   function handleInput() {
     clearTimeout(debounceTimer);
@@ -332,20 +575,116 @@
       e.preventDefault();
       selectCurrentItem();
     }
+    // Number shortcuts (1-9) for quick selection
+    else if (e.key >= "1" && e.key <= "9") {
+      const index = parseInt(e.key) - 1;
+      const items = searchResults.querySelectorAll(".search-result-item");
+
+      if (items[index]) {
+        e.preventDefault();
+        selectedIndex = index;
+        selectCurrentItem();
+      }
+    }
+  }
+
+  // Handle chord shortcuts (e.g., g+p for projects)
+  function handleChordShortcut(e: KeyboardEvent) {
+    // Ignore if we're in an input/textarea (except our search input when palette is closed)
+    const target = e.target as HTMLElement;
+    const isInInput = target.tagName === "INPUT" || target.tagName === "TEXTAREA";
+    const isPaletteOpen = dialog?.open;
+
+    if (isInInput && isPaletteOpen) return; // Ignore if typing in search
+    if (isPaletteOpen) return; // Ignore if palette is open
+
+    const now = Date.now();
+    const timeSinceLastKey = now - lastKeyTime;
+
+    // If pressing 'g', wait for second key
+    if (e.key === "g" && !lastKey) {
+      lastKey = "g";
+      lastKeyTime = now;
+
+      // Show toast
+      showChordToast();
+
+      // Reset after timeout
+      clearTimeout(chordTimeoutId);
+      chordTimeoutId = window.setTimeout(() => {
+        lastKey = null;
+        hideChordToast();
+      }, CHORD_TIMEOUT);
+
+      e.preventDefault();
+      return;
+    }
+
+    // If last key was 'g' and within timeout
+    if (lastKey === "g" && timeSinceLastKey < CHORD_TIMEOUT) {
+      clearTimeout(chordTimeoutId);
+      hideChordToast();
+
+      const shortcuts: Record<string, string> = {
+        p: "/projects",
+        w: "/work",
+        b: "/blog",
+        h: "/",
+      };
+
+      if (shortcuts[e.key]) {
+        e.preventDefault();
+        window.location.href = shortcuts[e.key];
+      }
+
+      // Reset state
+      lastKey = null;
+      lastKeyTime = 0;
+    }
   }
 
   // Global keyboard shortcut
   function handleGlobalKeydown(e: KeyboardEvent) {
+    // Ignore if we're in an input/textarea
+    const target = e.target as HTMLElement;
+    const isInInput = target.tagName === "INPUT" || target.tagName === "TEXTAREA";
+
+    // Cmd/Ctrl + K to open palette
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
       e.preventDefault();
       openPalette();
+      return;
     }
+
+    // ? to open shortcuts help (only if not in input)
+    if (e.key === "?" && !isInInput) {
+      e.preventDefault();
+      openShortcutsHelp();
+      return;
+    }
+
+    // Chord shortcuts (g + letter)
+    handleChordShortcut(e);
   }
 
   // Click on backdrop to close
   function handleDialogClick(e: MouseEvent) {
     if (e.target === dialog) {
       closePalette();
+    }
+  }
+
+  // Click on backdrop to close shortcuts help
+  function handleShortcutsHelpClick(e: MouseEvent) {
+    if (e.target === shortcutsHelpModal) {
+      closeShortcutsHelp();
+    }
+  }
+
+  // Handle Escape key for shortcuts help modal
+  function handleShortcutsHelpKeydown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      closeShortcutsHelp();
     }
   }
 
@@ -358,6 +697,12 @@
     searchInput?.addEventListener("input", handleInput);
     searchInput?.addEventListener("keydown", handleKeydown);
     dialog?.addEventListener("click", handleDialogClick);
+
+    // Shortcuts help modal listeners
+    shortcutsHelpBtn?.addEventListener("click", openShortcutsHelp);
+    closeShortcutsHelpBtn?.addEventListener("click", closeShortcutsHelp);
+    shortcutsHelpModal?.addEventListener("click", handleShortcutsHelpClick);
+    shortcutsHelpModal?.addEventListener("keydown", handleShortcutsHelpKeydown);
   }
 
   // Cleanup and reinitialize for view transitions
@@ -366,6 +711,14 @@
     searchInput?.removeEventListener("input", handleInput);
     searchInput?.removeEventListener("keydown", handleKeydown);
     dialog?.removeEventListener("click", handleDialogClick);
+    shortcutsHelpBtn?.removeEventListener("click", openShortcutsHelp);
+    closeShortcutsHelpBtn?.removeEventListener("click", closeShortcutsHelp);
+    shortcutsHelpModal?.removeEventListener("click", handleShortcutsHelpClick);
+    shortcutsHelpModal?.removeEventListener("keydown", handleShortcutsHelpKeydown);
+    clearTimeout(chordTimeoutId);
+    lastKey = null;
+    lastKeyTime = 0;
+    hideChordToast();
   }
 
   // Handle Astro view transitions

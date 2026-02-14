@@ -44,8 +44,7 @@ export function getTotalDateRange(
   positions: Array<{ dateStart: Date; dateEnd: Date | string }>,
 ): string {
   const sortedPositions = [...positions].sort(
-    (a, b) =>
-      new Date(a.dateStart).valueOf() - new Date(b.dateStart).valueOf(),
+    (a, b) => new Date(a.dateStart).valueOf() - new Date(b.dateStart).valueOf(),
   );
 
   const earliestStart = sortedPositions[0].dateStart;
@@ -58,8 +57,7 @@ export function getTotalDuration(
   positions: Array<{ dateStart: Date; dateEnd: Date | string }>,
 ): string {
   const sortedPositions = [...positions].sort(
-    (a, b) =>
-      new Date(a.dateStart).valueOf() - new Date(b.dateStart).valueOf(),
+    (a, b) => new Date(a.dateStart).valueOf() - new Date(b.dateStart).valueOf(),
   );
 
   const earliestStart = sortedPositions[0].dateStart;
@@ -141,7 +139,9 @@ export function groupPositionsByCompany(
             ? companyMeta.data.company
             : folder,
         url:
-          companyMeta?.data.type === "company" ? companyMeta.data.url : undefined,
+          companyMeta?.data.type === "company"
+            ? companyMeta.data.url
+            : undefined,
         positions,
         sortedPositions,
         totalDuration: getTotalDuration(

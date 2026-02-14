@@ -8,7 +8,13 @@ type Props = {
   class?: string;
 };
 
-const { href, external, underline = true, class: className, ...rest } = Astro.props;
+const {
+  href,
+  external,
+  underline = true,
+  class: className,
+  ...rest
+} = Astro.props;
 ---
 
 <a

@@ -1,5 +1,5 @@
+import { type CollectionEntry, getCollection } from "astro:content";
 import type { APIRoute } from "astro";
-import { getCollection, type CollectionEntry } from "astro:content";
 
 interface SearchItem {
   id: string;
@@ -75,7 +75,9 @@ export const GET: APIRoute = async () => {
   // Get all work positions (only positions, not companies)
   const allWork = await getCollection("work");
   const positions = allWork.filter(
-    (entry): entry is CollectionEntry<"work"> & { data: { type: "position" } } =>
+    (
+      entry,
+    ): entry is CollectionEntry<"work"> & { data: { type: "position" } } =>
       entry.data.type === "position",
   );
 
