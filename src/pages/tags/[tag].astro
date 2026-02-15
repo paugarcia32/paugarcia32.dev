@@ -50,11 +50,11 @@ const workContent = taggedContent.filter((item) => item.type === "work");
       <div class="animate space-y-4">
         <div class="flex items-center gap-2">
           <span class="text-2xl">🏷️</span>
-          <h1 class="font-semibold text-black dark:text-white">
+          <h1 class="font-semibold text-slate-dark dark:text-ivory-light">
             {tag}
           </h1>
         </div>
-        <p class="text-sm text-black/60 dark:text-white/60">
+        <p class="text-sm text-cloud-dark dark:text-cloud-light">
           {taggedContent.length} item{taggedContent.length !== 1 ? "s" : ""} tagged
           with "{tag}"
         </p>
@@ -64,7 +64,7 @@ const workContent = taggedContent.filter((item) => item.type === "work");
       {
         blogContent.length > 0 && (
           <section class="animate space-y-4">
-            <div class="font-semibold text-black dark:text-white">
+            <div class="font-semibold text-slate-dark dark:text-ivory-light">
               Blog Posts ({blogContent.length})
             </div>
             <ul class="flex flex-col gap-4">
@@ -82,7 +82,7 @@ const workContent = taggedContent.filter((item) => item.type === "work");
       {
         projectContent.length > 0 && (
           <section class="animate space-y-4">
-            <div class="font-semibold text-black dark:text-white">
+            <div class="font-semibold text-slate-dark dark:text-ivory-light">
               Projects ({projectContent.length})
             </div>
             <ul class="flex flex-col gap-4">
@@ -100,7 +100,7 @@ const workContent = taggedContent.filter((item) => item.type === "work");
       {
         workContent.length > 0 && (
           <section class="animate space-y-4">
-            <div class="font-semibold text-black dark:text-white">
+            <div class="font-semibold text-slate-dark dark:text-ivory-light">
               Work Experience ({workContent.length})
             </div>
             <ul class="flex flex-col gap-4">
@@ -121,11 +121,11 @@ const workContent = taggedContent.filter((item) => item.type === "work");
                   <li>
                     <a
                       href={`/work#${companyFolder}`}
-                      class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out"
+                      class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-cloud-medium/30 dark:border-cloud-medium/40 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5 hover:text-slate-dark dark:hover:text-ivory-light transition-colors duration-300 ease-in-out"
                     >
                       <div class="flex flex-col flex-1 truncate">
                         <div class="font-semibold">{position.data.role}</div>
-                        <div class="text-sm text-black/60 dark:text-white/60">
+                        <div class="text-sm text-cloud-dark dark:text-cloud-light">
                           {companyName} · {dateRange(position.data.dateStart, position.data.dateEnd)}
                         </div>
                       </div>
@@ -158,7 +158,7 @@ const workContent = taggedContent.filter((item) => item.type === "work");
       <!-- Empty State -->
       {
         taggedContent.length === 0 && (
-          <div class="animate text-center text-black/40 dark:text-white/40">
+          <div class="animate text-center text-cloud-medium dark:text-cloud-medium">
             <p>No content found with this tag.</p>
           </div>
         )

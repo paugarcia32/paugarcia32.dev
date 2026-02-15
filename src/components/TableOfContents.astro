@@ -35,11 +35,11 @@ const tocHeadings = headings.filter((h) => h.depth <= 3);
 
 <style>
   .toc {
-    @apply mb-10 pb-6 border-b border-black/10 dark:border-white/10;
+    @apply mb-10 pb-6 border-b border-cloud-medium/20 dark:border-cloud-medium/25;
   }
 
   .toc-title {
-    @apply text-sm font-semibold text-black dark:text-white mb-4;
+    @apply text-sm font-semibold text-slate-dark dark:text-ivory-light mb-4;
   }
 
   .toc-list {
@@ -60,14 +60,14 @@ const tocHeadings = headings.filter((h) => h.depth <= 3);
 
   .toc-link {
     @apply block py-1;
-    @apply text-black/60 dark:text-white/60;
-    @apply hover:text-black dark:hover:text-white;
+    @apply text-cloud-dark dark:text-cloud-light;
+    @apply hover:text-slate-dark dark:hover:text-ivory-light;
     @apply transition-colors duration-200;
     @apply no-underline;
   }
 
   .toc-link:hover {
-    @apply text-black dark:text-white;
+    @apply text-slate-dark dark:text-ivory-light;
   }
 </style>
 
@@ -151,6 +151,6 @@ const tocHeadings = headings.filter((h) => h.depth <= 3);
 
 <style is:global>
   .toc-link.active {
-    @apply text-black dark:text-white font-semibold;
+    @apply text-slate-dark dark:text-ivory-light font-semibold;
   }
 </style>

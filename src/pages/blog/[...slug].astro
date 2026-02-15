@@ -56,10 +56,10 @@ const relatedContent = post.data.tags && post.data.tags.length > 0
           {readingTime(post.body)}
         </div>
       </div>
-      <div class="animate text-2xl font-semibold text-black dark:text-white">
+      <div class="animate text-2xl font-semibold text-slate-dark dark:text-ivory-light">
         {post.data.title}
       </div>
-      <div class="animate text-black/60 dark:text-white/60">
+      <div class="animate text-cloud-dark dark:text-cloud-light">
         {post.data.description}
       </div>
       {post.data.tags && post.data.tags.length > 0 && (
@@ -77,7 +77,7 @@ const relatedContent = post.data.tags && post.data.tags.length > 0
 
     {relatedContent.length > 0 && (
       <div class="mt-16 space-y-4">
-        <h2 class="animate text-lg font-semibold text-black dark:text-white">
+        <h2 class="animate text-lg font-semibold text-slate-dark dark:text-ivory-light">
           Related Content
         </h2>
         <ul class="animate flex flex-col gap-4">
@@ -101,11 +101,11 @@ const relatedContent = post.data.tags && post.data.tags.length > 0
                 <li>
                   <a
                     href={`/work#${workEntry.id.split("/")[0]}`}
-                    class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out"
+                    class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-cloud-medium/30 dark:border-cloud-medium/40 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5 hover:text-slate-dark dark:hover:text-ivory-light transition-colors duration-300 ease-in-out"
                   >
                     <div class="flex flex-col flex-1 truncate">
                       <div class="font-semibold">{workEntry.data.role}</div>
-                      <div class="text-sm text-black/60 dark:text-white/60">
+                      <div class="text-sm text-cloud-dark dark:text-cloud-light">
                         {workEntry.data.description}
                       </div>
                     </div>

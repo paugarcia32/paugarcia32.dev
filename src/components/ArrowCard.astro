@@ -9,15 +9,15 @@ type Props = {
 const { entry } = Astro.props;
 ---
 
-<a href={`/${entry.collection}/${entry.slug}`} class="arrow-card relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
+<a href={`/${entry.collection}/${entry.slug}`} class="arrow-card relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-cloud-medium/30 dark:border-cloud-medium/40 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5 hover:text-slate-dark dark:hover:text-ivory-light transition-colors duration-300 ease-in-out">
   <div class="flex flex-col flex-1 min-w-0">
-    <div class="text-xs uppercase tracking-wide text-black/40 dark:text-white/40 mb-1">
+    <div class="text-xs uppercase tracking-wide text-cloud-medium dark:text-cloud-medium mb-1">
       {formatDateShort(entry.data.date)}
     </div>
     <div class="font-semibold truncate">
       {entry.data.title}
     </div>
-    <div class="text-sm text-black/60 dark:text-white/60 truncate">
+    <div class="text-sm text-cloud-dark dark:text-cloud-light truncate">
       {entry.data.description}
     </div>
     {entry.data.tags && entry.data.tags.length > 0 && (
@@ -25,7 +25,7 @@ const { entry } = Astro.props;
         {entry.data.tags.map((tag) => (
           <span
             data-tag-url={`/tags/${slugifyTag(tag)}`}
-            class="tag-badge inline-flex items-center rounded-full border border-black/10 bg-black/5 px-2 py-0.5 text-xs text-black/70 transition-colors duration-200 hover:border-black/20 hover:bg-black/10 hover:text-black cursor-pointer dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:border-white/20 dark:hover:bg-white/10 dark:hover:text-white"
+            class="tag-badge inline-flex items-center rounded-full border border-cloud-medium/20 bg-cloud-dark/5 px-2 py-0.5 text-xs text-cloud-dark transition-colors duration-200 hover:border-cloud-medium/40 hover:bg-cloud-dark/10 hover:text-slate-dark cursor-pointer dark:border-cloud-medium/25 dark:bg-ivory-dark/5 dark:text-cloud-light dark:hover:border-cloud-medium/50 dark:hover:bg-ivory-dark/10 dark:hover:text-ivory-light"
           >
             {tag}
           </span>

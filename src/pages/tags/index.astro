@@ -30,9 +30,9 @@ const tagsWithCounts = Array.from(allTags.entries())
       <div class="animate space-y-4">
         <div class="flex items-center gap-2">
           <span class="text-2xl">🏷️</span>
-          <h1 class="font-semibold text-black dark:text-white">All Tags</h1>
+          <h1 class="font-semibold text-slate-dark dark:text-ivory-light">All Tags</h1>
         </div>
-        <p class="text-sm text-black/60 dark:text-white/60">
+        <p class="text-sm text-cloud-dark dark:text-cloud-light">
           {tagsWithCounts.length} tag{tagsWithCounts.length !== 1 ? "s" : ""} across
           blog posts, projects, and work experience
         </p>
@@ -45,14 +45,14 @@ const tagsWithCounts = Array.from(allTags.entries())
             {tagsWithCounts.map(({ slug, displayName, count }) => (
               <a
                 href={`/tags/${slug}`}
-                class="group flex items-center justify-between rounded-lg border border-black/15 px-4 py-3 transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white"
+                class="group flex items-center justify-between rounded-lg border border-cloud-medium/30 px-4 py-3 transition-colors duration-300 ease-in-out hover:bg-cloud-dark/5 hover:text-slate-dark dark:border-cloud-medium/40 dark:hover:bg-ivory-dark/5 dark:hover:text-ivory-light"
               >
                 <div class="flex items-center gap-2">
                   <span class="text-lg">🏷️</span>
                   <span class="font-medium">{displayName}</span>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="text-sm text-black/60 dark:text-white/60">
+                  <span class="text-sm text-cloud-dark dark:text-cloud-light">
                     {count} item{count !== 1 ? "s" : ""}
                   </span>
                   <svg
@@ -68,7 +68,7 @@ const tagsWithCounts = Array.from(allTags.entries())
             ))}
           </div>
         ) : (
-          <div class="animate text-center text-black/40 dark:text-white/40">
+          <div class="animate text-center text-cloud-medium dark:text-cloud-medium">
             <p>No tags found.</p>
           </div>
         )
