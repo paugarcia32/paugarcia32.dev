@@ -97,3 +97,60 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+/* Mermaid dark mode support */
+.dark .mermaid .node rect,
+.dark .mermaid .node circle,
+.dark .mermaid .node ellipse,
+.dark .mermaid .node polygon,
+.dark .mermaid .node path {
+  fill: #262625 !important; /* slate-medium - fondo de nodos */
+  stroke: #CC785C !important; /* book-cloth - bordes */
+}
+
+.dark .mermaid .cluster rect {
+  fill: #40403E !important; /* slate-light - fondo de clusters */
+  stroke: #D4A27F !important; /* kraft - bordes de clusters */
+}
+
+.dark .mermaid text,
+.dark .mermaid .nodeLabel,
+.dark .mermaid .cluster-label span {
+  fill: #FAFAF7 !important; /* ivory-light - texto */
+  color: #FAFAF7 !important;
+}
+
+.dark .mermaid .edgeLabel {
+  background-color: #191919 !important; /* slate-dark - fondo de etiquetas */
+  color: #FAFAF7 !important; /* ivory-light - texto de etiquetas */
+}
+
+.dark .mermaid .edgeLabel rect {
+  fill: #191919 !important;
+}
+
+.dark .mermaid .edgePath path,
+.dark .mermaid .flowchart-link {
+  stroke: #D4A27F !important; /* kraft - líneas de conexión */
+}
+
+.dark .mermaid marker {
+  fill: #D4A27F !important; /* kraft - flechas */
+  stroke: #D4A27F !important;
+}
+
+/* Ajustar el fondo del SVG completo en modo oscuro */
+.dark .mermaid svg {
+  background-color: transparent;
+}
+
+/* Estilos para diferentes tipos de nodos en dark mode */
+.dark .mermaid .node.secondary rect,
+.dark .mermaid .node.secondary circle {
+  fill: #40403E !important; /* slate-light */
+}
+
+.dark .mermaid .node.tertiary rect,
+.dark .mermaid .node.tertiary circle {
+  fill: #666663 !important; /* cloud-dark */
+}
