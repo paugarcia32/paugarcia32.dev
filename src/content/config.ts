@@ -1,10 +1,5 @@
 import { defineCollection, z } from "astro:content";
-
-// Helper to parse dd/mm/yyyy format
-const parseDDMMYYYY = (dateString: string): Date => {
-  const [day, month, year] = dateString.split("/").map(Number);
-  return new Date(year, month - 1, day);
-};
+import { parseDDMMYYYY } from "@lib/utils";
 
 // Custom date schema that accepts dd/mm/yyyy format
 const ddmmyyyyDate = z.string().transform((val, ctx) => {

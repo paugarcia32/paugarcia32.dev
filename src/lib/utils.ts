@@ -6,6 +6,43 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Date parsing and formatting utilities
+
+/**
+ * Parse a date string in dd/mm/yyyy format to a Date object
+ * Used by content collections for work experience dates
+ */
+export function parseDDMMYYYY(dateString: string): Date {
+  const [day, month, year] = dateString.split("/").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+/**
+ * Format a Date object to dd/mm/yyyy format
+ * Example: 15/02/2026
+ */
+export function formatDateDDMMYYYY(date: Date): string {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+/**
+ * Format a Date object to short format (Mon YYYY)
+ * Example: Feb 2026
+ */
+export function formatDateShort(date: Date): string {
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
+}
+
+/**
+ * Legacy format function (Mon DD, YYYY)
+ * Example: Feb 22, 2024
+ */
 export function formatDate(date: Date) {
   return Intl.DateTimeFormat("en-US", {
     month: "short",

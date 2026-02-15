@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { slugifyTag } from "@lib/utils";
+import { slugifyTag, formatDateShort } from "@lib/utils";
 
 type Props = {
   entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
@@ -11,6 +11,9 @@ const { entry } = Astro.props;
 
 <a href={`/${entry.collection}/${entry.slug}`} class="arrow-card relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
   <div class="flex flex-col flex-1 min-w-0">
+    <div class="text-xs uppercase tracking-wide text-black/40 dark:text-white/40 mb-1">
+      {formatDateShort(entry.data.date)}
+    </div>
     <div class="font-semibold truncate">
       {entry.data.title}
     </div>
