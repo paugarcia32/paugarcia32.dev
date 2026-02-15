@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Mermaid color variables - Light mode */
+  --mermaid-node-bg: theme('colors.ivory.light');
+  --mermaid-node-border: theme('colors.book-cloth');
+  --mermaid-node-text: theme('colors.slate.dark');
+  --mermaid-cluster-bg: theme('colors.slate.light');
+  --mermaid-cluster-border: theme('colors.kraft');
+  --mermaid-edge-color: theme('colors.kraft');
+  --mermaid-edge-label-bg: theme('colors.ivory.light');
+  --mermaid-edge-label-text: theme('colors.slate.dark');
+  --mermaid-arrow-color: theme('colors.kraft');
+}
+
+html.dark {
+  /* Mermaid color variables - Dark mode */
+  --mermaid-node-bg: theme('colors.slate.medium');
+  --mermaid-node-border: theme('colors.book-cloth');
+  --mermaid-node-text: theme('colors.ivory.light');
+  --mermaid-cluster-bg: theme('colors.slate.light');
+  --mermaid-cluster-border: theme('colors.kraft');
+  --mermaid-edge-color: theme('colors.kraft');
+  --mermaid-edge-label-bg: theme('colors.slate.dark');
+  --mermaid-edge-label-text: theme('colors.ivory.light');
+  --mermaid-arrow-color: theme('colors.kraft');
+}
+
 html {
   overflow-y: scroll;
   scrollbar-gutter: stable;
@@ -98,59 +124,47 @@ body {
   overflow-y: auto;
 }
 
-/* Mermaid dark mode support */
-.dark .mermaid .node rect,
-.dark .mermaid .node circle,
-.dark .mermaid .node ellipse,
-.dark .mermaid .node polygon,
-.dark .mermaid .node path {
-  fill: #262625 !important; /* slate-medium - fondo de nodos */
-  stroke: #CC785C !important; /* book-cloth - bordes */
+/* Mermaid theme support - works in both light and dark modes */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+  fill: var(--mermaid-node-bg) !important;
+  stroke: var(--mermaid-node-border) !important;
 }
 
-.dark .mermaid .cluster rect {
-  fill: #40403E !important; /* slate-light - fondo de clusters */
-  stroke: #D4A27F !important; /* kraft - bordes de clusters */
+.mermaid .cluster rect {
+  fill: var(--mermaid-cluster-bg) !important;
+  stroke: var(--mermaid-cluster-border) !important;
 }
 
-.dark .mermaid text,
-.dark .mermaid .nodeLabel,
-.dark .mermaid .cluster-label span {
-  fill: #FAFAF7 !important; /* ivory-light - texto */
-  color: #FAFAF7 !important;
+.mermaid text,
+.mermaid .nodeLabel,
+.mermaid .cluster-label span {
+  fill: var(--mermaid-node-text) !important;
+  color: var(--mermaid-node-text) !important;
 }
 
-.dark .mermaid .edgeLabel {
-  background-color: #191919 !important; /* slate-dark - fondo de etiquetas */
-  color: #FAFAF7 !important; /* ivory-light - texto de etiquetas */
+.mermaid .edgeLabel {
+  background-color: var(--mermaid-edge-label-bg) !important;
+  color: var(--mermaid-edge-label-text) !important;
 }
 
-.dark .mermaid .edgeLabel rect {
-  fill: #191919 !important;
+.mermaid .edgeLabel rect {
+  fill: var(--mermaid-edge-label-bg) !important;
 }
 
-.dark .mermaid .edgePath path,
-.dark .mermaid .flowchart-link {
-  stroke: #D4A27F !important; /* kraft - líneas de conexión */
+.mermaid .edgePath path,
+.mermaid .flowchart-link {
+  stroke: var(--mermaid-edge-color) !important;
 }
 
-.dark .mermaid marker {
-  fill: #D4A27F !important; /* kraft - flechas */
-  stroke: #D4A27F !important;
+.mermaid marker {
+  fill: var(--mermaid-arrow-color) !important;
+  stroke: var(--mermaid-arrow-color) !important;
 }
 
-/* Ajustar el fondo del SVG completo en modo oscuro */
-.dark .mermaid svg {
+.mermaid svg {
   background-color: transparent;
-}
-
-/* Estilos para diferentes tipos de nodos en dark mode */
-.dark .mermaid .node.secondary rect,
-.dark .mermaid .node.secondary circle {
-  fill: #40403E !important; /* slate-light */
-}
-
-.dark .mermaid .node.tertiary rect,
-.dark .mermaid .node.tertiary circle {
-  fill: #666663 !important; /* cloud-dark */
 }
