@@ -1,0 +1,156 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+// Filter headings to only include h2 and h3 for better readability
+const tocHeadings = headings.filter((h) => h.depth <= 3);
+---
+
+{
+  tocHeadings.length >= 2 && (
+    <nav class="toc">
+      <h2 class="toc-title">On this page</h2>
+      <ul class="toc-list">
+        {tocHeadings.map((heading) => (
+          <li
+            class:list={[
+              "toc-item",
+              `toc-depth-${heading.depth}`,
+            ]}
+          >
+            <a href={`#${heading.slug}`} class="toc-link">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .toc {
+    @apply mb-10 pb-6 border-b border-black/10 dark:border-white/10;
+  }
+
+  .toc-title {
+    @apply text-sm font-semibold text-black dark:text-white mb-4;
+  }
+
+  .toc-list {
+    @apply flex flex-col gap-2;
+  }
+
+  .toc-item {
+    @apply text-sm;
+  }
+
+  .toc-depth-2 {
+    @apply pl-0;
+  }
+
+  .toc-depth-3 {
+    @apply pl-4;
+  }
+
+  .toc-link {
+    @apply block py-1;
+    @apply text-black/60 dark:text-white/60;
+    @apply hover:text-black dark:hover:text-white;
+    @apply transition-colors duration-200;
+    @apply no-underline;
+  }
+
+  .toc-link:hover {
+    @apply text-black dark:text-white;
+  }
+</style>
+
+<script is:inline>
+  function initTOC() {
+    const links = document.querySelectorAll(".toc-link");
+
+    if (links.length === 0) return;
+
+    // Handle smooth scroll with offset for fixed header
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const href = link.getAttribute("href");
+        if (!href) return;
+
+        const id = href.slice(1);
+        const target = document.getElementById(id);
+        if (!target) return;
+
+        // Use scrollIntoView with smooth behavior
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+
+        // Update URL after scrolling
+        setTimeout(() => {
+          history.pushState(null, "", href);
+        }, 0);
+      });
+    });
+
+    // Observe headings for active state
+    const headings = Array.from(links)
+      .map((link) => {
+        const id = link.getAttribute("href")?.slice(1);
+        return id ? document.getElementById(id) : null;
+      })
+      .filter((el) => el !== null);
+
+    if (headings.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.id;
+          const link = document.querySelector(
+            `.toc-link[href="#${id}"]`
+          );
+
+          if (link) {
+            if (entry.isIntersecting) {
+              // Remove active class from all links
+              links.forEach((l) => l.classList.remove("active"));
+              // Add active class to current link
+              link.classList.add("active");
+            }
+          }
+        });
+      },
+      {
+        rootMargin: "-100px 0px -66% 0px",
+        threshold: 0,
+      }
+    );
+
+    headings.forEach((heading) => observer.observe(heading));
+  }
+
+  // Initialize on page load
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTOC);
+  } else {
+    initTOC();
+  }
+
+  // Re-initialize after Astro page transitions
+  document.addEventListener("astro:after-swap", initTOC);
+</script>
+
+<style is:global>
+  .toc-link.active {
+    @apply text-black dark:text-white font-semibold;
+  }
+</style>

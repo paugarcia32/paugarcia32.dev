@@ -4,6 +4,8 @@
 
 html {
   overflow-y: scroll;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
   color-scheme: light;
 }
 
@@ -27,6 +29,11 @@ header {
   @apply fixed top-0 left-0 right-0 z-50 py-5;
   @apply bg-stone-100/75 dark:bg-stone-900/25;
   @apply backdrop-blur-sm saturate-200;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
 
 main {
@@ -41,6 +48,14 @@ article {
   @apply max-w-full prose dark:prose-invert prose-img:mx-auto prose-img:my-auto;
   @apply prose-headings:font-semibold prose-p:font-serif;
   @apply prose-headings:text-black prose-headings:dark:text-white;
+}
+
+article h2,
+article h3,
+article h4,
+article h5,
+article h6 {
+  scroll-margin-top: 6rem;
 }
 
 @layer utilities {
@@ -70,4 +85,15 @@ html #back-to-top {
 
 html.scrolled #back-to-top {
   @apply opacity-100 pointer-events-auto;
+}
+
+/* Performance optimizations for smooth scrolling */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
