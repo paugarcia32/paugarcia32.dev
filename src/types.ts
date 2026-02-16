@@ -1,9 +1,6 @@
 export type Site = {
   NAME: string;
   EMAIL: string;
-  NUM_POSTS_ON_HOMEPAGE: number;
-  NUM_WORKS_ON_HOMEPAGE: number;
-  NUM_PROJECTS_ON_HOMEPAGE: number;
 };
 
 export type Metadata = {
@@ -15,3 +12,22 @@ export type Socials = {
   NAME: string;
   HREF: string;
 }[];
+
+// Content reference types - can be either an object with slug or just the object itself
+export type ContentReference = {
+  readonly slug: string;
+  readonly tags?: readonly string[];
+};
+
+export type ShowcaseItem = ContentReference;
+
+export type CompanyReference = {
+  company: string;
+  limit?: number;
+};
+
+export type Showcase = {
+  blog?: ShowcaseItem[];
+  projects?: ShowcaseItem[];
+  work?: CompanyReference[];
+};

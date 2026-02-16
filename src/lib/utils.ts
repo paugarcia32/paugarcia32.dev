@@ -1,6 +1,7 @@
 import type { CollectionEntry } from "astro:content";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type * as Types from "@types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -320,4 +321,54 @@ export function getContentByTag(
 
   // Sort by date, most recent first
   return results.sort((a, b) => b.date.getTime() - a.date.getTime());
+}
+
+// Showcase utility functions
+
+/**
+ * Get content items based on showcase configuration
+ * Filters by slug and handles missing items gracefully
+ * Order is determined by array position in showcase
+ */
+export function getShowcasedContent<
+  T extends CollectionEntry<"blog" | "projects">,
+>(collection: T[], showcase?: Types.ShowcaseItem[]): T[] {
+  if (!showcase || showcase.length === 0) return [];
+
+  const slugMap = new Map(collection.map((item) => [item.slug, item]));
+
+  return showcase
+    .map(({ slug }) => slugMap.get(slug))
+    .filter((entry): entry is T => entry !== undefined && !entry.data.draft);
+}
+
+/**
+ * Get work companies based on showcase configuration
+ * Supports filtering by company name and limiting positions
+ * Order is determined by array position in showcase
+ */
+export function getShowcasedWork(
+  allWork: CollectionEntry<"work">[],
+  showcase?: Types.CompanyReference[],
+): CompanyWithPositions[] {
+  if (!showcase || showcase.length === 0) return [];
+
+  const allCompanies = groupPositionsByCompany(allWork);
+
+  return showcase
+    .map((item) => {
+      const company = allCompanies.find(
+        (c) => c.company.toLowerCase() === item.company.toLowerCase(),
+      );
+      if (!company) return null;
+
+      if (item.limit && company.sortedPositions.length > item.limit) {
+        return {
+          ...company,
+          sortedPositions: company.sortedPositions.slice(0, item.limit),
+        };
+      }
+      return company;
+    })
+    .filter((item): item is CompanyWithPositions => item !== null);
 }
