@@ -168,3 +168,12 @@ body {
 .mermaid svg {
   background-color: transparent;
 }
+
+/* Theme toggle icon animations */
+#theme-toggle-light-icon,
+#theme-toggle-dark-icon,
+#theme-toggle-system-icon {
+  transition: all 0.3s ease-in-out;
+  transform: scale(0) rotate(180deg);
+  opacity: 0;
+}
