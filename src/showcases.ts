@@ -1,27 +1,23 @@
+import { blogPosts } from "@content/blog";
+import { projects } from "@content/projects";
+import { companies } from "@content/work";
 import type * as Types from "@types";
-import { BLOG_POSTS } from "@content/blog/blog_data";
-import { PROJECTS } from "@content/projects/projects_data_refs";
-import { COMPANIES } from "@content/work/work_data";
 
 /**
  * Homepage showcase configuration
- * Uses type-safe content references from data files
+ * Uses type-safe content references with config.ts files
  * Order is determined by array position
+ *
+ * All imports have full autocomplete and type checking!
  */
 export const HOMEPAGE: Types.Showcase = {
   blog: [
-    BLOG_POSTS.workCollection,
-    BLOG_POSTS.projectsCollection,
-    BLOG_POSTS.gettingStarted,
+    blogPosts.workCollection,
+    blogPosts.projectsCollection,
+    blogPosts.gettingStarted,
   ],
-  projects: [
-    PROJECTS.realTimeSensoringIot,
-    PROJECTS.eetacGo,
-    PROJECTS.mqttServer,
-  ],
-  work: [
-    { company: COMPANIES.maat.company, limit: 2 },
-  ],
+  projects: [projects.iotOpenPlatform, projects.eetacGo, projects.mqttServer],
+  work: [{ company: companies.maat.companyConfig.company, limit: 2 }],
 };
 
 /**
@@ -30,11 +26,11 @@ export const HOMEPAGE: Types.Showcase = {
  */
 export const CV: Types.Showcase = {
   projects: [
-    PROJECTS.realTimeSensoringIot,
+    projects.realTimeSensoringIot,
     // Add more projects when CV page is created
   ],
   work: [
-    { company: COMPANIES.maat.company },
+    { company: companies.maat.companyConfig.company },
     // Add more work when CV page is created
   ],
 };

@@ -1,7 +1,7 @@
 ---
 title: "Year sorting example"
 description: "Nano groups posts by year."
-date: "12/31/2023"
+date: "Dec 31, 2023"
 tags: ["Astro", "TypeScript", "Tutorial"]
 ---
 

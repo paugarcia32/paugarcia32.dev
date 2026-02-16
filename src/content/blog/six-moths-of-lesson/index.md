@@ -1,9 +1,8 @@
 ---
 title: "Six Months of Lessons"
 description: "What a 'Three-Week' Redesign Actually Taught Us"
-date: "Jan 18 2026"
+date: "Jan 18, 2026"
 tags: ["project-management", "lessons-learned", "development"]
-draft: false
 ---
 
 

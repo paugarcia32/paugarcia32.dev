@@ -1,7 +1,7 @@
 ---
 title: "Projects Collection"
 description: "How to add projects to your portfolio."
-date: "Mar 20 2024"
+date: "Mar 20, 2024"
 tags: ["Astro", "Content Collections", "Portfolio"]
 ---
 

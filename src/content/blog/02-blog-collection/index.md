@@ -1,7 +1,7 @@
 ---
 title: "Blog Collection"
 description: "How to add posts to your blog."
-date: "Mar 21 2024"
+date: "Mar 21, 2024"
 tags: ["Astro", "Content Collections", "Tutorial"]
 ---
 

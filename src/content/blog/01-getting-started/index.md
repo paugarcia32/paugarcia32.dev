@@ -1,7 +1,7 @@
 ---
 title: "Getting started"
 description: "Hit the ground running."
-date: "Mar 22 2024"
+date: "Mar 22, 2024"
 tags: ["Astro", "Tutorial", "Web Development"]
 ---
 

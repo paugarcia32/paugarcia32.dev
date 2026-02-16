@@ -329,6 +329,7 @@ export function getContentByTag(
  * Get content items based on showcase configuration
  * Filters by slug and handles missing items gracefully
  * Order is determined by array position in showcase
+ * Works with both new config.ts system and legacy frontmatter
  */
 export function getShowcasedContent<
   T extends CollectionEntry<"blog" | "projects">,
@@ -338,8 +339,16 @@ export function getShowcasedContent<
   const slugMap = new Map(collection.map((item) => [item.slug, item]));
 
   return showcase
-    .map(({ slug }) => slugMap.get(slug))
-    .filter((entry): entry is T => entry !== undefined && !entry.data.draft);
+    .map(({ slug, config }) => {
+      const entry = slugMap.get(slug);
+      if (!entry) return null;
+
+      // Check draft status - prefer config.ts over frontmatter
+      const isDraft = config?.draft ?? entry.data.draft ?? false;
+
+      return isDraft ? null : entry;
+    })
+    .filter((entry): entry is T => entry !== null);
 }
 
 /**
