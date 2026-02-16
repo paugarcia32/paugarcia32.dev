@@ -198,6 +198,43 @@
           </div>
         </section>
 
+        <!-- Navigation Shortcuts -->
+        <section class="mb-6">
+          <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-cloud-dark dark:text-cloud-light">
+            Navigation Shortcuts
+          </h3>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Scroll down</span>
+              <kbd
+                class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
+                >j</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Scroll up</span>
+              <kbd
+                class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
+                >k</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Go back</span>
+              <kbd
+                class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
+                >[</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Go forward</span>
+              <kbd
+                class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
+                >]</kbd
+              >
+            </div>
+          </div>
+        </section>
+
         <!-- Palette Shortcuts -->
         <section class="mb-6">
           <h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-cloud-dark dark:text-cloud-light">
@@ -256,6 +293,10 @@
             <li class="flex items-start gap-2">
               <span class="mt-0.5">•</span>
               <span>Chord shortcuts show a visual indicator in the bottom right</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5">•</span>
+              <span>Navigation shortcuts (j/k/[/]) don't work when typing in input fields</span>
             </li>
           </ul>
         </section>
@@ -653,9 +694,14 @@
 
   // Global keyboard shortcut
   function handleGlobalKeydown(e: KeyboardEvent) {
-    // Ignore if we're in an input/textarea
+    // Ignore if we're in an input/textarea or contenteditable
     const target = e.target as HTMLElement;
-    const isInInput = target.tagName === "INPUT" || target.tagName === "TEXTAREA";
+    const isInInput =
+      target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      target.getAttribute("contenteditable") === "true";
+    const isPaletteOpen = dialog && dialog.hasAttribute("open");
+    const isShortcutsHelpOpen = shortcutsHelpModal && shortcutsHelpModal.hasAttribute("open");
 
     // Cmd/Ctrl + K to open palette
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -669,6 +715,40 @@
       e.preventDefault();
       openShortcutsHelp();
       return;
+    }
+
+    // Vim-style navigation (only if not in input and no modals open)
+    if (!isInInput && !isPaletteOpen && !isShortcutsHelpOpen && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      const SCROLL_AMOUNT = 60;
+
+      switch (e.key) {
+        case "j":
+          e.preventDefault();
+          e.stopPropagation();
+          document.body.scroll({
+            top: document.body.scrollTop + SCROLL_AMOUNT,
+            behavior: "smooth"
+          });
+          return;
+        case "k":
+          e.preventDefault();
+          e.stopPropagation();
+          document.body.scroll({
+            top: document.body.scrollTop - SCROLL_AMOUNT,
+            behavior: "smooth"
+          });
+          return;
+        case "[":
+          e.preventDefault();
+          e.stopPropagation();
+          window.history.back();
+          return;
+        case "]":
+          e.preventDefault();
+          e.stopPropagation();
+          window.history.forward();
+          return;
+      }
     }
 
     // Chord shortcuts (g + letter)
