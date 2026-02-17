@@ -1,6 +1,6 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import type { APIRoute } from "astro";
-import { getAllTags } from "@lib/utils";
+import { getAllTags, normalizeEntryId } from "@lib/utils";
 
 interface SearchItem {
   id: string;
@@ -46,12 +46,12 @@ export const GET: APIRoute = async () => {
 
   for (const post of blogPosts) {
     searchItems.push({
-      id: post.slug,
+      id: normalizeEntryId(post),
       type: "blog",
       title: post.data.title,
       description: post.data.description,
-      excerpt: extractExcerpt(post.body),
-      url: `/blog/${post.slug}`,
+      excerpt: extractExcerpt(post.body ?? ""),
+      url: `/blog/${normalizeEntryId(post)}`,
       date: post.data.date.toISOString(),
       tags: post.data.tags,
     });
@@ -64,12 +64,12 @@ export const GET: APIRoute = async () => {
 
   for (const project of projects) {
     searchItems.push({
-      id: project.slug,
+      id: normalizeEntryId(project),
       type: "project",
       title: project.data.title,
       description: project.data.description,
-      excerpt: extractExcerpt(project.body),
-      url: `/projects/${project.slug}`,
+      excerpt: extractExcerpt(project.body ?? ""),
+      url: `/projects/${normalizeEntryId(project)}`,
       date: project.data.date.toISOString(),
       tags: project.data.tags,
     });
@@ -103,7 +103,7 @@ export const GET: APIRoute = async () => {
       type: "work",
       title: position.data.role,
       description: position.data.description,
-      excerpt: extractExcerpt(position.body),
+      excerpt: extractExcerpt(position.body ?? ""),
       url: `/work#${companyFolder}`,
       date: position.data.dateStart.toISOString(),
       company: companyName,

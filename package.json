@@ -6,7 +6,7 @@
     "dev": "concurrently --names \"ASTRO,WATCH\" --prefix-colors \"cyan,magenta\" \"astro dev\" \"tsx scripts/watch-frontmatter.ts\"",
     "dev:no-sync": "astro dev",
     "dev:network": "astro dev --host",
-    "build": "astro check && astro build",
+    "build": "pnpm sync-frontmatter && astro check && astro build",
     "preview": "astro preview",
     "preview:network": "astro preview --host",
     "astro": "astro",

@@ -66,17 +66,7 @@ export const DEVELOPMENT = "development";
 // Tools
 export const POWER_BI = "Power BI";
 
-/**
- * Type-safe tag array for use in content data files
- */
-export type Tag = typeof PYTHON | typeof JAVASCRIPT | typeof TYPESCRIPT | typeof JAVA | typeof CPP |
-  typeof REACT | typeof ANGULAR | typeof NEXTJS | typeof ASTRO | typeof FLUTTER | typeof UNITY |
-  typeof EXPRESS | typeof NESTJS | typeof FLASK |
-  typeof MONGODB | typeof POSTGRESQL | typeof MARIADB |
-  typeof IOT | typeof ESP32 | typeof ARDUINO | typeof RASPBERRY_PI | typeof LORA | typeof BLE | typeof MQTT |
-  typeof AI | typeof YOLOV10 |
-  typeof CYBERSECURITY | typeof FULL_STACK | typeof MOBILE_DEVELOPMENT | typeof WEB_DEVELOPMENT | typeof TEAMWORK |
-  typeof TUTORIAL | typeof CONTENT_COLLECTIONS | typeof MARKDOWN | typeof MDX | typeof WRITING | typeof DOCUMENTATION |
-  typeof PORTFOLIO | typeof CAREER |
-  typeof PROJECT_MANAGEMENT | typeof LESSONS_LEARNED | typeof DEVELOPMENT |
-  typeof POWER_BI;
+// Derive Tag type from the exported constants — stays in sync automatically
+// when new constants are added.
+type StringValues<T> = { [K in keyof T]: T[K] extends string ? T[K] : never }[keyof T];
+export type Tag = StringValues<typeof import("./tags")>;

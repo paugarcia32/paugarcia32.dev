@@ -22,23 +22,39 @@ The final objective, beyond this work, is the development of a solid solution th
 To achieve this objective, the partial objectives have been defined as designing and developing a proof of concept of an IoT protocol that allows connectivity between several nodes. This need is given by the use of LoRa (Long Range) in scenarios where there is no Wi-Fi coverage. On the other hand, the objective has also been defined as investigating and implementing energy saving solutions, solutions for a possible simple configuration of the nodes and the possibility of saving data in non-volatile memory to avoid losing configuration data in possible power losses.
 
 
-# Design phases
+# Design Process
 
 ```mermaid
-graph LR
-    A[Install] --> B[Configure]
-    B --> C[Use in Markdown]
-    C --> D[Beautiful Diagrams!]
+graph TD
+    subgraph P1[" "]
+        direction LR
+        D1["Understanding how<br/>LoRa works"] -.-> A["Phase 1<br/>LoRa Fundamentals"]
+    end
+
+    subgraph P2[" "]
+        direction LR
+        D2["Testing deep sleep<br/>modes"] -.-> B["Phase 2<br/>Energy Efficiency"]
+    end
+
+    subgraph P3[" "]
+        direction LR
+        D3["Non-volatile storage<br/>implementation"] -.-> C["Phase 3<br/>Persistent Memory"]
+    end
+
+    subgraph P4[" "]
+        direction LR
+        D4["European frequency<br/>band restrictions"] -.-> D["Phase 4<br/>RF Regulations"]
+    end
+
+    subgraph P5[" "]
+        direction LR
+        D5["Optimal SF selection<br/>system"] -.-> E["Phase 5<br/>Spreading Factor"]
+    end
+
+    subgraph P6[" "]
+        direction LR
+        D6["Multi-node LoRa<br/>protocol"] -.-> F["Phase 6<br/>Protocol Design"]
+    end
+
+    P1 --> P2 --> P3 --> P4 --> P5 --> P6
 ```
-
-## Phase 1: Understand how LoRa Works
-
-## Phase 2: Measure energy efficiency: Test and analyze deep sleep modes
-
-## Phase 3: Test persistent memory
-
-## Phase 4: Understand european restrictions for open bands at certain frecquencies
-
-## Phase 5: Define a system to choose optimal Spreading Factor
-
-## Phase 6: Design a multi node LoRa Based Protocol

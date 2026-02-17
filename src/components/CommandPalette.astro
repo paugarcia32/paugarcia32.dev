@@ -755,6 +755,13 @@
     handleChordShortcut(e);
   }
 
+  // Load search index when dialog opens (regardless of how it was triggered)
+  async function handleDialogToggle() {
+    if (dialog.open) {
+      await loadSearchIndex();
+    }
+  }
+
   // Click on backdrop to close
   function handleDialogClick(e: MouseEvent) {
     if (e.target === dialog) {
@@ -794,6 +801,7 @@
     searchInput?.addEventListener("input", handleInput);
     searchInput?.addEventListener("keydown", handleKeydown);
     dialog?.addEventListener("click", handleDialogClick);
+    dialog?.addEventListener("toggle", handleDialogToggle);
 
     // Shortcuts help modal listeners
     shortcutsHelpBtn?.addEventListener("click", openShortcutsHelp);
@@ -808,6 +816,7 @@
     searchInput?.removeEventListener("input", handleInput);
     searchInput?.removeEventListener("keydown", handleKeydown);
     dialog?.removeEventListener("click", handleDialogClick);
+    dialog?.removeEventListener("toggle", handleDialogToggle);
     shortcutsHelpBtn?.removeEventListener("click", openShortcutsHelp);
     closeShortcutsHelpBtn?.removeEventListener("click", closeShortcutsHelp);
     shortcutsHelpModal?.removeEventListener("click", handleShortcutsHelpClick);

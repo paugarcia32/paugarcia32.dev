@@ -7,6 +7,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Normalizes a Content Layer entry id to a URL-safe slug.
+ * Glob-loader produces ids like "my-post/index";
+ * this strips the trailing "/index" to get "my-post".
+ */
+export function normalizeEntryId(entry: { id: string }): string {
+  return entry.id.replace(/\/index$/, "");
+}
+
 // Date parsing and formatting utilities
 
 /**
@@ -336,7 +345,7 @@ export function getShowcasedContent<
 >(collection: T[], showcase?: Types.ShowcaseItem[]): T[] {
   if (!showcase || showcase.length === 0) return [];
 
-  const slugMap = new Map(collection.map((item) => [item.slug, item]));
+  const slugMap = new Map(collection.map((item) => [normalizeEntryId(item), item]));
 
   return showcase
     .map(({ slug, config }) => {

@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { slugifyTag, formatDateShort } from "@lib/utils";
+import { slugifyTag, formatDateShort, normalizeEntryId } from "@lib/utils";
 
 type Props = {
   entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
@@ -9,7 +9,7 @@ type Props = {
 const { entry } = Astro.props;
 ---
 
-<a href={`/${entry.collection}/${entry.slug}`} class="arrow-card relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-cloud-medium/30 dark:border-cloud-medium/40 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5 hover:text-slate-dark dark:hover:text-ivory-light transition-colors duration-300 ease-in-out">
+<a href={`/${entry.collection}/${normalizeEntryId(entry)}`} class="arrow-card relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-cloud-medium/30 dark:border-cloud-medium/40 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5 hover:text-slate-dark dark:hover:text-ivory-light transition-colors duration-300 ease-in-out">
   <div class="flex flex-col flex-1 min-w-0">
     <div class="text-xs uppercase tracking-wide text-cloud-medium dark:text-cloud-medium mb-1">
       {formatDateShort(entry.data.date)}

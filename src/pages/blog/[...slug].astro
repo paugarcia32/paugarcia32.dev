@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection, render } from "astro:content";
 import BackToPrev from "@components/BackToPrev.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
@@ -7,21 +7,21 @@ import PageLayout from "@layouts/PageLayout.astro";
 import TagList from "@components/TagList.astro";
 import ArrowCard from "@components/ArrowCard.astro";
 import TableOfContents from "@components/TableOfContents.astro";
-import { readingTime, getContentByTag } from "@lib/utils";
+import { readingTime, getContentByTag, normalizeEntryId } from "@lib/utils";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
     .filter((post) => !post.data.draft)
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: normalizeEntryId(post) },
     props: post,
   }));
 }
 type Props = CollectionEntry<"blog">;
 
 const post = Astro.props;
-const { Content, headings } = await post.render();
+const { Content, headings } = await render(post);
 
 // Get related content based on first tag
 const allBlog = await getCollection("blog", ({ data }) => {
@@ -34,7 +34,7 @@ const allWork = await getCollection("work");
 
 const relatedContent = post.data.tags && post.data.tags.length > 0
   ? getContentByTag(post.data.tags[0], allBlog, allProjects, allWork)
-      .filter(item => item.entry.slug !== post.slug)
+      .filter(item => normalizeEntryId(item.entry) !== normalizeEntryId(post))
       .slice(0, 3)
   : [];
 ---
@@ -53,7 +53,7 @@ const relatedContent = post.data.tags && post.data.tags.length > 0
         </div>
         &bull;
         <div class="font-base text-sm">
-          {readingTime(post.body)}
+          {readingTime(post.body ?? "")}
         </div>
       </div>
       <div class="animate text-2xl font-semibold text-slate-dark dark:text-ivory-light">

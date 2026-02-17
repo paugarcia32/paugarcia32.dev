@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
 import { WORK } from "@consts";
@@ -39,7 +39,7 @@ const work = groupPositionsByCompany(allWork);
               )}
               <div class="mt-4 space-y-6">
                 {entry.sortedPositions.map(async (position) => {
-                  const { Content } = await position.render();
+                  const { Content } = await render(position);
                   return (
                     <div>
                       <div class="text-sm opacity-75">
