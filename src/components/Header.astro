@@ -6,31 +6,25 @@ import { SITE } from "@consts";
 
 <header>
   <Container>
-    <div class="flex flex-wrap gap-y-2 justify-between">
+    <div class="flex items-center justify-between">
       <Link href="/" underline={false}>
         <div class="font-semibold">
           {SITE.NAME}
         </div>
       </Link>
-      <nav class="flex items-center gap-1">
-        <Link href="/blog">
-          blog
-        </Link>
-        <span>
-          {`/`}
-        </span>
-        <Link href="/work">
-          work
-        </Link>
-        <span>
-          {`/`}
-        </span>
-        <Link href="/projects">
-          projects
-        </Link>
-        <span class="mx-1">
-          {`/`}
-        </span>
+
+      <div class="flex items-center gap-1">
+        <!-- Desktop nav links -->
+        <nav class="hidden sm:flex items-center gap-1">
+          <Link href="/blog">blog</Link>
+          <span>{`/`}</span>
+          <Link href="/work">work</Link>
+          <span>{`/`}</span>
+          <Link href="/projects">projects</Link>
+          <span class="mx-1">{`/`}</span>
+        </nav>
+
+        <!-- Search button (always visible) -->
         <button
           id="search-button"
           aria-label="Search"
@@ -52,24 +46,115 @@ import { SITE } from "@consts";
           </svg>
           <span class="hidden sm:inline text-cloud-dark dark:text-cloud-light">⌘K</span>
         </button>
-      </nav>
+
+        <!-- Hamburger button (mobile only) -->
+        <button
+          id="hamburger-button"
+          class="sm:hidden flex items-center justify-center rounded-md p-1.5 transition-colors duration-300 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+        >
+          <!-- Hamburger icon -->
+          <svg
+            id="hamburger-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
+          <!-- Close icon (hidden by default) -->
+          <svg
+            id="close-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="hidden"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
     </div>
   </Container>
+
+  <!-- Mobile menu dropdown -->
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-black/10 dark:border-white/10"
+  >
+    <Container>
+      <nav class="flex flex-col gap-3 py-4">
+        <Link href="/blog">blog</Link>
+        <Link href="/work">work</Link>
+        <Link href="/projects">projects</Link>
+      </nav>
+    </Container>
+  </div>
 </header>
 
 <script>
   function init() {
     const searchButton = document.getElementById("search-button");
     const dialog = document.getElementById("command-palette") as HTMLDialogElement;
+    const hamburgerButton = document.getElementById("hamburger-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const hamburgerIcon = document.getElementById("hamburger-icon");
+    const closeIcon = document.getElementById("close-icon");
 
     searchButton?.addEventListener("click", () => {
       dialog?.showModal();
       const searchInput = document.getElementById("search-input") as HTMLInputElement;
       searchInput?.focus();
     });
+
+    hamburgerButton?.addEventListener("click", () => {
+      const isOpen = !mobileMenu?.classList.contains("hidden");
+
+      if (isOpen) {
+        mobileMenu?.classList.add("hidden");
+        hamburgerIcon?.classList.remove("hidden");
+        closeIcon?.classList.add("hidden");
+        hamburgerButton.setAttribute("aria-expanded", "false");
+      } else {
+        mobileMenu?.classList.remove("hidden");
+        hamburgerIcon?.classList.add("hidden");
+        closeIcon?.classList.remove("hidden");
+        hamburgerButton.setAttribute("aria-expanded", "true");
+      }
+    });
   }
 
-  // Handle Astro view transitions
+  function closeMobileMenu() {
+    const mobileMenu = document.getElementById("mobile-menu");
+    const hamburgerButton = document.getElementById("hamburger-button");
+    const hamburgerIcon = document.getElementById("hamburger-icon");
+    const closeIcon = document.getElementById("close-icon");
+
+    mobileMenu?.classList.add("hidden");
+    hamburgerIcon?.classList.remove("hidden");
+    closeIcon?.classList.add("hidden");
+    hamburgerButton?.setAttribute("aria-expanded", "false");
+  }
+
   document.addEventListener("DOMContentLoaded", init);
-  document.addEventListener("astro:after-swap", init);
+  document.addEventListener("astro:after-swap", () => {
+    closeMobileMenu();
+    init();
+  });
 </script>
