@@ -1,0 +1,52 @@
+---
+interface GridItem {
+  title: string;
+  description?: string;
+  /** Renders a zero-padded number badge (1 → "01") */
+  number?: number;
+  /** Renders an emoji or short text inside the badge circle */
+  icon?: string;
+}
+
+interface Props {
+  items: GridItem[];
+  /** Items per row (default: 3) */
+  columns?: number;
+  /** Show border around each card (default: false) */
+  bordered?: boolean;
+}
+
+const { items, columns = 3, bordered = false } = Astro.props;
+
+function fmt(n: number) {
+  return String(n).padStart(2, "0");
+}
+---
+
+<div
+  class="not-prose my-8 w-full grid gap-2"
+  style={`grid-template-columns: repeat(${columns}, minmax(0, 1fr));`}
+>
+  {
+    items.map((item) => (
+      <div class={`flex flex-col gap-3 p-3 ${bordered ? "rounded-lg border border-black/10 dark:border-white/10" : ""}`}>
+        {/* Badge — shown only when number or icon is provided */}
+        {(item.number !== undefined || item.icon !== undefined) && (
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-black text-xs font-semibold text-white dark:bg-white dark:text-black">
+            {item.number !== undefined ? fmt(item.number) : item.icon}
+          </div>
+        )}
+
+        {/* Text content */}
+        <div>
+          <div class="font-semibold text-black dark:text-white">{item.title}</div>
+          {item.description && (
+            <div class="mt-1.5 text-sm leading-relaxed text-black/60 dark:text-white/60">
+              {item.description}
+            </div>
+          )}
+        </div>
+      </div>
+    ))
+  }
+</div>
