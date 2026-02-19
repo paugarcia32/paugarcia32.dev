@@ -1,0 +1,92 @@
+---
+title: "Traffic Flow AI"
+description: "Real-time AI traffic radar system using YOLOv10 model"
+date: "Jul 1, 2024"
+demoURL: "https://www.hackbarna.com/en/projects/TrafficFlow_AI"
+repoURL: "https://github.com/TrafficFlow-AI"
+tags: ["Python", "NextJS", "AI", "YOLOv10"]
+---
+
+import FeatureGrid from "../../../components/FeatureGrid.astro";
+import Timeline from "../../../components/Timeline.astro";
+
+# Project Overview
+
+TrafficFlow AI is a real-time vehicle radar system that uses computer vision to detect and count cars in a predefined area, identifying traffic jams and analyzing flow patterns as they happen.
+
+The project was built during **HackBCN** — a 30-hour hackathon — by a team of 3 members. For most of us, it was the first time integrating an AI model into a real project, making it as much a learning experience as a technical challenge.
+
+---
+
+# My Role
+
+My responsibilities spanned both ends of the stack. On the AI side, I implemented the YOLOv10 model to detect and count vehicles within a defined region of interest in the video feed. On the frontend side, I built the Next.js client to display the live detection results and traffic analysis in a clear, visual interface.
+
+The biggest challenge was time: learning how to work with YOLOv10, integrate it into a pipeline, and ship a working demo — all within 30 hours and with no prior AI project experience.
+
+---
+
+# Design Process
+
+<Timeline
+  items={[
+    {
+      title: "Step 1 — Problem Definition",
+      description: "Define a traffic monitoring use case achievable within 30 hours: detect vehicles in a fixed area and identify congestion in real time.",
+    },
+    {
+      title: "Step 2 — Model Selection",
+      description: "Evaluated object detection options and selected YOLOv10 for its balance of speed and accuracy, suitable for real-time inference.",
+    },
+    {
+      title: "Step 3 — YOLOv10 Integration",
+      description: "Set up the Python inference pipeline: load the model, define the region of interest, and run frame-by-frame vehicle detection on a video stream.",
+    },
+    {
+      title: "Step 4 — Traffic Logic",
+      description: "Implement vehicle counting and congestion thresholds to classify traffic state (free flow, slow, jammed) based on detected car density.",
+    },
+    {
+      title: "Step 5 — Frontend",
+      description: "Built the Next.js interface to consume the detection data and display live stats, vehicle counts, and traffic state in a dashboard.",
+    },
+    {
+      title: "Step 6 — Demo & Presentation",
+      description: "Integrated all components into a working end-to-end demo and presented at HackBCN, showcasing real-time detection on sample traffic footage.",
+    },
+  ]}
+/>
+
+---
+
+# Features
+
+<FeatureGrid
+  columns={3}
+  items={[
+    { icon: "🚗", title: "Vehicle Detection", description: "YOLOv10 model detects and counts cars in a predefined area of the video feed in real time." },
+    { icon: "🚦", title: "Traffic Analysis", description: "Classifies traffic state based on vehicle density: free flow, slow, or jammed." },
+    { icon: "📺", title: "Live Dashboard", description: "Next.js frontend displays real-time detection results, vehicle counts, and traffic status." },
+    { icon: "🧠", title: "YOLOv10", description: "State-of-the-art object detection model optimized for speed and accuracy in real-time scenarios." },
+    { icon: "⚡", title: "30-Hour Build", description: "Designed, trained, integrated, and demoed during a single HackBCN hackathon session." },
+    { icon: "🎯", title: "Region of Interest", description: "Detection focused on a configurable area of the frame, reducing noise and improving accuracy." },
+  ]}
+/>
+
+---
+
+# Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Object detection | YOLOv10 |
+| AI / inference | Python |
+| Frontend | Next.js |
+
+---
+
+# Conclusions
+
+TrafficFlow AI was a first contact with applied AI under real pressure. Going from zero AI project experience to a working YOLOv10 pipeline with a live frontend in 30 hours forced rapid learning and decisive prioritization.
+
+Beyond the technical side, the hackathon context taught us to scope aggressively, cut non-essential features early, and focus energy on what makes a demo convincing. The result was a functional traffic radar that detected vehicles in real time and classified congestion — a solid foundation for a more robust system given more time.

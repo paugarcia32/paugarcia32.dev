@@ -1,0 +1,93 @@
+---
+title: "IoT Real-Time Sensoring"
+description: "Full stack IoT real-time sensoring system"
+date: "May 4, 2024"
+repoURL: "https://github.com/CisHighLevel"
+tags: ["Python", "Flutter", "ESP32", "IoT"]
+---
+
+import FeatureGrid from "../../../components/FeatureGrid.astro";
+import Timeline from "../../../components/Timeline.astro";
+
+# Project Overview
+
+IoT Real-Time Sensoring is a full-stack application built to collect and visualize sensor data in real time. ESP32 microcontrollers read data from physical sensors and stream it to a backend, where a Flutter mobile app displays the live readings instantly.
+
+The project was built during **HackUPC** — a 36-hour hackathon — by a team of 4 members. The time constraint shaped every decision: fast iteration, pragmatic choices, and a clear split of responsibilities within the team.
+
+---
+
+# My Role
+
+My main responsibility was the ESP32 firmware: reading sensor values, managing the WiFi connection, and sending data to the backend reliably within the hackathon timeframe.
+
+The biggest challenge was a hardware conflict with the WiFi Arduino library — it required specific pins that were already in use by our sensors. Resolving this took a significant chunk of time during the event, but it was one of the most valuable debugging experiences of the project.
+
+---
+
+# Design Process
+
+<Timeline
+  items={[
+    {
+      title: "Step 1 — Problem Definition",
+      description: "Define the project scope for the hackathon: real-time sensor data collection and visualization, achievable within 36 hours by a team of 4.",
+    },
+    {
+      title: "Step 2 — Hardware Setup",
+      description: "Set up ESP32 microcontrollers with the target sensors and establish the data pipeline from hardware to backend.",
+    },
+    {
+      title: "Step 3 — WiFi Pin Conflict",
+      description: "Identified and resolved a critical hardware conflict: the WiFi Arduino library required pins already occupied by the sensors. Required rerouting and firmware workarounds.",
+    },
+    {
+      title: "Step 4 — Backend & Real-Time Transport",
+      description: "Built the Express.js backend to receive sensor payloads from the ESP32 and expose them to the mobile client in real time.",
+    },
+    {
+      title: "Step 5 — Mobile App",
+      description: "Developed the Flutter app to fetch and display live sensor readings, updating the UI as new data arrived from the backend.",
+    },
+    {
+      title: "Step 6 — Grafana Dashboard",
+      description: "Integrated Grafana to provide a visual dashboard of the historical and live sensor data alongside the mobile app.",
+    },
+  ]}
+/>
+
+---
+
+# Features
+
+<FeatureGrid
+  columns={3}
+  items={[
+    { icon: "📡", title: "Real-Time Data", description: "Sensor readings streamed live from ESP32 to the mobile app with minimal latency." },
+    { icon: "🔌", title: "ESP32 Firmware", description: "Custom firmware handling sensor reading, WiFi connectivity, and data transmission." },
+    { icon: "📱", title: "Flutter App", description: "Cross-platform mobile client displaying live sensor values as they arrive." },
+    { icon: "📊", title: "Grafana Dashboard", description: "Visual dashboards for real-time and historical sensor data visualization." },
+    { icon: "⚡", title: "36-Hour Build", description: "Designed, built, and demoed during a single HackUPC hackathon weekend." },
+    { icon: "👥", title: "Team of 4", description: "Collaborative development with clear role separation across hardware, backend, and frontend." },
+  ]}
+/>
+
+---
+
+# Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Microcontroller | ESP32 (Arduino framework) |
+| Firmware language | C++ / Python |
+| Backend | Express.js (Node.js) |
+| Mobile app | Flutter (Dart) |
+| Dashboards | Grafana |
+
+---
+
+# Conclusions
+
+Building a full-stack IoT system in 36 hours was as much a lesson in prioritization as it was in engineering. The hardware pin conflict with the WiFi library was a real blocker — the kind of low-level problem that doesn't show up until you're deep into integration — and solving it under time pressure made it memorable.
+
+The result was a working end-to-end pipeline: physical sensors feeding real-time data through a backend into both a mobile app and Grafana dashboards. A solid proof that constrained environments push you to find practical solutions fast.
