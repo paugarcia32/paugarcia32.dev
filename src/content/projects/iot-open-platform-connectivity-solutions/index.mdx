@@ -10,58 +10,126 @@ tags: ["LoRa", "IoT", "BLE", "ESP32"]
 import Timeline from "../../../components/Timeline.astro";
 import FeatureGrid from "../../../components/FeatureGrid.astro";
 
-# Design Process
-
-
-  <FeatureGrid
-    columns={3}
-    items={[
-      { number: 1, title: "LoRa Protocol", description: "Long-range connectivity between nodes." },
-      { icon: "⚡", title: "Energy Efficient", description: "Deep sleep modes on ESP32." },
-      { title: "Open Source", description: "Fully open platform." },
-    ]}
-  />
-  
-
-<Timeline
-  items={[
-    {
-      title: "Phase 1 — LoRa Fundamentals",
-      description: "Understanding how LoRa works: modulation basics, spreading factors, and long-range propagation characteristics.",
-    },
-    {
-      title: "Phase 2 — Energy Efficiency",
-      description: "Testing deep sleep modes on ESP32 to minimize power consumption between data transmissions.",
-    },
-    {
-      title: "Phase 3 — Persistent Memory",
-      description: "Non-volatile storage implementation using NVS to retain configuration across power cycles.",
-    },
-    {
-      title: "Phase 4 — RF Regulations",
-      description: "Studying European frequency band restrictions (868 MHz) and duty cycle compliance.",
-    },
-    {
-      title: "Phase 5 — Spreading Factor",
-      description: "Implementing an optimal SF selection system that adapts to link quality and range requirements.",
-    },
-    {
-      title: "Phase 6 — Protocol Design",
-      description: "Designing the multi-node LoRa protocol enabling mesh-like communication between field nodes.",
-    },
-  ]}
-/>
-
-
 # Project Overview
 
-The purpose of this work is to develop a tool to carry out citizen science projects.
+The purpose of this work is to develop a tool to carry out citizen science projects. Citizen science projects are aimed at generating new knowledge with the active and essential participation of citizens at some stage of the project's research process.
 
-Citizen science projects are aimed at generating new knowledge with the active and essential participation of citizens at some stage of the project's research process.
-
-Specifically, this work aims to develop an IoT (Internet of Things) device that, depending on its use, is low-cost, easy to use, suitable for operating in environments with different connectivity possibilities, can be coupled with different types of sensors and can be easily programmed, to adapt the device to the project in which it is being used.
-This work focuses on the connectivity part.
+Specifically, this work aims to develop an IoT (Internet of Things) device that, depending on its use, is low-cost, easy to use, suitable for operating in environments with different connectivity possibilities, can be coupled with different types of sensors and can be easily programmed, to adapt the device to the project in which it is being used. This work focuses on the connectivity part.
 
 The final objective, beyond this work, is the development of a solid solution that provides various connectivity possibilities, within a robust environment, that allows communication in various ways with, for example, a weather station. Therefore, in this work, as a first step, the objective has been defined as developing a platform that supports different connectivity technologies in order to facilitate its configuration and subsequent connection to the Internet to collect the generated data.
 
 To achieve this objective, the partial objectives have been defined as designing and developing a proof of concept of an IoT protocol that allows connectivity between several nodes. This need is given by the use of LoRa (Long Range) in scenarios where there is no Wi-Fi coverage. On the other hand, the objective has also been defined as investigating and implementing energy saving solutions, solutions for a possible simple configuration of the nodes and the possibility of saving data in non-volatile memory to avoid losing configuration data in possible power losses.
+
+---
+
+# Solution Implemented
+
+The final result is a prototype device configurable via Bluetooth Low Energy (BLE). During setup, the device receives Wi-Fi credentials (SSID and password), which are stored in non-volatile memory (NVS) to persist through deep sleep cycles. If no Wi-Fi is configured or the credentials are invalid, the device automatically falls back to the custom LoRa protocol.
+
+This custom LoRa protocol operates on a 60-second loop, during which each node transmits sensor data in an ordered and optimized manner. The protocol avoids collisions between node transmissions and remains compliant with EU radio frequency regulations.
+
+---
+
+# Design Process
+
+<Timeline
+  items={[
+    {
+      title: "Step 1 — LoRa Foundations",
+      description: "Understanding how LoRa works: modulation basics, spreading factors, and long-range propagation characteristics.",
+    },
+    {
+      title: "Step 2 — ETSI Regulations",
+      description: "Studying European frequency band restrictions at 868 MHz, duty cycle compliance (≤1%), and Polite Spectrum Access requirements.",
+    },
+    {
+      title: "Step 3 — Medium Access Protocols",
+      description: "Evaluating CSMA and TDMA approaches to handle multi-node access in a LoRa network without a central synchronization clock.",
+    },
+    {
+      title: "Step 4 — Optimal SF Calculation",
+      description: "Designing an algorithm to select the optimal Spreading Factor per node based on RSSI and SNR, minimizing Time-on-Air and duty cycle usage.",
+    },
+    {
+      title: "Step 5 — LoRa Protocol Definition",
+      description: "Designing the message structure and communication flow: Beacon, Request, Schedule, and Data message types.",
+    },
+    {
+      title: "Step 6 — Slot Negotiation",
+      description: "Implementing a TDMA slot assignment mechanism where the gateway assigns time slots and optimal SF to each node after the initial CSMA-based handshake.",
+    },
+  ]}
+/>
+
+---
+
+# Implementation
+
+## Protocol Characteristics
+
+<FeatureGrid
+  columns={3}
+  items={[
+    { icon: "🔗", title: "Up to 4 Nodes", description: "Supports up to 4 field nodes and 1 gateway in a single network." },
+    { icon: "📡", title: "SF Optimization", description: "Optimal Spreading Factor calculated per node based on RSSI and SNR." },
+    { icon: "⚡", title: "Energy Efficient", description: "TDMA-based scheduling enables deep sleep between transmissions." },
+    { icon: "💾", title: "Data Persistent", description: "Configuration stored in non-volatile memory (NVS) across power cycles." },
+    { icon: "📋", title: "ETSI Compliant", description: "Duty cycle ≤1% at 868 MHz with Polite Spectrum Access support." },
+    { icon: "🔀", title: "Collision Avoidance", description: "CSMA for initial access, TDMA for scheduled data transmission." },
+  ]}
+/>
+
+## Medium Access Control
+
+Since LoRa does not natively support any medium access control, two complementary approaches were implemented:
+
+**CSMA (Carrier Sense Multiple Access)** is used during the initial phase of communication. Without a central clock to synchronize all nodes from the start, each node listens to the channel before transmitting. If the channel is busy, the node waits one second and tries again. This mechanism avoids collisions during the bootstrap phase and satisfies the Polite Spectrum Access requirement defined by ETSI.
+
+**TDMA (Time Division Multiple Access)** is used once the gateway knows how many nodes are present. The gateway assigns a specific time slot to each node, so every node knows exactly when to transmit, eliminating the need to listen before sending. This simplifies node logic (nodes act as slaves, the gateway as master) and allows nodes to sleep between their assigned slots, significantly reducing power consumption. Even in TDMA mode, Polite Spectrum Access is respected before each transmission.
+
+## Spreading Factor Selection
+
+To optimize LoRa communication between the gateway and nodes, the optimal Spreading Factor is calculated per node based on the received RSSI and SNR. A lower SF results in a shorter Time-on-Air and lower duty cycle usage for nodes with a strong signal.
+
+```cpp
+uint8_t calculateOptimalSF(float rssi, float snr) {
+  const int sensitivitySF[] = { -125, -127, -130, -132, -135, -137 };
+  const float snrLimit[] = { -7.5, -10.0, -12.5, -15.0, -17.5, -20.0 };
+
+  for (int i = 0; i < 6; i++) {
+    if (rssi >= sensitivitySF[i] && snr >= snrLimit[i]) {
+      return 7 + i;
+    }
+  }
+  return 12;
+}
+```
+
+## Message Types
+
+All messages share a common header with the following fields:
+
+- **Message type** (2 bits): `00` Beacon · `01` Request · `10` Schedule · `11` Data
+- **Gateway flag** (1 bit): `0` = node · `1` = gateway
+- **Reserved flags** (5 bits): reserved for future use
+- **Transmitter node ID** (8 bits)
+- **Receiver node ID** (8 bits)
+
+| Message | Sender | Purpose |
+|---------|--------|---------|
+| **Beacon** | Gateway | Announces the gateway on the configured channel |
+| **Request** | Node | Confirms Beacon reception and requests transmission resources |
+| **Schedule** | Gateway | Assigns optimal SF and time slot to each responding node |
+| **Data** | Node | Transmits sensor readings to the gateway |
+
+The Schedule message carries per-node assignments: node ID (8 bits), optimal SF (3 bits), and slot index (2 bits). In the worst case with 4 active nodes, the Schedule message reaches 76 bits (10 bytes).
+
+---
+
+# Conclusions
+
+This work demonstrates that it is feasible to build a low-cost, open-source IoT platform capable of operating in environments with limited or no Wi-Fi connectivity. By combining BLE configuration, NVS persistence, and a custom LoRa protocol, the device adapts to different deployment scenarios without requiring manual reconfiguration.
+
+The designed LoRa protocol provides a solid proof of concept: it handles node discovery, medium access control, spreading factor optimization, and data collection within a 60-second cycle — all while remaining compliant with ETSI duty cycle regulations at 868 MHz. The CSMA-to-TDMA transition ensures both flexibility at startup and efficiency during steady-state operation.
+
+Future work could extend the platform to support more nodes, additional sensor types, and more robust over-the-air configuration mechanisms.
