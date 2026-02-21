@@ -10,6 +10,10 @@ This is a personal portfolio and blog site built with Astro, featuring a minimal
 
 This project uses **pnpm**. Always use `pnpm` commands, not npm or yarn.
 
+## Development Server
+
+**Assume the dev server is always running at `http://localhost:4321`** unless told otherwise. Do not start it again or run `pnpm dev` unless explicitly asked.
+
 ## Development Commands
 
 ```bash

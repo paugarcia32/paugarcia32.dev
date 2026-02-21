@@ -1,5 +1,6 @@
 ---
 import Container from "@components/Container.astro";
+import Icon from "@components/Icon.astro";
 import Link from "@components/Link.astro";
 import { SITE } from "@consts";
 ---
@@ -30,20 +31,7 @@ import { SITE } from "@consts";
           aria-label="Search"
           class="flex items-center gap-1.5 rounded-md px-2 py-1 text-sm transition-colors duration-300 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-          </svg>
+          <Icon name="magnifying-glass" size={16} />
           <span class="hidden sm:inline text-cloud-dark dark:text-cloud-light">⌘K</span>
         </button>
 
@@ -55,39 +43,9 @@ import { SITE } from "@consts";
           aria-expanded="false"
         >
           <!-- Hamburger icon -->
-          <svg
-            id="hamburger-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <line x1="4" y1="6" x2="20" y2="6"></line>
-            <line x1="4" y1="12" x2="20" y2="12"></line>
-            <line x1="4" y1="18" x2="20" y2="18"></line>
-          </svg>
+          <Icon id="hamburger-icon" name="bars-3" size={16} />
           <!-- Close icon (hidden by default) -->
-          <svg
-            id="close-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="hidden"
-          >
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
+          <Icon id="close-icon" name="x-mark" size={16} class="hidden" />
         </button>
       </div>
     </div>

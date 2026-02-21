@@ -4,6 +4,12 @@ description: "Get started writing content in markdown."
 date: "Mar 17, 2024"
 tags: ["Markdown", "Writing", "Documentation"]
 ---
+---
+title: "Markdown syntax guide"
+description: "Get started writing content in markdown."
+date: "Mar 17, 2024"
+tags: ["Markdown", "Writing", "Documentation"]
+---
 
 ---
 

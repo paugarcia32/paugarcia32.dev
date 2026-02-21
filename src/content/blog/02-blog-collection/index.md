@@ -4,6 +4,12 @@ description: "How to add posts to your blog."
 date: "Mar 21, 2024"
 tags: ["Astro", "Content Collections", "Tutorial"]
 ---
+---
+title: "Blog Collection"
+description: "How to add posts to your blog."
+date: "Mar 21, 2024"
+tags: ["Astro", "Content Collections", "Tutorial"]
+---
 
 The `blog` collections is found in `src/content/blog`.
 

@@ -4,6 +4,12 @@ description: "Hit the ground running."
 date: "Mar 22, 2024"
 tags: ["Astro", "Tutorial", "Web Development"]
 ---
+---
+title: "Getting started"
+description: "Hit the ground running."
+date: "Mar 22, 2024"
+tags: ["Astro", "Tutorial", "Web Development"]
+---
 
 The basic configuration of Nano is pretty simple.
 

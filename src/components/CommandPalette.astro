@@ -1,5 +1,7 @@
 ---
-// No props needed - this is a global component
+import { iconPaths } from "@lib/icons";
+
+const serializedIconPaths = JSON.stringify(iconPaths);
 ---
 
 <dialog
@@ -305,8 +307,15 @@
   </div>
 </dialog>
 
+<script type="application/json" id="icon-paths-data" set:html={serializedIconPaths}></script>
+
 <script>
   import Fuse, { type FuseResult } from "fuse.js";
+
+  type IconPaths = Record<string, string>;
+  const iconPaths: IconPaths = JSON.parse(
+    document.getElementById("icon-paths-data")!.textContent!
+  );
 
   interface SearchItem {
     id: string;
@@ -426,19 +435,20 @@
     }
   }
 
+  // Build an SVG string from a Heroicon name using the shared iconPaths map
+  function makeIcon(name: string): string {
+    const paths = iconPaths[name] ?? iconPaths["document"];
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle">${paths}</svg>`;
+  }
+
   // Get type icon
   function getTypeIcon(type: string): string {
     switch (type) {
-      case "blog":
-        return "📝";
-      case "work":
-        return "💼";
-      case "project":
-        return "🚀";
-      case "tag":
-        return "🏷️";
-      default:
-        return "📄";
+      case "blog":    return makeIcon("pencil-square");
+      case "work":    return makeIcon("briefcase");
+      case "project": return makeIcon("rocket-launch");
+      case "tag":     return makeIcon("tag");
+      default:        return makeIcon("document");
     }
   }
 

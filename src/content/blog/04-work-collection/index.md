@@ -4,6 +4,12 @@ description: "How to add work experience."
 date: "Mar 19, 2024"
 tags: ["Astro", "Content Collections", "Career"]
 ---
+---
+title: "Work Collection"
+description: "How to add work experience."
+date: "Mar 19, 2024"
+tags: ["Astro", "Content Collections", "Career"]
+---
 
 The `work` collections is found in `src/content/work`.
 
