@@ -59,6 +59,9 @@ const relatedContent = project.data.tags && project.data.tags.length > 0
       <div class="animate text-2xl font-semibold text-slate-dark dark:text-ivory-light">
         {project.data.title}
       </div>
+      <div class="animate text-cloud-dark dark:text-cloud-light">
+        {project.data.description}
+      </div>
       {(project.data.demoURL || project.data.repoURL) && (
         <nav class="animate flex gap-1">
           {project.data.demoURL && (

@@ -1,6 +1,6 @@
 ---
 title: "Traffic Flow AI"
-description: "Real-time AI traffic radar system using YOLOv10 model"
+description: "YOLOv10 pipeline that detects vehicles and classifies congestion in real time."
 date: "Jul 1, 2024"
 demoURL: "https://www.hackbarna.com/en/projects/TrafficFlow_AI"
 repoURL: "https://github.com/TrafficFlow-AI"
@@ -14,7 +14,7 @@ import Timeline from "../../../components/Timeline.astro";
 
 TrafficFlow AI is a real-time vehicle radar system that uses computer vision to detect and count cars in a predefined area, identifying traffic jams and analyzing flow patterns as they happen.
 
-The project was built during **HackBCN** — a 30-hour hackathon — by a team of 3 members. For most of us, it was the first time integrating an AI model into a real project, making it as much a learning experience as a technical challenge.
+The project was built during **HackBCN**, a 30-hour hackathon, by a team of 3 members. For most of us, it was the first time integrating an AI model into a real project.
 
 ---
 
@@ -52,7 +52,7 @@ The biggest challenge was time: learning how to work with YOLOv10, integrate it 
     },
     {
       title: "Step 6 — Demo & Presentation",
-      description: "Integrated all components into a working end-to-end demo and presented at HackBCN, showcasing real-time detection on sample traffic footage.",
+      description: "Integrated all components into a working end-to-end demo and presented at HackBCN with real-time detection running on sample traffic footage.",
     },
   ]}
 />
@@ -67,7 +67,7 @@ The biggest challenge was time: learning how to work with YOLOv10, integrate it 
     { icon: "truck", title: "Vehicle Detection", description: "YOLOv10 model detects and counts cars in a predefined area of the video feed in real time." },
     { icon: "signal", title: "Traffic Analysis", description: "Classifies traffic state based on vehicle density: free flow, slow, or jammed." },
     { icon: "tv", title: "Live Dashboard", description: "Next.js frontend displays real-time detection results, vehicle counts, and traffic status." },
-    { icon: "cpu-chip", title: "YOLOv10", description: "State-of-the-art object detection model optimized for speed and accuracy in real-time scenarios." },
+    { icon: "cpu-chip", title: "YOLOv10", description: "Object detection model selected for its balance of inference speed and accuracy on video streams." },
     { icon: "bolt", title: "30-Hour Build", description: "Designed, trained, integrated, and demoed during a single HackBCN hackathon session." },
     { icon: "viewfinder-circle", title: "Region of Interest", description: "Detection focused on a configurable area of the frame, reducing noise and improving accuracy." },
   ]}
@@ -89,4 +89,4 @@ The biggest challenge was time: learning how to work with YOLOv10, integrate it 
 
 TrafficFlow AI was a first contact with applied AI under real pressure. Going from zero AI project experience to a working YOLOv10 pipeline with a live frontend in 30 hours forced rapid learning and decisive prioritization.
 
-Beyond the technical side, the hackathon context taught us to scope aggressively, cut non-essential features early, and focus energy on what makes a demo convincing. The result was a functional traffic radar that detected vehicles in real time and classified congestion — a solid foundation for a more robust system given more time.
+Beyond the technical side, the hackathon context taught us to scope aggressively, cut non-essential features early, and focus energy on what makes a demo convincing. The result was a functional traffic radar that detected vehicles in real time and classified congestion. Given more time, the pipeline could support more camera angles, real traffic feeds, and finer congestion thresholds.

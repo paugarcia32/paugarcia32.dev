@@ -1,50 +1,42 @@
 ---
 title: "Six Months of Lessons"
-description: "What a 'Three-Week' Redesign Actually Taught Us"
-date: "Jan 18, 2026"
-tags: ["project-management", "lessons-learned", "development"]
----
----
-title: "Six Months of Lessons"
-description: "What a 'Three-Week' Redesign Actually Taught Us"
+description: "What a three-week mobile app redesign taught me about scope, capacity, and craft."
 date: "Jan 18, 2026"
 tags: ["project-management", "lessons-learned", "development"]
 ---
 
+Over the past six months, we worked on a large project: redesigning our mobile application.
 
-Over the past six months, we've been working on a large project: redesigning our mobile application.
+The original estimate was two to three weeks. It took six months. Throughout this article, I'll walk through the problems we faced, the lessons we learned, and a few other thoughts.
 
-As one would expect, the time allocated for this project, which was originally between two and three weeks, was nowhere near the actual time. Throughout this article, I'll try to walk through the problems we faced, the lessons we've learned, and a few other thoughts.
-
-Before we get into the content of the article, there are a few things that need to be said. This project took place between mid-August and mid-January. We're a small startup with two engineers: one junior (myself) and one senior. We're not a large team, which means our bandwidth is moderate. We're not working on the product 24/7, but we also need to handle the technical side of new clients entering our system, as well as the technical support clients need because of the lack of features our product currently has.
+Before getting into the content, some context. This project ran from mid-August to mid-January. We're a small startup with two engineers: one junior (myself) and one senior. We're not working on the product 24/7, and we also handle the technical side of onboarding new clients and the support load that comes from missing features in the current product.
 
 Having said that, here are my thoughts.
 
 ## Difficulties
 
-One of the biggest problems that we faced was our lack of experience with this type of project. There were a number of shortcuts that we didn't know existed that would have helped us develop faster and cleaner code. A good example of this was our initial theme implementation, which we did entirely ourselves, making mistakes, then going back to correct them, and finally going back to correct them again. There are tools available that can help you configure a Flutter theme's colors, typography, spacing, and sizing without having to do it manually. Not knowing this early on cost us a lot of time.
+Our biggest problem early on was not knowing the shortcuts that existed. A clear example was our initial theme implementation: we built it entirely from scratch, made mistakes, fixed them, then fixed them again. Tools exist that configure a Flutter theme's colors, typography, spacing, and sizing without doing it by hand. Not knowing this cost us real time.
 
-It's worth noting that by implementing everything ourselves, we gained a good understanding of the system, and if we ever need to change anything in the future, we will know exactly where to look and what to do.
+Worth noting: building it ourselves gave us a complete understanding of the system. If we ever need to change anything, we know exactly where to look.
 
-Another important challenge was that of the true capacity of the team. The team consisted of only two developers. As a result, any loss of time by the team members or any shift of focus towards other tasks that were not part of the redesign meant that the team would be able to accomplish only half of what it was capable of. It is always difficult to assess the true capacity of a team, and it is even more difficult when that team is also responsible for other aspects of the business.
+A harder challenge was accurately accounting for team capacity. Two developers means any shift of focus, any day lost to something outside the redesign, cuts output in half. Assessing true capacity is difficult in any team. It is even harder when the same team also owns other parts of the business.
 
-The biggest challenge of all was that of the true size of the project. As discussed earlier, it was initially believed that it would take two to three weeks to finish. As we progressed, however, it was clear that the project was growing exponentially. The redesign was also based on a vision of what this product would be, but this vision did not yet exist. As a result, it was necessary to create new flows, new user experiences, and new features to bring this vision to life. It was impossible to accurately define the scope of this project from the very beginning.
-
+The hardest challenge was the true size of the project. At the start, two to three weeks seemed reasonable. As we progressed, scope expanded. The redesign was built around a product vision that did not yet fully exist, which meant creating new flows, new user experiences, and new features on top of the visual work. Defining scope at the beginning was impossible because the target kept moving.
 
 ## Lessons Learned
 
-The most important lesson learned through this project was that in order to define the scope of a project well, one had to have a good grasp of three factors: the expected output, the actual capacity of the team, and the potential setbacks that may occur during the execution of the project. Not leaving any room for error does not amount to estimating; rather, it amounts to wishful thinking. In any project that takes a long time to execute, there are bound to be setbacks.
+The clearest lesson was that good scope definition requires three things: a precise expected output, an honest assessment of team capacity, and room for setbacks. Leaving no buffer is not estimating; it is wishful thinking. On any project that runs for months, setbacks will happen.
 
-One of the instances in our project was during the redesign. At this time, the team was working on two other projects. The two projects needed more or less dedication at different times, but they never needed zero dedication. The two projects significantly contributed to the fact that the project took far longer than expected.
+In our case, the team was running two other projects in parallel during the redesign. Those projects demanded attention at different times, but never zero attention. That constant drain was a major reason the project ran long.
 
-A related lesson is the value of not beginning a new project while another is already in progress, unless the capabilities and priorities of the team have been specifically factored in. Parallel workstreams without well-defined boundaries can have a corrosive impact on focus and momentum that is hard to grasp initially.
+A related lesson: starting a new project while another is in progress is risky unless the team's capacity and priorities are clearly defined upfront. Parallel workstreams without hard boundaries quietly erode focus and momentum in ways that are not obvious until you are deep in.
 
 ## Reflections
 
-Apart from these structural lessons, there are a few more personal reflections that I thought were worth sharing.
+Three personal observations from this project worth sharing.
 
-One of these is just how far AI as a development tool has come. Throughout this project, AI was invaluable in helping us implement, edit, and refactor code at a rate we would not have managed otherwise. It was especially useful in creating a first working version of features that we had no idea how to get started with in the first place. While someone still needs to look over the code produced by AI to ensure everything works as expected, used well, it’s a genuine time-saver.
+First, AI as a development tool is genuinely useful now. Throughout this project, it helped us implement, edit, and refactor code faster than we could have managed alone. It was especially useful for getting a first working version of features we had no prior experience with. Someone still needs to review the output, but used well, it saves real time.
 
-The second reflection is with respect to the power of small details. In a software product, the difference between a good product and a great product can often be determined by small details, such as the correct font size, correct spacing, correct application of color schemes, and correct application of micro animations. However, there is a thin line between correct application of small details and overuse of small details to the extent of creating visual noise. The correct application of small details, staying on the right side of the line, is part of the craft.
+Second, small details matter more than you might expect. In a software product, the gap between good and great often comes down to font size, spacing, color application, and micro animations. There is a thin line between deliberate detail and visual noise. Staying on the right side of that line is part of the craft.
 
-Lastly, I want to emphasize the significance of bug bash sessions and beta testing. In a product of this scale, small bugs and minor issues can go unnoticed by the developer. The product may suffer if these bug bash sessions and beta testing are not conducted before release. The product may appear less polished in the eyes of the consumer.
+Third, bug bash sessions and beta testing are not optional on a project of this scale. Small issues go unnoticed by the developers building the product. Without structured testing before release, they reach users instead.

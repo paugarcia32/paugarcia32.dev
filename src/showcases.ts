@@ -21,12 +21,6 @@ export const HOMEPAGE: Types.Showcase = {
  * Add more content when CV page is created
  */
 export const CV: Types.Showcase = {
-  projects: [
-    projects.realTimeSensoringIot,
-    // Add more projects when CV page is created
-  ],
-  work: [
-    { company: companies.maat.companyConfig.company },
-    // Add more work when CV page is created
-  ],
+  projects: [projects.realTimeSensoringIot],
+  work: [{ company: companies.maat.companyConfig.company }],
 };
