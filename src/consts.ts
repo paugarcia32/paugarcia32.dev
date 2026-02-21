@@ -29,10 +29,6 @@ export const PROJECTS: Types.Metadata = {
 
 export const SOCIALS: Types.Socials = [
   {
-    NAME: "twitter-x",
-    HREF: "https://twitter.com/markhorn_dev",
-  },
-  {
     NAME: "github",
     HREF: "https://github.com/paugarcia32",
   },
