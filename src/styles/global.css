@@ -49,6 +49,7 @@ body {
   @apply flex flex-col;
   @apply bg-ivory-light dark:bg-slate-dark;
   @apply text-slate-dark/75 dark:text-ivory-light/90;
+  @apply leading-relaxed text-[0.9375rem];
 }
 
 header {

@@ -12,6 +12,21 @@ export default {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
         serif: ["Lora", ...defaultTheme.fontFamily.serif],
       },
+      lineHeight: {
+        relaxed: "1.4",
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            lineHeight: "1.4",
+            p: {
+              marginTop: "1.25em",
+              marginBottom: "1.25em",
+            },
+            fontSize: "0.875rem",
+          },
+        },
+      },
       colors: tailwindColors,
     },
   },
