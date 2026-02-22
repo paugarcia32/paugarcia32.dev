@@ -13,6 +13,13 @@ export type Socials = {
   HREF: string;
 }[];
 
+export type LinkedInProfile = {
+  name: string;
+  handle: string;
+  headline: string;
+  connections: string;
+};
+
 // Content configuration types - type-safe metadata for content
 
 export type BlogPostConfig = {

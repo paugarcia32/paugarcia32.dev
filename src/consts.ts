@@ -27,6 +27,13 @@ export const PROJECTS: Types.Metadata = {
     "A collection of my projects, with links to repositories and demos.",
 };
 
+export const LINKEDIN: Types.LinkedInProfile = {
+  name: "Pau Garcia",
+  handle: "paugarcia32",
+  headline: "Software Engineer & Network Engineer · Barcelona",
+  connections: "400+",
+};
+
 export const SOCIALS: Types.Socials = [
   {
     NAME: "github",

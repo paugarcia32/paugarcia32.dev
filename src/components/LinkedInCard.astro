@@ -1,0 +1,120 @@
+---
+import { Image } from "astro:assets";
+import { LINKEDIN } from "@consts";
+import linkedInImage from "@assets/linkedin_profile_image.png";
+import linkedInBanner from "@assets/linkedin_profile_banner.jpg";
+
+interface Props {}
+
+const instanceId = `linkedin-card-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<span class="linkedin-card-trigger inline" data-instance={instanceId}>
+  <slot />
+</span>
+
+<template id={`${instanceId}-template`}>
+  <div
+    role="tooltip"
+    class="linkedin-card pointer-events-none fixed z-50 w-72 rounded-lg border border-cloud-medium/30 dark:border-cloud-medium/40 bg-ivory-light dark:bg-slate-medium shadow-lg opacity-0 translate-y-1"
+    data-instance={instanceId}
+    style="top: -9999px; left: -9999px; transition: opacity 200ms ease-out, transform 200ms ease-out;"
+  >
+    <!-- Banner -->
+    <div class="h-16 overflow-hidden rounded-t-lg">
+      <Image
+        src={linkedInBanner}
+        alt=""
+        width={288}
+        height={64}
+        class="w-full h-full object-cover object-right"
+      />
+    </div>
+    <!-- Profile picture overlapping the banner -->
+    <div class="px-4 pb-4 flex flex-col gap-3">
+      <div class="-mt-6">
+        <Image
+          src={linkedInImage}
+          alt="Pau Garcia's LinkedIn profile picture"
+          width={48}
+          height={48}
+          class="rounded-full size-12 ring-2 ring-ivory-light dark:ring-slate-medium"
+        />
+      </div>
+      <div class="flex items-baseline gap-1.5 min-w-0">
+        <span class="font-semibold text-sm text-slate-dark dark:text-ivory-light truncate">{LINKEDIN.name}</span>
+        <span class="text-xs text-cloud-dark dark:text-cloud-light font-normal shrink-0">@{LINKEDIN.handle}</span>
+      </div>
+      <p class="text-xs text-slate-dark/75 dark:text-ivory-light/75 leading-relaxed !m-0 !p-0 font-sans">{LINKEDIN.headline}</p>
+      <div class="flex gap-4 text-xs">
+        <span>
+          <span class="font-semibold text-slate-dark dark:text-ivory-light">{LINKEDIN.connections}</span>
+          <span class="text-cloud-dark dark:text-cloud-light ml-1">Contacts</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  function positionCard(trigger: Element, card: HTMLElement) {
+    const rect = trigger.getBoundingClientRect();
+    const cardHeight = card.offsetHeight || 160;
+    const spaceBelow = window.innerHeight - rect.bottom;
+
+    if (spaceBelow < cardHeight + 16) {
+      card.style.top = `${rect.top - cardHeight - 8}px`;
+    } else {
+      card.style.top = `${rect.bottom + 8}px`;
+    }
+
+    const left = Math.min(rect.left, window.innerWidth - 288 - 16);
+    card.style.left = `${left}px`;
+  }
+
+  function initLinkedInCards() {
+    const triggers = document.querySelectorAll<HTMLElement>(".linkedin-card-trigger[data-instance]");
+
+    triggers.forEach((trigger) => {
+      const instanceId = trigger.dataset.instance;
+      if (!instanceId) return;
+
+      const template = document.getElementById(`${instanceId}-template`) as HTMLTemplateElement | null;
+      if (!template) return;
+
+      // Remove existing card for this instance (view transitions cleanup)
+      document.querySelector(`.linkedin-card[data-instance="${instanceId}"]`)?.remove();
+
+      // Clone template and append to body — escapes all transform/overflow contexts
+      const fragment = template.content.cloneNode(true) as DocumentFragment;
+      document.body.appendChild(fragment);
+      const cardEl = document.querySelector<HTMLElement>(`.linkedin-card[data-instance="${instanceId}"]`);
+      if (!cardEl) return;
+
+      let hideTimeout: ReturnType<typeof setTimeout>;
+
+      function show() {
+        clearTimeout(hideTimeout);
+        positionCard(trigger, cardEl!);
+        cardEl!.getBoundingClientRect(); // force reflow before animating
+        cardEl!.classList.remove("opacity-0", "translate-y-1", "pointer-events-none");
+        cardEl!.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
+      }
+
+      function hide() {
+        hideTimeout = setTimeout(() => {
+          cardEl!.classList.remove("opacity-100", "translate-y-0", "pointer-events-auto");
+          cardEl!.classList.add("opacity-0", "translate-y-1", "pointer-events-none");
+        }, 100);
+      }
+
+      trigger.addEventListener("mouseenter", show);
+      trigger.addEventListener("mouseleave", hide);
+      cardEl.addEventListener("mouseenter", () => clearTimeout(hideTimeout));
+      cardEl.addEventListener("mouseleave", hide);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", initLinkedInCards);
+  document.addEventListener("astro:after-swap", initLinkedInCards);
+</script>
