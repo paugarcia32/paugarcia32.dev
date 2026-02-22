@@ -60,12 +60,12 @@ const instanceId = `linkedin-card-${Math.random().toString(36).slice(2, 8)}`;
   function positionCard(trigger: Element, card: HTMLElement) {
     const rect = trigger.getBoundingClientRect();
     const cardHeight = card.offsetHeight || 160;
-    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
 
-    if (spaceBelow < cardHeight + 16) {
-      card.style.top = `${rect.top - cardHeight - 8}px`;
-    } else {
+    if (spaceAbove < cardHeight + 16) {
       card.style.top = `${rect.bottom + 8}px`;
+    } else {
+      card.style.top = `${rect.top - cardHeight - 8}px`;
     }
 
     const left = Math.min(rect.left, window.innerWidth - 288 - 16);
