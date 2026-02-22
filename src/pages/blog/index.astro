@@ -1,10 +1,10 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import ArrowCard from "@components/ArrowCard.astro";
+import BlogCard from "@components/BlogCard.astro";
 import Container from "@components/Container.astro";
 import { BLOG } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
-import { normalizeEntryId } from "@lib/utils";
+import { normalizeEntryId, readingTime } from "@lib/utils";
 
 const data = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
@@ -18,9 +18,7 @@ type Acc = {
 
 const posts = data.reduce((acc: Acc, post) => {
   const year = post.data.date.getFullYear().toString();
-  if (!acc[year]) {
-    acc[year] = [];
-  }
+  if (!acc[year]) acc[year] = [];
   acc[year].push(post);
   return acc;
 }, {});
@@ -34,22 +32,17 @@ const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
       <div class="animate font-semibold text-slate-dark dark:text-ivory-light">
         Blog
       </div>
-      <div class="space-y-4">
+      <div class="space-y-8">
         {years.map(year => (
-          <section class="animate space-y-4">
-            <div class="font-semibold text-slate-dark dark:text-ivory-light">
+          <section class="animate space-y-1">
+            <div class="text-xs font-medium text-cloud-dark dark:text-cloud-light uppercase tracking-wider px-2 pb-1">
               {year}
             </div>
-            <div>
-              <ul class="flex flex-col gap-4">
-                {
-                  posts[year].map((post) => (
-                    <li>
-                      <ArrowCard entry={post}/>
-                    </li>
-                  ))
-                }
-              </ul>
+            <div data-hover-table class="relative flex flex-col">
+              <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
+              {posts[year].map((post) => (
+                <BlogCard entry={post} readingTimeStr={readingTime(post.body ?? "")} />
+              ))}
             </div>
           </section>
         ))}

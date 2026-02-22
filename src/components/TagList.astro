@@ -12,43 +12,26 @@ const { tags, class: className, clickable = true } = Astro.props;
 
 {
   tags && tags.length > 0 && (
-    <div class={`flex flex-wrap gap-1.5 ${className || ""}`}>
-      {tags.map((tag) =>
-        clickable ? (
-          <a
-            href={`/tags/${slugifyTag(tag)}`}
-            class="tag-link inline-flex items-center rounded-full border border-cloud-medium/20 bg-cloud-dark/5 px-2 py-0.5 text-xs text-cloud-dark transition-colors duration-200 hover:border-cloud-medium/40 hover:bg-cloud-dark/10 hover:text-slate-dark dark:border-cloud-medium/25 dark:bg-ivory-dark/5 dark:text-cloud-light dark:hover:border-cloud-medium/50 dark:hover:bg-ivory-dark/10 dark:hover:text-ivory-light"
-          >
-            {tag}
-          </a>
-        ) : (
-          <span class="inline-flex items-center rounded-full border border-cloud-medium/20 bg-cloud-dark/5 px-2 py-0.5 text-xs text-cloud-dark dark:border-cloud-medium/25 dark:bg-ivory-dark/5 dark:text-cloud-light">
-            {tag}
-          </span>
-        )
-      )}
+    <div class={`flex flex-wrap items-center gap-x-2 gap-y-1 ${className || ""}`}>
+      {tags.map((tag, i) => (
+        <>
+          {clickable ? (
+            <a
+              href={`/tags/${slugifyTag(tag)}`}
+              class="tag-link text-xs text-cloud-dark dark:text-cloud-light hover:text-slate-dark dark:hover:text-ivory-light transition-colors duration-150"
+            >
+              <span class="text-cloud-medium dark:text-cloud-medium select-none">#</span>{tag}
+            </a>
+          ) : (
+            <span class="text-xs text-cloud-dark dark:text-cloud-light">
+              <span class="text-cloud-medium dark:text-cloud-medium select-none">#</span>{tag}
+            </span>
+          )}
+          {i < tags.length - 1 && (
+            <span class="text-cloud-medium/50 dark:text-cloud-medium/50 select-none text-xs">/</span>
+          )}
+        </>
+      ))}
     </div>
   )
 }
-
-{clickable && (
-  <script>
-    // Prevent tag clicks from triggering parent link
-    document.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      if (target.closest('.tag-link')) {
-        e.stopPropagation();
-      }
-    });
-
-    // Reinitialize after view transitions
-    document.addEventListener('astro:after-swap', () => {
-      document.addEventListener('click', (e) => {
-        const target = e.target as HTMLElement;
-        if (target.closest('.tag-link')) {
-          e.stopPropagation();
-        }
-      });
-    });
-  </script>
-)}

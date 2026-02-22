@@ -1,7 +1,8 @@
 ---
 import { getCollection } from "astro:content";
-import ArrowCard from "@components/ArrowCard.astro";
+import BlogCard from "@components/BlogCard.astro";
 import CompanyCard from "@components/CompanyCard.astro";
+import ProjectCard from "@components/ProjectCard.astro";
 import Container from "@components/Container.astro";
 import GitHubCard from "@components/GitHubCard.astro";
 import Link from "@components/Link.astro";
@@ -104,7 +105,7 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
         </article>
       </section>
 
-      <section class="animate space-y-6">
+      <section class="animate space-y-3">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
           <h5 class="font-semibold text-slate-dark dark:text-ivory-light">
             Featured posts
@@ -113,13 +114,12 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
             See all posts
           </Link>
         </div>
-        <ul class="flex flex-col gap-4">
+        <div data-hover-table class="relative flex flex-col">
+          <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
           {blog.map(post => (
-            <li>
-              <ArrowCard entry={post} />
-            </li>
+            <BlogCard entry={post} />
           ))}
-        </ul>
+        </div>
       </section>
 
       <section class="animate space-y-6">
@@ -213,7 +213,7 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
         </div>
       </section>
 
-      <section class="animate space-y-6">
+      <section class="animate space-y-3">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
           <h5 class="font-semibold text-slate-dark dark:text-ivory-light">
             Featured projects
@@ -222,13 +222,12 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
             See all projects
           </Link>
         </div>
-        <ul class="flex flex-col gap-4">
+        <div data-hover-table class="relative flex flex-col">
+          <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
           {projects.map(project => (
-            <li>
-              <ArrowCard entry={project} />
-            </li>
+            <ProjectCard entry={project} />
           ))}
-        </ul>
+        </div>
       </section>
 
       <section class="animate space-y-4">

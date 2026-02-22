@@ -735,18 +735,12 @@ const serializedIconPaths = JSON.stringify(iconPaths);
         case "j":
           e.preventDefault();
           e.stopPropagation();
-          document.body.scroll({
-            top: document.body.scrollTop + SCROLL_AMOUNT,
-            behavior: "smooth"
-          });
+          window.scrollBy({ top: SCROLL_AMOUNT, behavior: "smooth" });
           return;
         case "k":
           e.preventDefault();
           e.stopPropagation();
-          document.body.scroll({
-            top: document.body.scrollTop - SCROLL_AMOUNT,
-            behavior: "smooth"
-          });
+          window.scrollBy({ top: -SCROLL_AMOUNT, behavior: "smooth" });
           return;
         case "[":
           e.preventDefault();

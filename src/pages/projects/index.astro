@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
-import ArrowCard from "@components/ArrowCard.astro";
 import Container from "@components/Container.astro";
+import ProjectCard from "@components/ProjectCard.astro";
 import { PROJECTS } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
 import { normalizeEntryId } from "@lib/utils";
@@ -19,15 +19,12 @@ const projectUrls = projects.map((project) => `/projects/${normalizeEntryId(proj
       <div class="animate font-semibold text-slate-dark dark:text-ivory-light">
         Projects
       </div>
-      <ul class="animate flex flex-col gap-4">
-        {
-          projects.map((project) => (
-            <li>
-              <ArrowCard entry={project}/>
-            </li>
-          ))
-        }
-      </ul>
+      <div data-hover-table class="animate relative flex flex-col">
+        <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
+        {projects.map((project) => (
+          <ProjectCard entry={project} />
+        ))}
+      </div>
     </div>
   </Container>
 </PageLayout>
