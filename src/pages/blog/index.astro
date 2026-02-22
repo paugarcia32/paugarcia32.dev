@@ -4,10 +4,13 @@ import ArrowCard from "@components/ArrowCard.astro";
 import Container from "@components/Container.astro";
 import { BLOG } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
+import { normalizeEntryId } from "@lib/utils";
 
 const data = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const postUrls = data.map((post) => `/blog/${normalizeEntryId(post)}`);
 
 type Acc = {
   [year: string]: CollectionEntry<"blog">[];
@@ -54,3 +57,5 @@ const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
     </div>
   </Container>
 </PageLayout>
+
+<script type="application/json" id="page-quick-nav-data" set:html={JSON.stringify(postUrls)}></script>

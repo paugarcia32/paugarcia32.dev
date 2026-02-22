@@ -761,6 +761,20 @@ const serializedIconPaths = JSON.stringify(iconPaths);
       }
     }
 
+    // Number shortcuts on blog/projects listing pages
+    if (!isInInput && !isPaletteOpen && !isShortcutsHelpOpen && e.key >= "1" && e.key <= "9") {
+      const quickNavEl = document.getElementById("page-quick-nav-data");
+      if (quickNavEl) {
+        const urls: string[] = JSON.parse(quickNavEl.textContent ?? "[]");
+        const url = urls[parseInt(e.key) - 1];
+        if (url) {
+          e.preventDefault();
+          window.location.href = url;
+          return;
+        }
+      }
+    }
+
     // Chord shortcuts (g + letter)
     handleChordShortcut(e);
   }

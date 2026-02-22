@@ -4,10 +4,13 @@ import ArrowCard from "@components/ArrowCard.astro";
 import Container from "@components/Container.astro";
 import { PROJECTS } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
+import { normalizeEntryId } from "@lib/utils";
 
 const projects = (await getCollection("projects"))
   .filter((project) => !project.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const projectUrls = projects.map((project) => `/projects/${normalizeEntryId(project)}`);
 ---
 
 <PageLayout title={PROJECTS.TITLE} description={PROJECTS.DESCRIPTION}>
@@ -28,3 +31,5 @@ const projects = (await getCollection("projects"))
     </div>
   </Container>
 </PageLayout>
+
+<script type="application/json" id="page-quick-nav-data" set:html={JSON.stringify(projectUrls)}></script>
