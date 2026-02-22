@@ -3,8 +3,8 @@ import { getCollection } from "astro:content";
 import ArrowCard from "@components/ArrowCard.astro";
 import Container from "@components/Container.astro";
 import GitHubCard from "@components/GitHubCard.astro";
-import LinkedInCard from "@components/LinkedInCard.astro";
 import Link from "@components/Link.astro";
+import LinkedInCard from "@components/LinkedInCard.astro";
 import { HOME, SITE, SOCIALS } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
 import { dateRange, getShowcasedContent, getShowcasedWork } from "@lib/utils";
@@ -194,10 +194,11 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
 
 <script>
   function initCopyEmail() {
-    const btn = document.getElementById("copy-email-btn");
-    if (!btn) return;
+    const btnEl = document.getElementById("copy-email-btn") as HTMLButtonElement | null;
+    if (!btnEl) return;
+    const btn: HTMLButtonElement = btnEl;
 
-    const email = (btn as HTMLButtonElement).dataset.email ?? "";
+    const email = btn.dataset.email ?? "";
 
     // Create tooltip and append to body
     const existing = document.getElementById("copy-email-tooltip");
