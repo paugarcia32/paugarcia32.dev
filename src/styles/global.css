@@ -4,28 +4,28 @@
 
 :root {
   /* Mermaid color variables - Light mode */
-  --mermaid-node-bg: theme('colors.ivory.light');
-  --mermaid-node-border: theme('colors.book-cloth');
-  --mermaid-node-text: theme('colors.slate.dark');
-  --mermaid-cluster-bg: theme('colors.slate.light');
-  --mermaid-cluster-border: theme('colors.kraft');
-  --mermaid-edge-color: theme('colors.kraft');
-  --mermaid-edge-label-bg: theme('colors.ivory.light');
-  --mermaid-edge-label-text: theme('colors.slate.dark');
-  --mermaid-arrow-color: theme('colors.kraft');
+  --mermaid-node-bg: theme("colors.ivory.light");
+  --mermaid-node-border: theme("colors.book-cloth");
+  --mermaid-node-text: theme("colors.slate.dark");
+  --mermaid-cluster-bg: theme("colors.slate.light");
+  --mermaid-cluster-border: theme("colors.kraft");
+  --mermaid-edge-color: theme("colors.kraft");
+  --mermaid-edge-label-bg: theme("colors.ivory.light");
+  --mermaid-edge-label-text: theme("colors.slate.dark");
+  --mermaid-arrow-color: theme("colors.kraft");
 }
 
 html.dark {
   /* Mermaid color variables - Dark mode */
-  --mermaid-node-bg: theme('colors.slate.medium');
-  --mermaid-node-border: theme('colors.book-cloth');
-  --mermaid-node-text: theme('colors.ivory.light');
-  --mermaid-cluster-bg: theme('colors.slate.light');
-  --mermaid-cluster-border: theme('colors.kraft');
-  --mermaid-edge-color: theme('colors.kraft');
-  --mermaid-edge-label-bg: theme('colors.slate.dark');
-  --mermaid-edge-label-text: theme('colors.ivory.light');
-  --mermaid-arrow-color: theme('colors.kraft');
+  --mermaid-node-bg: theme("colors.slate.medium");
+  --mermaid-node-border: theme("colors.book-cloth");
+  --mermaid-node-text: theme("colors.ivory.light");
+  --mermaid-cluster-bg: theme("colors.slate.light");
+  --mermaid-cluster-border: theme("colors.kraft");
+  --mermaid-edge-color: theme("colors.kraft");
+  --mermaid-edge-label-bg: theme("colors.slate.dark");
+  --mermaid-edge-label-text: theme("colors.ivory.light");
+  --mermaid-arrow-color: theme("colors.kraft");
 }
 
 html {

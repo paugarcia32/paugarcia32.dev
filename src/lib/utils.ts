@@ -1,7 +1,7 @@
 import type { CollectionEntry } from "astro:content";
+import type * as Types from "@types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type * as Types from "@types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -269,10 +269,7 @@ export function getAllTags(
 
 export interface TaggedContent {
   type: "blog" | "project" | "work";
-  entry:
-    | CollectionEntry<"blog">
-    | CollectionEntry<"projects">
-    | WorkPosition;
+  entry: CollectionEntry<"blog"> | CollectionEntry<"projects"> | WorkPosition;
   date: Date;
 }
 
@@ -345,7 +342,9 @@ export function getShowcasedContent<
 >(collection: T[], showcase?: Types.ShowcaseItem[]): T[] {
   if (!showcase || showcase.length === 0) return [];
 
-  const slugMap = new Map(collection.map((item) => [normalizeEntryId(item), item]));
+  const slugMap = new Map(
+    collection.map((item) => [normalizeEntryId(item), item]),
+  );
 
   return showcase
     .map(({ slug, config }) => {

@@ -1,13 +1,13 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
+import ArrowCard from "@components/ArrowCard.astro";
 import BackToPrev from "@components/BackToPrev.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import Link from "@components/Link.astro";
-import PageLayout from "@layouts/PageLayout.astro";
 import TagList from "@components/TagList.astro";
-import ArrowCard from "@components/ArrowCard.astro";
-import { readingTime, getContentByTag, normalizeEntryId } from "@lib/utils";
+import PageLayout from "@layouts/PageLayout.astro";
+import { getContentByTag, normalizeEntryId, readingTime } from "@lib/utils";
 
 export async function getStaticPaths() {
   const projects = (await getCollection("projects"))
@@ -32,11 +32,14 @@ const allProjects = await getCollection("projects", ({ data }) => {
 });
 const allWork = await getCollection("work");
 
-const relatedContent = project.data.tags && project.data.tags.length > 0
-  ? getContentByTag(project.data.tags[0], allBlog, allProjects, allWork)
-      .filter(item => normalizeEntryId(item.entry) !== normalizeEntryId(project))
-      .slice(0, 3)
-  : [];
+const relatedContent =
+  project.data.tags && project.data.tags.length > 0
+    ? getContentByTag(project.data.tags[0], allBlog, allProjects, allWork)
+        .filter(
+          (item) => normalizeEntryId(item.entry) !== normalizeEntryId(project),
+        )
+        .slice(0, 3)
+    : [];
 ---
 
 <PageLayout title={project.data.title} description={project.data.description}>

@@ -142,11 +142,7 @@ function generateWorkPositionFrontmatter(config: WorkPositionConfig): string {
  * Generate frontmatter for work company
  */
 function generateWorkCompanyFrontmatter(config: WorkCompanyConfig): string {
-  const lines = [
-    "---",
-    `type: "company"`,
-    `company: "${config.company}"`,
-  ];
+  const lines = ["---", `type: "company"`, `company: "${config.company}"`];
 
   if (config.url) {
     lines.push(`url: "${config.url}"`);
@@ -159,10 +155,7 @@ function generateWorkCompanyFrontmatter(config: WorkCompanyConfig): string {
 /**
  * Update frontmatter in a markdown file
  */
-function updateMarkdownFile(
-  filePath: string,
-  newFrontmatter: string,
-): boolean {
+function updateMarkdownFile(filePath: string, newFrontmatter: string): boolean {
   try {
     const content = fs.readFileSync(filePath, "utf-8");
 

@@ -1,6 +1,6 @@
 import { type CollectionEntry, getCollection } from "astro:content";
-import type { APIRoute } from "astro";
 import { getAllTags, normalizeEntryId } from "@lib/utils";
+import type { APIRoute } from "astro";
 
 interface SearchItem {
   id: string;

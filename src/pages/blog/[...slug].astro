@@ -1,13 +1,13 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
+import ArrowCard from "@components/ArrowCard.astro";
 import BackToPrev from "@components/BackToPrev.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
-import PageLayout from "@layouts/PageLayout.astro";
-import TagList from "@components/TagList.astro";
-import ArrowCard from "@components/ArrowCard.astro";
 import TableOfContents from "@components/TableOfContents.astro";
-import { readingTime, getContentByTag, normalizeEntryId } from "@lib/utils";
+import TagList from "@components/TagList.astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import { getContentByTag, normalizeEntryId, readingTime } from "@lib/utils";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
@@ -32,11 +32,14 @@ const allProjects = await getCollection("projects", ({ data }) => {
 });
 const allWork = await getCollection("work");
 
-const relatedContent = post.data.tags && post.data.tags.length > 0
-  ? getContentByTag(post.data.tags[0], allBlog, allProjects, allWork)
-      .filter(item => normalizeEntryId(item.entry) !== normalizeEntryId(post))
-      .slice(0, 3)
-  : [];
+const relatedContent =
+  post.data.tags && post.data.tags.length > 0
+    ? getContentByTag(post.data.tags[0], allBlog, allProjects, allWork)
+        .filter(
+          (item) => normalizeEntryId(item.entry) !== normalizeEntryId(post),
+        )
+        .slice(0, 3)
+    : [];
 ---
 
 <PageLayout title={post.data.title} description={post.data.description}>

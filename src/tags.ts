@@ -68,5 +68,7 @@ export const POWER_BI = "Power BI";
 
 // Derive Tag type from the exported constants — stays in sync automatically
 // when new constants are added.
-type StringValues<T> = { [K in keyof T]: T[K] extends string ? T[K] : never }[keyof T];
+type StringValues<T> = {
+  [K in keyof T]: T[K] extends string ? T[K] : never;
+}[keyof T];
 export type Tag = StringValues<typeof import("./tags")>;

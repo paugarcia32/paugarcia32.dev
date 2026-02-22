@@ -2,11 +2,12 @@
 import { getCollection } from "astro:content";
 import ArrowCard from "@components/ArrowCard.astro";
 import Container from "@components/Container.astro";
+import GitHubCard from "@components/GitHubCard.astro";
 import Link from "@components/Link.astro";
 import { HOME, SITE, SOCIALS } from "@consts";
-import { HOMEPAGE } from "@showcases";
 import PageLayout from "@layouts/PageLayout.astro";
 import { dateRange, getShowcasedContent, getShowcasedWork } from "@lib/utils";
+import { HOMEPAGE } from "@showcases";
 
 const allBlog = (await getCollection("blog")).filter((p) => !p.data.draft);
 const allProjects = (await getCollection("projects")).filter(
@@ -43,13 +44,15 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
                 projects page
               </Link>
               or visit my
-              <Link
-                href="https://github.com/paugarcia32"
-                aria-label="Pau Garcia on Github"
-                external
-              >
-                GitHub
-              </Link>
+              <GitHubCard username="paugarcia32">
+                <Link
+                  href="https://github.com/paugarcia32"
+                  aria-label="Pau Garcia on Github"
+                  external
+                >
+                  GitHub
+                </Link>
+              </GitHubCard>
               to see what I'm currently building.
             </p>
         </article>
@@ -152,9 +155,17 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
         <ul class="flex flex-wrap gap-2">
           {SOCIALS.map(SOCIAL => (
             <li class="flex gap-x-2 text-nowrap">
-              <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
-                {SOCIAL.NAME}
-              </Link>
+              {SOCIAL.NAME === "github" ? (
+                <GitHubCard username="paugarcia32">
+                  <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
+                    {SOCIAL.NAME}
+                  </Link>
+                </GitHubCard>
+              ) : (
+                <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
+                  {SOCIAL.NAME}
+                </Link>
+              )}
               {"/"}
             </li>
           ))}

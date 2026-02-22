@@ -1,7 +1,7 @@
 import { defineCollection, z } from "astro:content";
-import { glob } from "astro/loaders";
 import { parseDDMMYYYY } from "@lib/utils";
 import * as TAGS from "@tags";
+import { glob } from "astro/loaders";
 
 // Derive Zod enum from tags.ts — adding a tag constant there automatically
 // makes it valid in frontmatter. astro check will fail on unknown tags.
@@ -62,7 +62,10 @@ const work = defineCollection({
 });
 
 const projects = defineCollection({
-  loader: glob({ pattern: "**/index.{md,mdx}", base: "./src/content/projects" }),
+  loader: glob({
+    pattern: "**/index.{md,mdx}",
+    base: "./src/content/projects",
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

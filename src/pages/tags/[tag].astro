@@ -1,11 +1,11 @@
 ---
 import { getCollection } from "astro:content";
-import type { GetStaticPaths } from "astro";
-import PageLayout from "@layouts/PageLayout.astro";
-import Container from "@components/Container.astro";
 import ArrowCard from "@components/ArrowCard.astro";
+import Container from "@components/Container.astro";
 import Icon from "@components/Icon.astro";
-import { getAllTags, getContentByTag, dateRange } from "@lib/utils";
+import PageLayout from "@layouts/PageLayout.astro";
+import { dateRange, getAllTags, getContentByTag } from "@lib/utils";
+import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async () => {
   const blogPosts = await getCollection("blog", ({ data }) => {

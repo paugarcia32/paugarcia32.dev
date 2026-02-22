@@ -1,4 +1,5 @@
 #!/usr/bin/env tsx
+
 /**
  * Create Content Script
  * Interactive script to create new blog posts, projects, or work experience
@@ -6,17 +7,12 @@
  * Usage: pnpm create-content
  */
 
+import { checkbox, confirm, input, select } from "@inquirer/prompts";
+import { exec } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { exec } from "child_process";
 import { promisify } from "util";
-import {
-  select,
-  input,
-  confirm,
-  checkbox,
-} from "@inquirer/prompts";
 import * as TAGS from "../src/tags.js";
 
 const execAsync = promisify(exec);
@@ -32,7 +28,7 @@ const allTags = Object.entries(TAGS)
   }))
   .sort((a, b) => a.name.localeCompare(b.name));
 
-type ContentType = "blog" | "projects" | "work";
+// type ContentType = "blog" | "projects" | "work";
 
 /**
  * Format date to "Mon DD YYYY" format
@@ -82,7 +78,8 @@ async function createBlogPost() {
     validate: (value) => {
       if (value.length === 0) return "Slug is required";
       const postDir = path.join(contentDir, "blog", value);
-      if (fs.existsSync(postDir)) return "A blog post with this slug already exists";
+      if (fs.existsSync(postDir))
+        return "A blog post with this slug already exists";
       return true;
     },
   });
@@ -165,7 +162,9 @@ Your content here...
   console.log("\n🔄 Syncing frontmatter...");
   await execAsync("pnpm sync-frontmatter");
 
-  console.log("\n✨ Done! Don't forget to add the post to src/content/blog/index.ts");
+  console.log(
+    "\n✨ Done! Don't forget to add the post to src/content/blog/index.ts",
+  );
 }
 
 /**
@@ -185,7 +184,8 @@ async function createProject() {
     validate: (value) => {
       if (value.length === 0) return "Slug is required";
       const projectDir = path.join(contentDir, "projects", value);
-      if (fs.existsSync(projectDir)) return "A project with this slug already exists";
+      if (fs.existsSync(projectDir))
+        return "A project with this slug already exists";
       return true;
     },
   });
@@ -278,7 +278,9 @@ Your content here...
   console.log("\n🔄 Syncing frontmatter...");
   await execAsync("pnpm sync-frontmatter");
 
-  console.log("\n✨ Done! Don't forget to add the project to src/content/projects/index.ts");
+  console.log(
+    "\n✨ Done! Don't forget to add the project to src/content/projects/index.ts",
+  );
 }
 
 /**
@@ -316,7 +318,10 @@ async function createWork() {
 };
 `;
 
-      fs.writeFileSync(path.join(companyDir, "company.ts"), companyConfigContent);
+      fs.writeFileSync(
+        path.join(companyDir, "company.ts"),
+        companyConfigContent,
+      );
 
       // Create company.md
       const companyMdContent = `---
@@ -345,7 +350,8 @@ company: "${company}"${companyURL ? `\nurl: "${companyURL}"` : ""}
     validate: (value) => {
       if (value.length === 0) return "Slug is required";
       const positionPath = path.join(companyDir, `${value}.ts`);
-      if (fs.existsSync(positionPath)) return "A position with this slug already exists";
+      if (fs.existsSync(positionPath))
+        return "A position with this slug already exists";
       return true;
     },
   });
@@ -404,7 +410,10 @@ export const config = {
 };
 `;
 
-  fs.writeFileSync(path.join(companyDir, `${positionSlug}.ts`), positionConfigContent);
+  fs.writeFileSync(
+    path.join(companyDir, `${positionSlug}.ts`),
+    positionConfigContent,
+  );
 
   // Create position markdown
   const positionMdContent = `---
@@ -419,7 +428,10 @@ tags: [${selectedTags.map((tag) => `"${TAGS[tag as keyof typeof TAGS]}"`).join("
 Your work description here...
 `;
 
-  fs.writeFileSync(path.join(companyDir, `${positionSlug}.md`), positionMdContent);
+  fs.writeFileSync(
+    path.join(companyDir, `${positionSlug}.md`),
+    positionMdContent,
+  );
 
   console.log(`\n✅ Work position created at: src/content/work/${companySlug}`);
   console.log(`   - ${positionSlug}.ts`);

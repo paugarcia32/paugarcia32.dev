@@ -1,4 +1,5 @@
 #!/usr/bin/env tsx
+
 /**
  * Watch Frontmatter Script
  * Watches config.ts files and auto-syncs frontmatter on changes.
@@ -7,11 +8,11 @@
  * Usage: pnpm watch-frontmatter (runs automatically with pnpm dev)
  */
 
-import chokidar from "chokidar";
 import { exec } from "child_process";
-import { promisify } from "util";
+import chokidar from "chokidar";
 import path from "path";
 import { fileURLToPath } from "url";
+import { promisify } from "util";
 
 const execAsync = promisify(exec);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
