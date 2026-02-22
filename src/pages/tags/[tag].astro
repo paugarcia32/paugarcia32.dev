@@ -1,10 +1,9 @@
 ---
 import { getCollection } from "astro:content";
-import ArrowCard from "@components/ArrowCard.astro";
 import Container from "@components/Container.astro";
-import Icon from "@components/Icon.astro";
+import Link from "@components/Link.astro";
 import PageLayout from "@layouts/PageLayout.astro";
-import { dateRange, getAllTags, getContentByTag } from "@lib/utils";
+import { dateRange, formatDate, getAllTags, getContentByTag } from "@lib/utils";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async () => {
@@ -20,150 +19,120 @@ export const getStaticPaths = (async () => {
 
   return Array.from(allTags.entries()).map(([slug, displayName]) => ({
     params: { tag: slug },
-    props: {
-      tag: displayName,
-      slug,
-      blogPosts,
-      projects,
-      allWork,
-    },
+    props: { tag: displayName, slug, blogPosts, projects, allWork },
   }));
 }) satisfies GetStaticPaths;
 
 const { tag, blogPosts, projects, allWork } = Astro.props;
 
-// Get all content with this tag
 const taggedContent = getContentByTag(tag, blogPosts, projects, allWork);
-
-// Separate by type
 const blogContent = taggedContent.filter((item) => item.type === "blog");
 const projectContent = taggedContent.filter((item) => item.type === "project");
 const workContent = taggedContent.filter((item) => item.type === "work");
 ---
 
-<PageLayout
-  title={`Tag: ${tag}`}
-  description={`All content tagged with "${tag}"`}
->
+<PageLayout title={`${tag}`} description={`All content tagged with "${tag}"`}>
   <Container>
     <div class="space-y-10">
-      <!-- Header -->
-      <div class="animate space-y-4">
-        <div class="flex items-center gap-2">
-          <Icon name="tag" size={24} />
-          <h1 class="font-semibold text-slate-dark dark:text-ivory-light">
-            {tag}
-          </h1>
-        </div>
+      <div class="animate space-y-1">
+        <div class="font-semibold text-slate-dark dark:text-ivory-light">{tag}</div>
         <p class="text-sm text-cloud-dark dark:text-cloud-light">
-          {taggedContent.length} item{taggedContent.length !== 1 ? "s" : ""} tagged
-          with "{tag}"
+          {taggedContent.length} item{taggedContent.length !== 1 ? "s" : ""}
         </p>
       </div>
 
-      <!-- Blog Posts Section -->
-      {
-        blogContent.length > 0 && (
-          <section class="animate space-y-4">
-            <div class="font-semibold text-slate-dark dark:text-ivory-light">
-              Blog Posts ({blogContent.length})
-            </div>
-            <ul class="flex flex-col gap-4">
-              {blogContent.map((item) => (
-                <li>
-                  <ArrowCard entry={item.entry as any} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        )
-      }
-
-      <!-- Projects Section -->
-      {
-        projectContent.length > 0 && (
-          <section class="animate space-y-4">
-            <div class="font-semibold text-slate-dark dark:text-ivory-light">
-              Projects ({projectContent.length})
-            </div>
-            <ul class="flex flex-col gap-4">
-              {projectContent.map((item) => (
-                <li>
-                  <ArrowCard entry={item.entry as any} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        )
-      }
-
-      <!-- Work Experience Section -->
-      {
-        workContent.length > 0 && (
-          <section class="animate space-y-4">
-            <div class="font-semibold text-slate-dark dark:text-ivory-light">
-              Work Experience ({workContent.length})
-            </div>
-            <ul class="flex flex-col gap-4">
-              {workContent.map((item) => {
-                const position = item.entry as any;
-                const companyFolder = position.id.split("/")[0];
-                const companyEntry = allWork.find(
-                  (entry) =>
-                    entry.id.startsWith(companyFolder + "/") &&
-                    entry.data.type === "company"
-                );
-                const companyName =
-                  companyEntry?.data.type === "company"
-                    ? companyEntry.data.company
-                    : companyFolder;
-
-                return (
-                  <li>
-                    <a
-                      href={`/work#${companyFolder}`}
-                      class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-cloud-medium/30 dark:border-cloud-medium/40 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5 hover:text-slate-dark dark:hover:text-ivory-light transition-colors duration-300 ease-in-out"
-                    >
-                      <div class="flex flex-col flex-1 truncate">
-                        <div class="font-semibold">{position.data.role}</div>
-                        <div class="text-sm text-cloud-dark dark:text-cloud-light">
-                          {companyName} · {dateRange(position.data.dateStart, position.data.dateEnd)}
-                        </div>
-                      </div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        class="absolute top-1/2 right-2 -translate-y-1/2 size-5 stroke-2 fill-none stroke-current"
-                      >
-                        <line
-                          x1="5"
-                          y1="12"
-                          x2="19"
-                          y2="12"
-                          class="translate-x-3 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"
-                        />
-                        <polyline
-                          points="12 5 19 12 12 19"
-                          class="-translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-in-out"
-                        />
-                      </svg>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        )
-      }
-
-      <!-- Empty State -->
-      {
-        taggedContent.length === 0 && (
-          <div class="animate text-center text-cloud-medium dark:text-cloud-medium">
-            <p>No content found with this tag.</p>
+      {blogContent.length > 0 && (
+        <section class="animate space-y-3">
+          <div class="text-xs font-medium text-cloud-dark dark:text-cloud-light uppercase tracking-wider">
+            Blog
           </div>
-        )
-      }
+          <div data-hover-table class="relative flex flex-col">
+            <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
+            {blogContent.map((item) => {
+              const entry = item.entry as any;
+              return (
+                <a
+                  href={`/blog/${entry.id}`}
+                  data-hover-row
+                  class="relative grid grid-cols-[4rem_1fr] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
+                >
+                  <span class="text-xs text-cloud-dark dark:text-cloud-light tabular-nums">
+                    {entry.data.date ? entry.data.date.getFullYear() : ""}
+                  </span>
+                  <span class="text-sm font-medium">{entry.data.title}</span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {projectContent.length > 0 && (
+        <section class="animate space-y-3">
+          <div class="text-xs font-medium text-cloud-dark dark:text-cloud-light uppercase tracking-wider">
+            Projects
+          </div>
+          <div data-hover-table class="relative flex flex-col">
+            <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
+            {projectContent.map((item) => {
+              const entry = item.entry as any;
+              return (
+                <a
+                  href={`/projects/${entry.id}`}
+                  data-hover-row
+                  class="relative grid grid-cols-[4rem_1fr] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
+                >
+                  <span class="text-xs text-cloud-dark dark:text-cloud-light tabular-nums">
+                    {entry.data.date ? entry.data.date.getFullYear() : ""}
+                  </span>
+                  <span class="text-sm font-medium">{entry.data.title}</span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {workContent.length > 0 && (
+        <section class="animate space-y-3">
+          <div class="text-xs font-medium text-cloud-dark dark:text-cloud-light uppercase tracking-wider">
+            Work
+          </div>
+          <div data-hover-table class="relative flex flex-col">
+            <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
+            {workContent.map((item) => {
+              const position = item.entry as any;
+              const companyFolder = position.id.split("/")[0];
+              const companyEntry = allWork.find(
+                (e) => e.id.startsWith(companyFolder + "/") && e.data.type === "company"
+              );
+              const companyName =
+                companyEntry?.data.type === "company"
+                  ? companyEntry.data.company
+                  : companyFolder;
+              return (
+                <a
+                  href="/work"
+                  data-hover-row
+                  class="relative grid grid-cols-[4rem_1fr_auto] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
+                >
+                  <span class="text-xs text-cloud-dark dark:text-cloud-light tabular-nums">
+                    {position.data.dateStart ? position.data.dateStart.getFullYear() : ""}
+                  </span>
+                  <span class="text-sm font-medium">{position.data.role}</span>
+                  <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">{companyName}</span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {taggedContent.length === 0 && (
+        <div class="animate text-sm text-cloud-medium dark:text-cloud-medium">
+          No content found with this tag.
+        </div>
+      )}
     </div>
   </Container>
 </PageLayout>

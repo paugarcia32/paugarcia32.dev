@@ -10,6 +10,9 @@ import { HOME, SITE, SOCIALS } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
 import {
   dateRange,
+  formatDate,
+  getAllTags,
+  getContentByTag,
   getCurrentPosition,
   getShowcasedContent,
   getShowcasedWork,
@@ -23,6 +26,16 @@ const allProjects = (await getCollection("projects")).filter(
 const allWork = await getCollection("work");
 
 const currentPosition = getCurrentPosition(allWork);
+
+const allTags = getAllTags(allBlog, allProjects, allWork);
+const topTags = Array.from(allTags.entries())
+  .map(([slug, displayName]) => {
+    const items = getContentByTag(displayName, allBlog, allProjects, allWork);
+    return { slug, displayName, count: items.length, lastUpdated: items[0]?.date };
+  })
+  .filter((t) => t.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 6);
 
 const blog = getShowcasedContent(allBlog, HOMEPAGE.blog);
 const projects = getShowcasedContent(allProjects, HOMEPAGE.projects);
@@ -162,6 +175,42 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
             </li>
           ))}
         </ul>
+      </section>
+
+      <section class="animate space-y-4">
+        <div class="flex flex-wrap gap-y-2 items-center justify-between">
+          <h5 class="font-semibold text-slate-dark dark:text-ivory-light">
+            Topics
+          </h5>
+          <Link href="/tags">
+            See all topics
+          </Link>
+        </div>
+        <div data-hover-table class="relative flex flex-col">
+          <div class="grid grid-cols-[4rem_1fr_auto] gap-x-4 border-b border-cloud-medium/20 dark:border-cloud-medium/10 pb-1.5 mb-1 px-2">
+            <span class="text-xs text-cloud-dark dark:text-cloud-light">updated</span>
+            <span class="text-xs text-cloud-dark dark:text-cloud-light">topic</span>
+            <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">items</span>
+          </div>
+          <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
+          {topTags.map(({ slug, displayName, count, lastUpdated }) => (
+            <a
+              href={`/tags/${slug}`}
+              data-hover-row
+              class="relative grid grid-cols-[4rem_1fr_auto] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
+            >
+              <span class="text-xs text-cloud-dark dark:text-cloud-light tabular-nums">
+                {lastUpdated ? lastUpdated.getFullYear() : ""}
+              </span>
+              <span class="text-sm font-medium">
+                {displayName}
+              </span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light text-right tabular-nums">
+                {count}
+              </span>
+            </a>
+          ))}
+        </div>
       </section>
 
       <section class="animate space-y-6">

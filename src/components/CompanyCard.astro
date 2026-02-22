@@ -60,7 +60,7 @@ const instanceId = `company-card-${Math.random().toString(36).slice(2, 8)}`;
 </template>
 
 <script>
-  function positionCard(trigger: Element, card: HTMLElement) {
+  function positionCompanyCard(trigger: Element, card: HTMLElement) {
     const rect = trigger.getBoundingClientRect();
     const cardHeight = card.offsetHeight || 140;
     const spaceAbove = rect.top;
@@ -96,7 +96,7 @@ const instanceId = `company-card-${Math.random().toString(36).slice(2, 8)}`;
 
       function show() {
         clearTimeout(hideTimeout);
-        positionCard(trigger, cardEl!);
+        positionCompanyCard(trigger, cardEl!);
         cardEl!.getBoundingClientRect();
         cardEl!.classList.remove("opacity-0", "translate-y-1", "pointer-events-none");
         cardEl!.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
@@ -116,6 +116,6 @@ const instanceId = `company-card-${Math.random().toString(36).slice(2, 8)}`;
     });
   }
 
+  (window as any).__initCompanyCards = initCompanyCards;
   document.addEventListener("DOMContentLoaded", initCompanyCards);
-  document.addEventListener("astro:after-swap", initCompanyCards);
 </script>

@@ -79,7 +79,11 @@ const { title, description, image = "/nano.png" } = Astro.props;
   function init() {
     preloadTheme();
     onScroll();
+    initHoverTables();
     animate();
+    if (typeof window.__initCompanyCards === "function") window.__initCompanyCards();
+    if (typeof window.__initGitHubCards === "function") window.__initGitHubCards();
+    if (typeof window.__initLinkedInCards === "function") window.__initLinkedInCards();
 
     const backToPrev = document.getElementById("back-to-prev");
     backToPrev?.addEventListener("click", () => window.history.back());
@@ -158,6 +162,48 @@ const { title, description, image = "/nano.png" } = Astro.props;
       setTimeout(() => {
         element.classList.add("show");
       }, index * 150);
+    });
+  }
+
+  function initHoverTables() {
+    document.querySelectorAll("[data-hover-table]").forEach(function(tableEl) {
+      var table = tableEl;
+      // Clone to remove previous listeners
+      var fresh = table.cloneNode(true);
+      table.parentNode.replaceChild(fresh, table);
+      table = fresh;
+
+      var highlight = table.querySelector("[data-hover-highlight]");
+      var rows = table.querySelectorAll("[data-hover-row]");
+      if (!highlight || !rows.length) return;
+
+      var current = null;
+
+      function moveTo(row, withAnim) {
+        var tableRect = table.getBoundingClientRect();
+        var rowRect = row.getBoundingClientRect();
+        var top = rowRect.top - tableRect.top;
+        highlight.style.transition = withAnim
+          ? "top 180ms cubic-bezier(0.4,0,0.2,1), height 180ms cubic-bezier(0.4,0,0.2,1), opacity 120ms ease"
+          : "opacity 120ms ease";
+        highlight.style.top = top + "px";
+        highlight.style.height = rowRect.height + "px";
+        highlight.style.opacity = "1";
+      }
+
+      rows.forEach(function(row) {
+        row.addEventListener("mouseenter", function() {
+          var isFirst = current === null;
+          current = row;
+          moveTo(row, !isFirst);
+        });
+      });
+
+      table.addEventListener("mouseleave", function() {
+        current = null;
+        highlight.style.transition = "opacity 150ms ease";
+        highlight.style.opacity = "0";
+      });
     });
   }
 

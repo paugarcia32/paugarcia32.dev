@@ -115,6 +115,6 @@ const instanceId = `linkedin-card-${Math.random().toString(36).slice(2, 8)}`;
     });
   }
 
+  (window as any).__initLinkedInCards = initLinkedInCards;
   document.addEventListener("DOMContentLoaded", initLinkedInCards);
-  document.addEventListener("astro:after-swap", initLinkedInCards);
 </script>

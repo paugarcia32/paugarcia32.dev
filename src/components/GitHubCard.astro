@@ -204,6 +204,6 @@ const instanceId = `github-card-${Math.random().toString(36).slice(2, 8)}`;
     });
   }
 
+  (window as any).__initGitHubCards = initGitHubCards;
   document.addEventListener("DOMContentLoaded", initGitHubCards);
-  document.addEventListener("astro:after-swap", initGitHubCards);
 </script>
