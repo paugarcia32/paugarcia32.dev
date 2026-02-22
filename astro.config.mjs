@@ -4,9 +4,19 @@ import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
 import mermaid from "astro-mermaid";
 import { mermaidLight } from "./src/lib/colors.ts";
+import nanoDark from "./src/lib/shiki-theme-dark.json";
+import nanoLight from "./src/lib/shiki-theme-light.json";
 
 export default defineConfig({
   site: "https://astro-nano-demo.vercel.app",
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: nanoLight,
+        dark: nanoDark,
+      },
+    },
+  },
   integrations: [
     mdx(),
     sitemap(),

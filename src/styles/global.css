@@ -179,6 +179,41 @@ body {
   background-color: transparent;
 }
 
+/* Shiki code blocks */
+.astro-code {
+  @apply rounded-lg text-xs leading-relaxed overflow-x-auto;
+  padding: 1rem 1.25rem !important;
+  margin: 1.25em 0 !important;
+  border: 1px solid rgb(145 145 141 / 0.15);
+  background-color: #F0F0EB !important;
+}
+
+html.dark .astro-code {
+  background-color: #191919 !important;
+  border-color: rgb(145 145 141 / 0.1);
+}
+
+.astro-code span {
+  color: var(--shiki-light);
+  background-color: transparent !important;
+}
+
+html.dark .astro-code span {
+  color: var(--shiki-dark);
+}
+
+/* Inline code */
+:not(pre) > code {
+  @apply rounded px-1.5 py-0.5 text-xs font-mono;
+  background-color: rgb(145 145 141 / 0.12);
+  color: #CC785C;
+}
+
+html.dark :not(pre) > code {
+  background-color: rgb(145 145 141 / 0.1);
+  color: #D4A27F;
+}
+
 /* Theme toggle icon animations */
 #theme-toggle-light-icon,
 #theme-toggle-dark-icon,

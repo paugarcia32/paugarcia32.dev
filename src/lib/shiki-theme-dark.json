@@ -1,0 +1,72 @@
+{
+  "name": "nano-dark",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#191919",
+    "editor.foreground": "#E5E4DF",
+    "editorLineNumber.foreground": "#40403E",
+    "editorLineNumber.activeForeground": "#666663"
+  },
+  "tokenColors": [
+    {
+      "scope": ["comment", "punctuation.definition.comment"],
+      "settings": { "foreground": "#666663", "fontStyle": "italic" }
+    },
+    {
+      "scope": ["string", "string.quoted", "string.template"],
+      "settings": { "foreground": "#8FAF8F" }
+    },
+    {
+      "scope": ["constant.numeric", "constant.language", "constant.character"],
+      "settings": { "foreground": "#D4A27F" }
+    },
+    {
+      "scope": ["keyword", "keyword.control", "keyword.operator", "storage.type", "storage.modifier"],
+      "settings": { "foreground": "#A99AC5" }
+    },
+    {
+      "scope": ["entity.name.function", "meta.function-call", "support.function"],
+      "settings": { "foreground": "#7AAFCF" }
+    },
+    {
+      "scope": ["entity.name.type", "entity.name.class", "support.class", "entity.name.tag"],
+      "settings": { "foreground": "#D4A27F" }
+    },
+    {
+      "scope": ["variable", "variable.other", "variable.parameter"],
+      "settings": { "foreground": "#E5E4DF" }
+    },
+    {
+      "scope": ["variable.other.constant", "support.constant"],
+      "settings": { "foreground": "#D4A27F" }
+    },
+    {
+      "scope": ["punctuation", "meta.brace"],
+      "settings": { "foreground": "#666663" }
+    },
+    {
+      "scope": ["meta.attribute", "entity.other.attribute-name"],
+      "settings": { "foreground": "#D4A27F" }
+    },
+    {
+      "scope": ["markup.heading"],
+      "settings": { "foreground": "#FAFAF7", "fontStyle": "bold" }
+    },
+    {
+      "scope": ["markup.bold"],
+      "settings": { "fontStyle": "bold" }
+    },
+    {
+      "scope": ["markup.italic"],
+      "settings": { "fontStyle": "italic" }
+    },
+    {
+      "scope": ["markup.inline.raw", "markup.raw"],
+      "settings": { "foreground": "#D4A27F" }
+    },
+    {
+      "scope": ["import", "module"],
+      "settings": { "foreground": "#A99AC5" }
+    }
+  ]
+}

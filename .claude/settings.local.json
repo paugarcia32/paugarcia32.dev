@@ -1,5 +1,9 @@
 {
   "permissions": {
-    "allow": ["Bash(pnpm astro check:*)", "Bash(pnpm lint:fix:*)"]
+    "allow": [
+      "Bash(pnpm astro check:*)",
+      "Bash(pnpm lint:fix:*)",
+      "Bash(pnpm lint:*)"
+    ]
   }
 }

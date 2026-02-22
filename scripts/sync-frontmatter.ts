@@ -203,7 +203,7 @@ async function syncBlogPosts() {
     try {
       // Dynamic import the config
       const configModule = await import(`file://${configPath}`);
-      const { slug, config } = configModule.default;
+      const { config } = configModule.default;
 
       const frontmatter = generateBlogFrontmatter(config);
       if (updateMarkdownFile(markdownPath, frontmatter)) {
@@ -242,7 +242,7 @@ async function syncProjects() {
 
     try {
       const configModule = await import(`file://${configPath}`);
-      const { slug, config } = configModule.default;
+      const { config } = configModule.default;
 
       const frontmatter = generateProjectFrontmatter(config);
       if (updateMarkdownFile(markdownPath, frontmatter)) {
