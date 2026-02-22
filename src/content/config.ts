@@ -49,6 +49,8 @@ const work = defineCollection({
       type: z.literal("company"),
       company: z.string(),
       url: z.string().url().optional(),
+      description: z.string().optional(),
+      logo: z.string().optional(),
     }),
     z.object({
       type: z.literal("position"),

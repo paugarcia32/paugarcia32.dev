@@ -51,6 +51,8 @@ export type WorkPositionConfig = {
 export type WorkCompanyConfig = {
   readonly company: string;
   readonly url?: string;
+  readonly description?: string;
+  readonly logo?: string;
 };
 
 // Content items with config + markdown content

@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
+import CompanyCard from "@components/CompanyCard.astro";
 import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
 import { WORK } from "@consts";
@@ -24,19 +25,26 @@ const work = groupPositionsByCompany(allWork);
           work.map((entry) => (
             <li class="animate">
               <div class="text-sm opacity-75">{entry.totalDuration}</div>
-              {entry.url ? (
-                <Link
-                  href={entry.url}
-                  external
-                  class="font-semibold text-slate-dark dark:text-ivory-light hover:underline"
-                >
-                  {entry.company}
-                </Link>
-              ) : (
-                <div class="font-semibold text-slate-dark dark:text-ivory-light">
-                  {entry.company}
-                </div>
-              )}
+              <CompanyCard
+                company={entry.company}
+                url={entry.url}
+                description={entry.description}
+                logo={entry.logo}
+              >
+                {entry.url ? (
+                  <Link
+                    href={entry.url}
+                    external
+                    class="font-semibold text-slate-dark dark:text-ivory-light hover:underline"
+                  >
+                    {entry.company}
+                  </Link>
+                ) : (
+                  <div class="font-semibold text-slate-dark dark:text-ivory-light">
+                    {entry.company}
+                  </div>
+                )}
+              </CompanyCard>
               <div class="mt-4 space-y-6">
                 {entry.sortedPositions.map(async (position) => {
                   const { Content } = await render(position);

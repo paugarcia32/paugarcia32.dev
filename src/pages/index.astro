@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import ArrowCard from "@components/ArrowCard.astro";
+import CompanyCard from "@components/CompanyCard.astro";
 import Container from "@components/Container.astro";
 import GitHubCard from "@components/GitHubCard.astro";
 import Link from "@components/Link.astro";
@@ -40,13 +41,20 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
               {currentPosition ? (
                 <>
                   I am a {currentPosition.role.toLowerCase()} and network engineering graduate working at{" "}
-                  {currentPosition.url ? (
-                    <Link href={currentPosition.url} external>
-                      {currentPosition.company}
-                    </Link>
-                  ) : (
-                    currentPosition.company
-                  )}
+                  <CompanyCard
+                    company={currentPosition.company}
+                    url={currentPosition.url}
+                    description={currentPosition.description}
+                    logo={currentPosition.logo}
+                  >
+                    {currentPosition.url ? (
+                      <Link href={currentPosition.url} external>
+                        {currentPosition.company}
+                      </Link>
+                    ) : (
+                      currentPosition.company
+                    )}
+                  </CompanyCard>
                   . I'm passionate about building full-stack
                   applications and IoT projects using microcontrollers like Arduino and ESP32.
                 </>
@@ -116,19 +124,26 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
               <div class="text-sm opacity-75">
                 {entry.totalDuration}
               </div>
-              {entry.url ? (
-                <Link
-                  href={entry.url}
-                  external
-                  class="font-semibold text-slate-dark dark:text-ivory-light hover:underline"
-                >
-                  {entry.company}
-                </Link>
-              ) : (
-                <div class="font-semibold text-slate-dark dark:text-ivory-light">
-                  {entry.company}
-                </div>
-              )}
+              <CompanyCard
+                company={entry.company}
+                url={entry.url}
+                description={entry.description}
+                logo={entry.logo}
+              >
+                {entry.url ? (
+                  <Link
+                    href={entry.url}
+                    external
+                    class="font-semibold text-slate-dark dark:text-ivory-light hover:underline"
+                  >
+                    {entry.company}
+                  </Link>
+                ) : (
+                  <div class="font-semibold text-slate-dark dark:text-ivory-light">
+                    {entry.company}
+                  </div>
+                )}
+              </CompanyCard>
               <div class="mt-4 space-y-6">
                 {entry.sortedPositions.map((position) => (
                   <div>

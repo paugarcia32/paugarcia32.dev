@@ -142,6 +142,8 @@ export type WorkPosition = CollectionEntry<"work"> & {
 export interface CompanyWithPositions {
   company: string;
   url?: string;
+  description?: string;
+  logo?: string;
   positions: WorkPosition[];
   sortedPositions: WorkPosition[];
   totalDuration: string;
@@ -188,6 +190,14 @@ export function groupPositionsByCompany(
         url:
           companyMeta?.data.type === "company"
             ? companyMeta.data.url
+            : undefined,
+        description:
+          companyMeta?.data.type === "company"
+            ? companyMeta.data.description
+            : undefined,
+        logo:
+          companyMeta?.data.type === "company"
+            ? companyMeta.data.logo
             : undefined,
         positions,
         sortedPositions,
@@ -333,6 +343,8 @@ export interface CurrentPosition {
   role: string;
   company: string;
   url?: string;
+  description?: string;
+  logo?: string;
 }
 
 /**
@@ -366,6 +378,10 @@ export function getCurrentPosition(
       companyMeta?.data.type === "company" ? companyMeta.data.company : companyFolder,
     url:
       companyMeta?.data.type === "company" ? companyMeta.data.url : undefined,
+    description:
+      companyMeta?.data.type === "company" ? companyMeta.data.description : undefined,
+    logo:
+      companyMeta?.data.type === "company" ? companyMeta.data.logo : undefined,
   };
 }
 
