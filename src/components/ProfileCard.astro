@@ -1,0 +1,102 @@
+---
+import { Image } from "astro:assets";
+import avatar from "@assets/avatar.jpg";
+---
+
+<div class="flex items-center gap-4">
+  <Image
+    src={avatar}
+    alt="Pau Garcia"
+    width={48}
+    height={48}
+    class="rounded-full size-12 object-cover ring-1 ring-cloud-medium/30 dark:ring-cloud-medium/40"
+  />
+  <div class="flex flex-col gap-0.5">
+    <span class="font-semibold text-slate-dark dark:text-ivory-light">Pau Garcia</span>
+    <div class="flex items-center gap-1 text-xs text-cloud-dark dark:text-cloud-light">
+      <span id="bcn-time" class="tabular-nums"></span>
+      <span>in Barcelona</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .digit-flip {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+
+  .digit-flip span {
+    display: inline-block;
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
+  }
+
+  .digit-flip.animating span {
+    transform: translateY(-40%);
+    opacity: 0;
+  }
+</style>
+
+<script is:inline>
+  function initClock() {
+    const el = document.getElementById("bcn-time");
+    if (!el) return;
+
+    function getBarcelonaTime() {
+      return new Date().toLocaleTimeString("en-GB", {
+        timeZone: "Europe/Madrid",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+    }
+
+    function buildDigits(timeStr) {
+      return timeStr.split("").map(function(ch) {
+        if (ch === ":") {
+          return '<span class="mx-px">:</span>';
+        }
+        return '<span class="digit-flip"><span>' + ch + '</span></span>';
+      }).join("");
+    }
+
+    function animateDigit(wrapper, newChar) {
+      var inner = wrapper.querySelector("span");
+      if (!inner || inner.textContent === newChar) return;
+
+      wrapper.classList.add("animating");
+      setTimeout(function() {
+        inner.textContent = newChar;
+        wrapper.classList.remove("animating");
+      }, 150);
+    }
+
+    function updateTime() {
+      var timeStr = getBarcelonaTime();
+
+      if (!el.hasChildNodes() || el.querySelectorAll(".digit-flip").length === 0) {
+        el.innerHTML = buildDigits(timeStr);
+        return;
+      }
+
+      var digits = el.querySelectorAll(".digit-flip");
+      var charIdx = 0;
+      for (var i = 0; i < timeStr.length; i++) {
+        if (timeStr[i] === ":") continue;
+        if (digits[charIdx]) {
+          animateDigit(digits[charIdx], timeStr[i]);
+          charIdx++;
+        }
+      }
+    }
+
+    updateTime();
+
+    // Tick every second but only animate on actual change
+    setInterval(updateTime, 1000);
+  }
+
+  document.addEventListener("DOMContentLoaded", initClock);
+  document.addEventListener("astro:after-swap", initClock);
+</script>

@@ -2,11 +2,12 @@
 import { getCollection } from "astro:content";
 import BlogCard from "@components/BlogCard.astro";
 import CompanyCard from "@components/CompanyCard.astro";
-import ProjectCard from "@components/ProjectCard.astro";
 import Container from "@components/Container.astro";
 import GitHubCard from "@components/GitHubCard.astro";
 import Link from "@components/Link.astro";
 import LinkedInCard from "@components/LinkedInCard.astro";
+import ProfileCard from "@components/ProfileCard.astro";
+import ProjectCard from "@components/ProjectCard.astro";
 import { HOME, SITE, SOCIALS } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
 import {
@@ -32,7 +33,12 @@ const allTags = getAllTags(allBlog, allProjects, allWork);
 const topTags = Array.from(allTags.entries())
   .map(([slug, displayName]) => {
     const items = getContentByTag(displayName, allBlog, allProjects, allWork);
-    return { slug, displayName, count: items.length, lastUpdated: items[0]?.date };
+    return {
+      slug,
+      displayName,
+      count: items.length,
+      lastUpdated: items[0]?.date,
+    };
   })
   .filter((t) => t.count > 0)
   .sort((a, b) => b.count - a.count)
@@ -45,9 +51,9 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
-    <h4 class="animate font-semibold text-slate-dark dark:text-ivory-light">
-      Hi, I'm Pau <span class="text-xl">👋🏻</span>
-    </h4>
+    <div class="animate mb-12">
+      <ProfileCard />
+    </div>
     <div class="space-y-16">
       <section>
         <article class="space-y-4">
