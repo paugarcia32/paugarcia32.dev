@@ -1,9 +1,10 @@
 ---
 title: "Six Months of Lessons"
-description: "What a three-week mobile app redesign taught me about scope, capacity, and craft."
+description: "What a 'Three-Week' Redesign Actually Taught Us"
 date: "Jan 18, 2026"
 tags: ["project-management", "lessons-learned", "development"]
 ---
+
 
 Over the past six months, we worked on a large project: redesigning our mobile application.
 

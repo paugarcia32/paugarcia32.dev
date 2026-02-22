@@ -329,6 +329,46 @@ export function getContentByTag(
   return results.sort((a, b) => b.date.getTime() - a.date.getTime());
 }
 
+export interface CurrentPosition {
+  role: string;
+  company: string;
+  url?: string;
+}
+
+/**
+ * Returns the current active position (dateEnd is "Present" or a future date)
+ * along with the company name and URL, or null if none found.
+ */
+export function getCurrentPosition(
+  allWork: CollectionEntry<"work">[],
+): CurrentPosition | null {
+  const now = new Date();
+
+  const positions = allWork.filter(
+    (entry): entry is WorkPosition => entry.data.type === "position",
+  );
+  const companies = allWork.filter((entry) => entry.data.type === "company");
+
+  const active = positions.find((p) => {
+    const end = p.data.dateEnd;
+    if (typeof end === "string") return end.toLowerCase() === "present";
+    return end > now;
+  });
+
+  if (!active) return null;
+
+  const companyFolder = active.id.split("/")[0];
+  const companyMeta = companies.find((c) => c.id.startsWith(companyFolder + "/"));
+
+  return {
+    role: active.data.role,
+    company:
+      companyMeta?.data.type === "company" ? companyMeta.data.company : companyFolder,
+    url:
+      companyMeta?.data.type === "company" ? companyMeta.data.url : undefined,
+  };
+}
+
 // Showcase utility functions
 
 /**

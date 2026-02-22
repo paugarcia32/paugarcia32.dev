@@ -7,7 +7,12 @@ import Link from "@components/Link.astro";
 import LinkedInCard from "@components/LinkedInCard.astro";
 import { HOME, SITE, SOCIALS } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
-import { dateRange, getShowcasedContent, getShowcasedWork } from "@lib/utils";
+import {
+  dateRange,
+  getCurrentPosition,
+  getShowcasedContent,
+  getShowcasedWork,
+} from "@lib/utils";
 import { HOMEPAGE } from "@showcases";
 
 const allBlog = (await getCollection("blog")).filter((p) => !p.data.draft);
@@ -15,6 +20,8 @@ const allProjects = (await getCollection("projects")).filter(
   (p) => !p.data.draft,
 );
 const allWork = await getCollection("work");
+
+const currentPosition = getCurrentPosition(allWork);
 
 const blog = getShowcasedContent(allBlog, HOMEPAGE.blog);
 const projects = getShowcasedContent(allProjects, HOMEPAGE.projects);
@@ -30,9 +37,26 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
       <section>
         <article class="space-y-4">
             <p class="animate">
-              I am a software engineer and network engineer graduate based in Barcelona
-              with over a year of professional experience. I'm passionate about building full-stack
-              applications and IoT projects using microcontrollers like Arduino and ESP32.
+              {currentPosition ? (
+                <>
+                  I am a {currentPosition.role.toLowerCase()} and network engineering graduate working at{" "}
+                  {currentPosition.url ? (
+                    <Link href={currentPosition.url} external>
+                      {currentPosition.company}
+                    </Link>
+                  ) : (
+                    currentPosition.company
+                  )}
+                  . I'm passionate about building full-stack
+                  applications and IoT projects using microcontrollers like Arduino and ESP32.
+                </>
+              ) : (
+                <>
+                  i am a software engineer and network engineer graduate based in Barcelona
+                  with over a year of professional experience. I'm passionate about building full-stack
+                  applications and IoT projects using microcontrollers like Arduino and ESP32.
+                </>
+              )}
             </p>
             <p class="animate">
               When I'm not coding, I'm probably tinkering with new tech or working on side projects.

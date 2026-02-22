@@ -7,6 +7,7 @@ description: "Full-stack development for a SaaS platform serving martial arts ac
 tags: ["Flutter", "NestJS", "TypeScript", "PostgreSQL", "Full Stack"]
 ---
 
+
 Led critical Stripe payment provider migrations including custom scripts for customer imports, subscription recreation, and billing cycle handling across multiple gyms.
 
 Contributed to the complete mobile app redesign and architectural migration from Firebase/Firestore to PostgreSQL with proper REST API implementation.
