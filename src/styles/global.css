@@ -38,6 +38,16 @@ html.dark {
   color-scheme: dark;
 }
 
+::selection {
+  background-color: #CC785C;
+  color: #FAFAF7;
+}
+
+html.dark ::selection {
+  background-color: #D4A27F;
+  color: #191919;
+}
+
 html,
 body {
   @apply size-full;
