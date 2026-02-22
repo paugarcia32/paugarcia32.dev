@@ -126,6 +126,17 @@ import Timeline from "../../../components/Timeline.astro";
 
 ---
 
+## Heading Levels
+
+All headings in content files must start at `##` (h2). Never use `#` (h1) in body content — the page title from frontmatter serves as the h1.
+
+```markdown
+## Project Overview   ✓
+# Project Overview    ✗
+```
+
+---
+
 ## Recommended Project Page Structure
 
 For consistency, project pages follow this section order:
@@ -208,6 +219,7 @@ Be specific, not grandiose. Instead of "a robust, cutting-edge AI system," write
 - [ ] Tags exist in `src/tags.ts`
 - [ ] `draft: true` is set if the entry is not ready to publish
 - [ ] MDX components are imported after the frontmatter block
+- [ ] All headings use `##` or deeper — never `#` in body content
 - [ ] No em dashes used as parenthetical separators in body text
 - [ ] Active voice used throughout
 - [ ] No puffery or AI-pattern vocabulary

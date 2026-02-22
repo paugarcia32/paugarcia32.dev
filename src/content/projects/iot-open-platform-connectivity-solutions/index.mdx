@@ -10,7 +10,7 @@ tags: ["LoRa", "IoT", "BLE", "ESP32"]
 import Timeline from "../../../components/Timeline.astro";
 import FeatureGrid from "../../../components/FeatureGrid.astro";
 
-# Project Overview
+## Project Overview
 
 This project is my final bachelor's thesis. It builds an IoT platform for citizen science, where volunteers deploy sensor nodes to collect environmental data in the field.
 
@@ -18,7 +18,7 @@ The device targets deployments where Wi-Fi is unavailable. It connects via LoRa 
 
 ---
 
-# Solution Implemented
+## Solution Implemented
 
 The final result is a prototype device configurable via Bluetooth Low Energy (BLE). During setup, the device receives Wi-Fi credentials (SSID and password), which are stored in non-volatile memory (NVS) to persist through deep sleep cycles. If no Wi-Fi is configured or the credentials are invalid, the device automatically falls back to the custom LoRa protocol.
 
@@ -26,7 +26,7 @@ This custom LoRa protocol operates on a 60-second loop, during which each node t
 
 ---
 
-# Design Process
+## Design Process
 
 <Timeline
   items={[
@@ -59,9 +59,9 @@ This custom LoRa protocol operates on a 60-second loop, during which each node t
 
 ---
 
-# Implementation
+## Implementation
 
-## Protocol Characteristics
+### Protocol Characteristics
 
 <FeatureGrid
   columns={3}
@@ -75,7 +75,7 @@ This custom LoRa protocol operates on a 60-second loop, during which each node t
   ]}
 />
 
-## Medium Access Control
+### Medium Access Control
 
 Since LoRa does not natively support any medium access control, two complementary approaches were implemented:
 
@@ -83,7 +83,7 @@ Since LoRa does not natively support any medium access control, two complementar
 
 **TDMA (Time Division Multiple Access)** is used once the gateway knows how many nodes are present. The gateway assigns a specific time slot to each node, so every node knows exactly when to transmit, eliminating the need to listen before sending. This simplifies node logic (nodes act as slaves, the gateway as master) and allows nodes to sleep between their assigned slots, significantly reducing power consumption. Even in TDMA mode, Polite Spectrum Access is respected before each transmission.
 
-## Spreading Factor Selection
+### Spreading Factor Selection
 
 To optimize LoRa communication between the gateway and nodes, the optimal Spreading Factor is calculated per node based on the received RSSI and SNR. A lower SF results in a shorter Time-on-Air and lower duty cycle usage for nodes with a strong signal.
 
@@ -101,7 +101,7 @@ uint8_t calculateOptimalSF(float rssi, float snr) {
 }
 ```
 
-## Message Types
+### Message Types
 
 All messages share a common header with the following fields:
 
@@ -122,7 +122,7 @@ The Schedule message carries per-node assignments: node ID (8 bits), optimal SF 
 
 ---
 
-# Conclusions
+## Conclusions
 
 This work builds a low-cost, open-source IoT platform that operates in environments with limited or no Wi-Fi connectivity. BLE configuration, NVS persistence, and a custom LoRa protocol let the device adapt to different deployment scenarios without manual reconfiguration.
 
