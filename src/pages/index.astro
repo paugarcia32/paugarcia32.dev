@@ -177,12 +177,97 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
             </li>
           ))}
           <li class="line-clamp-1">
-            <Link href={`mailto:${SITE.EMAIL}`} aria-label={`Email ${SITE.NAME}`}>
+            <button
+              id="copy-email-btn"
+              data-email={SITE.EMAIL}
+              aria-label={`Copy ${SITE.NAME}'s email`}
+              class="decoration-primary/30 dark:decoration-accent/40 hover:decoration-primary/50 hover:dark:decoration-accent/60 text-current hover:text-primary hover:dark:text-accent transition-colors duration-300 ease-in-out underline underline-offset-2 cursor-pointer"
+            >
               {SITE.EMAIL}
-            </Link>
+            </button>
           </li>
         </ul>
       </section>
     </div>
   </Container>
 </PageLayout>
+
+<script>
+  function initCopyEmail() {
+    const btn = document.getElementById("copy-email-btn");
+    if (!btn) return;
+
+    const email = (btn as HTMLButtonElement).dataset.email ?? "";
+
+    // Create tooltip and append to body
+    const existing = document.getElementById("copy-email-tooltip");
+    if (existing) existing.remove();
+
+    const tooltip = document.createElement("div");
+    tooltip.id = "copy-email-tooltip";
+    tooltip.textContent = "click to copy";
+    tooltip.className = "pointer-events-none fixed z-50 rounded-md px-2.5 py-1 text-xs font-medium bg-slate-dark dark:bg-ivory-light text-ivory-light dark:text-slate-dark opacity-0 translate-y-1";
+    tooltip.style.cssText += "top: -9999px; left: -9999px; transition: opacity 200ms ease-out, transform 200ms ease-out;";
+    document.body.appendChild(tooltip);
+
+    let hideTimeout: ReturnType<typeof setTimeout>;
+    let copied = false;
+
+    function positionTooltip() {
+      const rect = btn.getBoundingClientRect();
+      const tooltipWidth = tooltip.offsetWidth || 90;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      if (spaceBelow < 40) {
+        tooltip.style.top = `${rect.top - tooltip.offsetHeight - 6}px`;
+      } else {
+        tooltip.style.top = `${rect.bottom + 6}px`;
+      }
+      tooltip.style.left = `${rect.left + rect.width / 2 - tooltipWidth / 2}px`;
+    }
+
+    function show() {
+      clearTimeout(hideTimeout);
+      if (!copied) tooltip.textContent = "click to copy";
+      positionTooltip();
+      tooltip.getBoundingClientRect();
+      tooltip.classList.remove("opacity-0", "translate-y-1");
+      tooltip.classList.add("opacity-100", "translate-y-0");
+    }
+
+    function hide() {
+      hideTimeout = setTimeout(() => {
+        tooltip.classList.remove("opacity-100", "translate-y-0");
+        tooltip.classList.add("opacity-0", "translate-y-1");
+      }, 100);
+    }
+
+    btn.addEventListener("mouseenter", show);
+    btn.addEventListener("mouseleave", hide);
+
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(email);
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = email;
+        ta.style.cssText = "position:fixed;opacity:0;";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+
+      copied = true;
+      tooltip.textContent = "copied!";
+      positionTooltip();
+
+      setTimeout(() => {
+        copied = false;
+        tooltip.textContent = "click to copy";
+      }, 2000);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", initCopyEmail);
+  document.addEventListener("astro:after-swap", initCopyEmail);
+</script>
