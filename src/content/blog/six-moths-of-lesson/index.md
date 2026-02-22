@@ -4,8 +4,6 @@ description: "What a 'Three-Week' Redesign Actually Taught Us"
 date: "Jan 18, 2026"
 tags: ["project-management", "lessons-learned", "development"]
 ---
-
-
 Over the past six months, we worked on a large project: redesigning our mobile application.
 
 The original estimate was two to three weeks. It took six months. Throughout this article, I'll walk through the problems we faced, the lessons we learned, and a few other thoughts.
