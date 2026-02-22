@@ -29,7 +29,6 @@ html.dark {
 }
 
 html {
-  overflow-y: scroll;
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
   color-scheme: light;
