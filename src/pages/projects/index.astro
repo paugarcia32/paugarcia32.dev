@@ -1,32 +1,145 @@
 ---
 import { getCollection } from "astro:content";
 import Container from "@components/Container.astro";
+import FilterDropdown from "@components/FilterDropdown.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import { PROJECTS } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
-import { normalizeEntryId } from "@lib/utils";
+import { normalizeEntryId, slugifyTag } from "@lib/utils";
 
 const projects = (await getCollection("projects"))
   .filter((project) => !project.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const projectUrls = projects.map((project) => `/projects/${normalizeEntryId(project)}`);
+
+// Collect all unique tags
+const tagMap = new Map<string, string>();
+for (const project of projects) {
+  for (const tag of project.data.tags ?? []) {
+    const slug = slugifyTag(tag);
+    if (!tagMap.has(slug)) tagMap.set(slug, tag);
+  }
+}
+const allTags = Array.from(tagMap.entries()).sort((a, b) => a[1].localeCompare(b[1]));
 ---
 
 <PageLayout title={PROJECTS.TITLE} description={PROJECTS.DESCRIPTION}>
   <Container>
-    <div class="space-y-10">
-      <div class="animate font-semibold text-slate-dark dark:text-ivory-light">
-        Projects
+    <div class="space-y-8">
+      <div class="animate relative z-10 flex flex-wrap items-center justify-between gap-3">
+        <span class="font-semibold text-slate-dark dark:text-ivory-light">Projects</span>
+        <div class="flex items-center gap-2">
+          {allTags.length > 0 && (
+            <FilterDropdown
+              id="tag-select"
+              defaultLabel="All topics"
+              options={[
+                { value: "all", label: "All topics" },
+                ...allTags.map(([slug, displayName]) => ({ value: slug, label: displayName }))
+              ]}
+            />
+          )}
+          <FilterDropdown
+            id="sort-select"
+            defaultLabel="Newest"
+            options={[
+              { value: "newest", label: "Newest" },
+              { value: "oldest", label: "Oldest" },
+            ]}
+          />
+        </div>
       </div>
-      <div data-hover-table class="animate relative flex flex-col">
+
+      <div data-hover-table class="animate relative flex flex-col" id="projects-list">
         <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
         {projects.map((project) => (
-          <ProjectCard entry={project} />
+          <div
+            data-project-id={normalizeEntryId(project)}
+            data-project-tags={(project.data.tags ?? []).map(slugifyTag).join(",")}
+            data-project-year={project.data.date.getFullYear()}
+          >
+            <ProjectCard entry={project} />
+          </div>
         ))}
       </div>
+
+      <p id="no-results" class="hidden py-8 text-center text-xs text-cloud-medium">
+        No projects match this filter.
+      </p>
     </div>
   </Container>
 </PageLayout>
 
 <script type="application/json" id="page-quick-nav-data" set:html={JSON.stringify(projectUrls)}></script>
+
+<script>
+  function initDropdowns() {
+    for (const details of document.querySelectorAll<HTMLDetailsElement>(".filter-dropdown")) {
+      const label = details.querySelector<HTMLElement>(".filter-label");
+      const options = details.querySelectorAll<HTMLButtonElement>(".filter-option");
+
+      if (options[0]) options[0].dataset.selected = "";
+
+      for (const opt of options) {
+        opt.addEventListener("click", () => {
+          if (label) label.textContent = opt.textContent?.trim() ?? "";
+          for (const o of options) delete o.dataset.selected;
+          opt.dataset.selected = "";
+          details.removeAttribute("open");
+          details.dispatchEvent(new CustomEvent("filter-change", { bubbles: true }));
+        });
+      }
+    }
+
+    document.addEventListener("click", (e) => {
+      for (const details of document.querySelectorAll<HTMLDetailsElement>(".filter-dropdown[open]")) {
+        if (!details.contains(e.target as Node)) {
+          details.removeAttribute("open");
+        }
+      }
+    });
+  }
+
+  function getDropdownValue(id: string): string {
+    const details = document.getElementById(id);
+    return details?.querySelector<HTMLButtonElement>(".filter-option[data-selected]")?.dataset.value ?? "";
+  }
+
+  function init() {
+    initDropdowns();
+
+    const list = document.getElementById("projects-list");
+    const noResults = document.getElementById("no-results");
+    if (!list) return;
+
+    function applyFilters() {
+      const activeTag = getDropdownValue("tag-select") || "all";
+      const sortAsc = getDropdownValue("sort-select") === "oldest";
+
+      const items = Array.from(list!.querySelectorAll<HTMLElement>("[data-project-id]"));
+      let visibleCount = 0;
+
+      for (const item of items) {
+        const tags = item.dataset.projectTags?.split(",").filter(Boolean) ?? [];
+        const visible = activeTag === "all" || tags.includes(activeTag);
+        item.style.display = visible ? "" : "none";
+        if (visible) visibleCount++;
+      }
+
+      const sorted = [...items].sort((a, b) => {
+        const ya = parseInt(a.dataset.projectYear ?? "0");
+        const yb = parseInt(b.dataset.projectYear ?? "0");
+        return sortAsc ? ya - yb : yb - ya;
+      });
+      for (const item of sorted) list!.appendChild(item);
+
+      noResults?.classList.toggle("hidden", visibleCount > 0);
+    }
+
+    document.addEventListener("filter-change", applyFilters);
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("astro:after-swap", init);
+</script>

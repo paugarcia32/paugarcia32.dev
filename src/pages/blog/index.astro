@@ -2,9 +2,10 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import BlogCard from "@components/BlogCard.astro";
 import Container from "@components/Container.astro";
+import FilterDropdown from "@components/FilterDropdown.astro";
 import { BLOG } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
-import { normalizeEntryId, readingTime } from "@lib/utils";
+import { normalizeEntryId, readingTime, slugifyTag } from "@lib/utils";
 
 const data = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
@@ -12,43 +13,170 @@ const data = (await getCollection("blog"))
 
 const postUrls = data.map((post) => `/blog/${normalizeEntryId(post)}`);
 
-type Acc = {
-  [year: string]: CollectionEntry<"blog">[];
-};
+// Collect all unique tags
+const tagMap = new Map<string, string>();
+for (const post of data) {
+  for (const tag of post.data.tags ?? []) {
+    const slug = slugifyTag(tag);
+    if (!tagMap.has(slug)) tagMap.set(slug, tag);
+  }
+}
+const allTags = Array.from(tagMap.entries()).sort((a, b) => a[1].localeCompare(b[1]));
 
-const posts = data.reduce((acc: Acc, post) => {
+// Group by year for template
+type Acc = { [year: string]: CollectionEntry<"blog">[] };
+const grouped = data.reduce((acc: Acc, post) => {
   const year = post.data.date.getFullYear().toString();
   if (!acc[year]) acc[year] = [];
   acc[year].push(post);
   return acc;
 }, {});
-
-const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
+const years = Object.keys(grouped).sort((a, b) => parseInt(b) - parseInt(a));
 ---
 
 <PageLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
   <Container>
-    <div class="space-y-10">
-      <div class="animate font-semibold text-slate-dark dark:text-ivory-light">
-        Blog
+    <div class="space-y-8">
+      <div class="animate relative z-10 flex flex-wrap items-center justify-between gap-3">
+        <span class="font-semibold text-slate-dark dark:text-ivory-light">Blog</span>
+        <div class="flex items-center gap-2">
+          {allTags.length > 0 && (
+            <FilterDropdown
+              id="tag-select"
+              defaultLabel="All topics"
+              options={[
+                { value: "all", label: "All topics" },
+                ...allTags.map(([slug, displayName]) => ({ value: slug, label: displayName }))
+              ]}
+            />
+          )}
+          <FilterDropdown
+            id="sort-select"
+            defaultLabel="Newest"
+            options={[
+              { value: "newest", label: "Newest" },
+              { value: "oldest", label: "Oldest" },
+            ]}
+          />
+        </div>
       </div>
-      <div class="space-y-8">
+
+      <div id="posts-container" class="space-y-8">
         {years.map(year => (
-          <section class="animate space-y-1">
-            <div class="text-xs font-medium text-cloud-dark dark:text-cloud-light uppercase tracking-wider px-2 pb-1">
+          <section class="animate space-y-1" data-year-section={year}>
+            <div class="text-xs font-medium uppercase tracking-wider text-cloud-dark px-2 pb-1 dark:text-cloud-light">
               {year}
             </div>
             <div data-hover-table class="relative flex flex-col">
               <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
-              {posts[year].map((post) => (
-                <BlogCard entry={post} readingTimeStr={readingTime(post.body ?? "")} />
+              {grouped[year].map((post) => (
+                <div
+                  data-post-id={normalizeEntryId(post)}
+                  data-post-year={post.data.date.getFullYear()}
+                  data-post-tags={(post.data.tags ?? []).map(slugifyTag).join(",")}
+                >
+                  <BlogCard entry={post} readingTimeStr={readingTime(post.body ?? "")} />
+                </div>
               ))}
             </div>
           </section>
         ))}
       </div>
+
+      <p id="no-results" class="hidden py-8 text-center text-xs text-cloud-medium">
+        No posts match this filter.
+      </p>
     </div>
   </Container>
 </PageLayout>
 
 <script type="application/json" id="page-quick-nav-data" set:html={JSON.stringify(postUrls)}></script>
+
+<script>
+  function initDropdowns() {
+    // Wire up all FilterDropdown instances on the page
+    for (const details of document.querySelectorAll<HTMLDetailsElement>(".filter-dropdown")) {
+      const label = details.querySelector<HTMLElement>(".filter-label");
+      const options = details.querySelectorAll<HTMLButtonElement>(".filter-option");
+
+      // Mark first option as selected by default
+      if (options[0]) options[0].dataset.selected = "";
+
+      for (const opt of options) {
+        opt.addEventListener("click", () => {
+          // Update label
+          if (label) label.textContent = opt.textContent?.trim() ?? "";
+          // Update selected state
+          for (const o of options) delete o.dataset.selected;
+          opt.dataset.selected = "";
+          // Close dropdown
+          details.removeAttribute("open");
+          // Dispatch change event so filter logic can listen
+          details.dispatchEvent(new CustomEvent("filter-change", { bubbles: true }));
+        });
+      }
+    }
+
+    // Close on outside click
+    document.addEventListener("click", (e) => {
+      for (const details of document.querySelectorAll<HTMLDetailsElement>(".filter-dropdown[open]")) {
+        if (!details.contains(e.target as Node)) {
+          details.removeAttribute("open");
+        }
+      }
+    });
+  }
+
+  function getDropdownValue(id: string): string {
+    const details = document.getElementById(id);
+    return details?.querySelector<HTMLButtonElement>(".filter-option[data-selected]")?.dataset.value ?? "";
+  }
+
+  function init() {
+    initDropdowns();
+
+    const container = document.getElementById("posts-container");
+    const noResults = document.getElementById("no-results");
+    if (!container) return;
+
+    function applyFilters() {
+      const activeTag = getDropdownValue("tag-select") || "all";
+      const sortAsc = getDropdownValue("sort-select") === "oldest";
+
+      const allPosts = Array.from(container!.querySelectorAll<HTMLElement>("[data-post-id]"));
+
+      let visibleCount = 0;
+      for (const post of allPosts) {
+        const tags = post.dataset.postTags?.split(",").filter(Boolean) ?? [];
+        const visible = activeTag === "all" || tags.includes(activeTag);
+        post.style.display = visible ? "" : "none";
+        if (visible) visibleCount++;
+      }
+
+      const yearSections = Array.from(container!.querySelectorAll<HTMLElement>("[data-year-section]"));
+      const sortedSections = [...yearSections].sort((a, b) => {
+        const ya = parseInt(a.dataset.yearSection ?? "0");
+        const yb = parseInt(b.dataset.yearSection ?? "0");
+        return sortAsc ? ya - yb : yb - ya;
+      });
+      for (const s of sortedSections) container!.appendChild(s);
+
+      for (const section of yearSections) {
+        const table = section.querySelector("[data-hover-table]");
+        if (!table) continue;
+        const posts = Array.from(table.querySelectorAll<HTMLElement>("[data-post-id]"));
+        const sorted = sortAsc ? [...posts].reverse() : posts;
+        for (const p of sorted) table.appendChild(p);
+        const hasVisible = posts.some((p) => p.style.display !== "none");
+        (section as HTMLElement).style.display = hasVisible ? "" : "none";
+      }
+
+      noResults?.classList.toggle("hidden", visibleCount > 0);
+    }
+
+    document.addEventListener("filter-change", applyFilters);
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("astro:after-swap", init);
+</script>

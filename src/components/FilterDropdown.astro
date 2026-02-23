@@ -1,0 +1,95 @@
+---
+interface Props {
+  id: string;
+  options: { value: string; label: string }[];
+  defaultLabel: string;
+}
+
+const { id, options, defaultLabel } = Astro.props;
+---
+
+<details id={id} class="filter-dropdown">
+  <summary class="flex cursor-pointer list-none items-center gap-1 rounded border border-cloud-medium/30 px-2 py-1 text-xs text-cloud-medium transition-colors hover:border-cloud-medium/60 hover:text-slate-dark dark:hover:text-ivory-light">
+    <span class="filter-label">{defaultLabel}</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 transition-transform duration-150 details-chevron">
+      <path d="m6 9 6 6 6-6"/>
+    </svg>
+  </summary>
+  <ul class="dropdown-menu">
+    {options.map(({ value, label }) => (
+      <li>
+        <button
+          type="button"
+          data-value={value}
+          class="filter-option"
+        >
+          {label}
+        </button>
+      </li>
+    ))}
+  </ul>
+</details>
+
+<style is:global>
+  .filter-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 10;
+  }
+
+  .filter-dropdown summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .filter-dropdown[open] .details-chevron {
+    transform: rotate(180deg);
+  }
+
+  .filter-dropdown .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    z-index: 50;
+    min-width: 8rem;
+    padding: 0.25rem 0;
+    margin: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+    border: 1px solid rgb(145 145 141 / 0.25);
+    background-color: #FAFAF7;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+    pointer-events: auto;
+  }
+
+  html.dark .filter-dropdown .dropdown-menu {
+    background-color: #262625;
+    border-color: rgb(145 145 141 / 0.25);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.4);
+  }
+
+  .filter-dropdown .filter-option {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    text-align: left;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: rgb(145 145 141);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 150ms ease;
+    white-space: nowrap;
+    pointer-events: auto;
+  }
+
+  .filter-dropdown .filter-option:hover,
+  .filter-dropdown .filter-option[data-selected] {
+    color: #191919;
+  }
+
+  html.dark .filter-dropdown .filter-option:hover,
+  html.dark .filter-dropdown .filter-option[data-selected] {
+    color: #FAFAF7;
+  }
+</style>
