@@ -248,11 +248,25 @@ const serializedIconPaths = JSON.stringify(iconPaths);
               <span class="text-sm">Go back</span>
               <kbd
                 class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
-                >[</kbd
+                >h</kbd
               >
             </div>
             <div class="flex items-center justify-between">
               <span class="text-sm">Go forward</span>
+              <kbd
+                class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
+                >l</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Jump to prev section</span>
+              <kbd
+                class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
+                >[</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Jump to next section</span>
               <kbd
                 class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
                 >]</kbd
@@ -780,16 +794,36 @@ const serializedIconPaths = JSON.stringify(iconPaths);
           e.stopPropagation();
           window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
           return;
-        case "[":
+        case "h":
           e.preventDefault();
           e.stopPropagation();
           window.history.back();
           return;
-        case "]":
+        case "l":
           e.preventDefault();
           e.stopPropagation();
           window.history.forward();
           return;
+        case "[": {
+          e.preventDefault();
+          e.stopPropagation();
+          const blocks = Array.from(document.querySelectorAll<HTMLElement>("section, h2, h3, article"));
+          const scrollY = window.scrollY;
+          const prev = [...blocks].reverse().find(el => el.getBoundingClientRect().top + scrollY < scrollY - 10);
+          if (prev) prev.scrollIntoView({ behavior: "smooth", block: "start" });
+          else window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
+        case "]": {
+          e.preventDefault();
+          e.stopPropagation();
+          const blocks = Array.from(document.querySelectorAll<HTMLElement>("section, h2, h3, article"));
+          const scrollY = window.scrollY;
+          const next = blocks.find(el => el.getBoundingClientRect().top + scrollY > scrollY + 10);
+          if (next) next.scrollIntoView({ behavior: "smooth", block: "start" });
+          else window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+          return;
+        }
       }
     }
 
