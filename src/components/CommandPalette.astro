@@ -231,6 +231,20 @@ const serializedIconPaths = JSON.stringify(iconPaths);
               >
             </div>
             <div class="flex items-center justify-between">
+              <span class="text-sm">Jump to top</span>
+              <kbd
+                class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
+                >gg</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm">Jump to bottom</span>
+              <kbd
+                class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
+                >G</kbd
+              >
+            </div>
+            <div class="flex items-center justify-between">
               <span class="text-sm">Go back</span>
               <kbd
                 class="rounded border border-cloud-medium/30 px-1.5 py-0.5 text-xs dark:border-cloud-medium/40"
@@ -694,6 +708,15 @@ const serializedIconPaths = JSON.stringify(iconPaths);
       clearTimeout(chordTimeoutId);
       hideChordToast();
 
+      // gg — scroll to top
+      if (e.key === "g") {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        lastKey = null;
+        lastKeyTime = 0;
+        return;
+      }
+
       const shortcuts: Record<string, string> = {
         p: "/projects",
         w: "/work",
@@ -751,6 +774,11 @@ const serializedIconPaths = JSON.stringify(iconPaths);
           e.preventDefault();
           e.stopPropagation();
           window.scrollBy({ top: -SCROLL_AMOUNT, behavior: "smooth" });
+          return;
+        case "G":
+          e.preventDefault();
+          e.stopPropagation();
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
           return;
         case "[":
           e.preventDefault();
