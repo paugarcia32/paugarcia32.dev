@@ -7,9 +7,9 @@ import avatar from "@assets/avatar.jpg";
   <Image
     src={avatar}
     alt="Pau Garcia"
-    width={48}
-    height={48}
-    class="rounded-full size-12 object-cover ring-1 ring-cloud-medium/30 dark:ring-cloud-medium/40"
+    width={160}
+    height={160}
+    class="avatar-img rounded-full size-12 object-cover ring-1 ring-cloud-medium/30 dark:ring-cloud-medium/40 cursor-pointer"
   />
   <div class="flex flex-col gap-0.5">
     <span class="font-semibold text-slate-dark dark:text-ivory-light">Pau Garcia</span>
@@ -21,6 +21,17 @@ import avatar from "@assets/avatar.jpg";
 </div>
 
 <style>
+  .avatar-img {
+    transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 300ms ease;
+    transform-origin: center;
+  }
+
+  .avatar-img:hover,
+  .avatar-img:focus-visible {
+    transform: scale(1.6);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  }
+
   .digit-flip {
     display: inline-block;
     overflow: hidden;
