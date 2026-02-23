@@ -216,6 +216,43 @@ async function createProject() {
     default: false,
   });
 
+  // Build work position choices from filesystem
+  const workDir = path.join(contentDir, "work");
+  const workPositionChoices: { name: string; value: string }[] = [];
+  if (fs.existsSync(workDir)) {
+    const companies = fs
+      .readdirSync(workDir)
+      .filter((d) => fs.statSync(path.join(workDir, d)).isDirectory());
+    for (const company of companies) {
+      const files = fs.readdirSync(path.join(workDir, company));
+      for (const file of files) {
+        if (file === "company.ts" || file === "company.md" || !file.endsWith(".md")) continue;
+        const positionSlug = file.replace(".md", "");
+        workPositionChoices.push({
+          name: `${company}/${positionSlug}`,
+          value: `${company}/${positionSlug}`,
+        });
+      }
+    }
+  }
+
+  let workPosition = "";
+  if (workPositionChoices.length > 0) {
+    const linkToWork = await confirm({
+      message: "Link this project to a work position?",
+      default: false,
+    });
+    if (linkToWork) {
+      workPosition = await select({
+        message: "Select work position:",
+        choices: [
+          { name: "(none)", value: "" },
+          ...workPositionChoices,
+        ],
+      });
+    }
+  }
+
   const selectedTags = await checkbox({
     message: "Select tags (use space to select, enter to confirm):",
     choices: allTags,
@@ -246,7 +283,7 @@ export default {
     title: "${title}",
     description: "${description}",
     date: new Date("${date.toISOString().split("T")[0]}"),
-    draft: ${draft},${demoURL ? `\n    demoURL: "${demoURL}",` : ""}${repoURL ? `\n    repoURL: "${repoURL}",` : ""}
+    draft: ${draft},${demoURL ? `\n    demoURL: "${demoURL}",` : ""}${repoURL ? `\n    repoURL: "${repoURL}",` : ""}${workPosition ? `\n    workPosition: "${workPosition}",` : ""}
     tags: [${tagsImport}],
   },
 } as const satisfies ProjectReference;
@@ -259,7 +296,7 @@ export default {
 title: "${title}"
 description: "${description}"
 date: "${formatDate(date)}"
-${draft ? "draft: true" : ""}${demoURL ? `\ndemoURL: "${demoURL}"` : ""}${repoURL ? `\nrepoURL: "${repoURL}"` : ""}
+${draft ? "draft: true" : ""}${demoURL ? `\ndemoURL: "${demoURL}"` : ""}${repoURL ? `\nrepoURL: "${repoURL}"` : ""}${workPosition ? `\nworkPosition: "${workPosition}"` : ""}
 tags: [${selectedTags.map((tag) => `"${TAGS[tag as keyof typeof TAGS]}"`).join(", ")}]
 ---
 

@@ -177,7 +177,29 @@ export const blogPosts = {
 
 #### Project
 
-Similar to blog posts, but use `ProjectReference` type and add optional `demoURL` and `repoURL` fields.
+Similar to blog posts, but use `ProjectReference` type and add optional `demoURL`, `repoURL`, and `workPosition` fields.
+
+To link a project to a work position, add the `workPosition` field with the value `"company-slug/position-slug"` (matching the folder and filename under `src/content/work/`):
+
+```typescript
+export default {
+  slug: "my-project",
+  config: {
+    title: "My Project",
+    description: "...",
+    date: new Date("2025-01-01"),
+    draft: false,
+    workPosition: "maat/junior-engineer", // links to src/content/work/maat/junior-engineer.md
+    tags: [TAGS.FLUTTER],
+  },
+} as const satisfies ProjectReference;
+```
+
+This will:
+- Show a badge on the project detail page linking to the work position
+- Show the project under "Projects" in the work experience page for that position
+
+The `pnpm create-content` tool will also prompt you to link a project to a work position interactively.
 
 #### Work Experience
 

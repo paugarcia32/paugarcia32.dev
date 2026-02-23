@@ -24,6 +24,7 @@ interface BlogPostConfig {
 interface ProjectConfig extends BlogPostConfig {
   demoURL?: string;
   repoURL?: string;
+  workPosition?: string;
 }
 
 interface WorkPositionConfig {
@@ -105,6 +106,10 @@ function generateProjectFrontmatter(config: ProjectConfig): string {
 
   if (config.repoURL) {
     lines.push(`repoURL: "${config.repoURL}"`);
+  }
+
+  if (config.workPosition) {
+    lines.push(`workPosition: "${config.workPosition}"`);
   }
 
   if (config.tags && config.tags.length > 0) {

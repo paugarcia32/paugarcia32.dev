@@ -5,10 +5,15 @@ import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
 import { WORK } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
-import { dateRange, groupPositionsByCompany } from "@lib/utils";
+import { dateRange, groupPositionsByCompany, normalizeEntryId } from "@lib/utils";
 
 // Get all work entries (positions and company metadata)
 const allWork = await getCollection("work");
+
+// Get all non-draft projects (drafts should never appear in work page)
+const allProjects = await getCollection("projects", ({ data }) => {
+  return data.draft !== true;
+});
 
 // Group and sort
 const work = groupPositionsByCompany(allWork);
@@ -59,6 +64,31 @@ const work = groupPositionsByCompany(allWork);
                       <article class="prose prose-sm dark:prose-invert mt-2">
                         <Content />
                       </article>
+                      {(() => {
+                        const related = allProjects.filter(
+                          (p) => p.data.workPosition === position.id,
+                        );
+                        return related.length > 0 ? (
+                          <div class="mt-3 space-y-1.5">
+                            <div class="text-xs font-medium text-cloud-dark dark:text-cloud-light uppercase tracking-wide">
+                              Projects
+                            </div>
+                            <ul class="flex flex-col gap-1">
+                              {related.map((p) => (
+                                <li>
+                                  <a
+                                    href={`/projects/${normalizeEntryId(p)}`}
+                                    class="group flex items-center gap-1 text-sm text-cloud-dark dark:text-cloud-light hover:text-slate-dark dark:hover:text-ivory-light transition-colors"
+                                  >
+                                    <span class="opacity-50 group-hover:opacity-100 transition-opacity">→</span>
+                                    {p.data.title}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : null;
+                      })()}
                     </div>
                   );
                 })}

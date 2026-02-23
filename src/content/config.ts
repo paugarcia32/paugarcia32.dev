@@ -76,6 +76,7 @@ const projects = defineCollection({
     demoURL: z.string().optional(),
     repoURL: z.string().optional(),
     tags: z.array(tagEnum).optional(),
+    workPosition: z.string().optional(),
   }),
 });
 

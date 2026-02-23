@@ -38,6 +38,7 @@ export type ProjectConfig = {
   readonly tags: readonly string[];
   readonly demoURL?: string;
   readonly repoURL?: string;
+  readonly workPosition?: string;
 };
 
 export type WorkPositionConfig = {

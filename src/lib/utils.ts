@@ -385,6 +385,33 @@ export function getCurrentPosition(
   };
 }
 
+/**
+ * Looks up a work position entry by its id (e.g. "maat/junior-engineer")
+ * Returns the position entry along with its company name and optional URL.
+ */
+export function getWorkPositionById(
+  allWork: CollectionEntry<"work">[],
+  positionId: string,
+): { position: WorkPosition; companyName: string; companyUrl?: string } | null {
+  const position = allWork.find(
+    (e): e is WorkPosition =>
+      e.data.type === "position" && e.id === positionId,
+  );
+  if (!position) return null;
+
+  const companyFolder = positionId.split("/")[0];
+  const companies = allWork.filter((e) => e.data.type === "company");
+  const companyMeta = companies.find((c) => c.id.startsWith(companyFolder + "/"));
+
+  return {
+    position,
+    companyName:
+      companyMeta?.data.type === "company" ? companyMeta.data.company : companyFolder,
+    companyUrl:
+      companyMeta?.data.type === "company" ? companyMeta.data.url : undefined,
+  };
+}
+
 // Showcase utility functions
 
 /**
