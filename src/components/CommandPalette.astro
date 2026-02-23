@@ -9,7 +9,7 @@ const serializedIconPaths = JSON.stringify(iconPaths);
   class="fixed inset-0 z-[60] m-0 h-full w-full max-w-none bg-transparent p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm"
 >
   <div
-    class="flex h-full items-start justify-center px-4 pt-[15vh]"
+    class="flex h-full items-start justify-center px-3 pt-[10vh] sm:px-4 sm:pt-[15vh]"
     id="palette-container"
   >
     <div
@@ -38,7 +38,17 @@ const serializedIconPaths = JSON.stringify(iconPaths);
       <div
         class="flex items-center justify-between border-t border-cloud-medium/30 px-4 py-3 text-xs text-black/60 dark:border-cloud-medium/40 dark:text-white/60"
       >
-        <div class="flex gap-4">
+        <!-- Mobile: just esc hint -->
+        <div class="flex gap-4 sm:hidden">
+          <span class="flex items-center gap-1">
+            <kbd
+              class="rounded border border-cloud-medium/30 px-1.5 py-0.5 dark:border-cloud-medium/40"
+              >esc</kbd
+            > close
+          </span>
+        </div>
+        <!-- Desktop: full shortcuts -->
+        <div class="hidden sm:flex gap-4">
           <span class="flex items-center gap-1">
             <kbd
               class="rounded border border-cloud-medium/30 px-1.5 py-0.5 dark:border-cloud-medium/40"
@@ -73,7 +83,7 @@ const serializedIconPaths = JSON.stringify(iconPaths);
           >
             ?
           </button>
-          <div>
+          <div class="hidden sm:block">
             <kbd
               class="rounded border border-cloud-medium/30 px-1.5 py-0.5 dark:border-cloud-medium/40"
               >⌘K</kbd
