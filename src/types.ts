@@ -1,3 +1,5 @@
+import type { WorkPositionId } from "@content/work";
+
 export type Site = {
   NAME: string;
   EMAIL: string;
@@ -38,7 +40,7 @@ export type ProjectConfig = {
   readonly tags: readonly string[];
   readonly demoURL?: string;
   readonly repoURL?: string;
-  readonly workPosition?: string;
+  readonly workPosition?: WorkPositionId;
 };
 
 export type WorkPositionConfig = {

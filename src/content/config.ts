@@ -2,6 +2,7 @@ import { defineCollection, z } from "astro:content";
 import { parseDDMMYYYY } from "@lib/utils";
 import * as TAGS from "@tags";
 import { glob } from "astro/loaders";
+import { companies } from "./work/index";
 
 // Derive Zod enum from tags.ts — adding a tag constant there automatically
 // makes it valid in frontmatter. astro check will fail on unknown tags.
@@ -9,6 +10,15 @@ const tagValues = Object.values(TAGS).filter(
   (v) => typeof v === "string",
 ) as string[];
 const tagEnum = z.enum(tagValues as [string, ...string[]]);
+
+// Derive valid work position IDs from companies — stays in sync automatically.
+// Adding a new position to work/index.ts makes it valid here too.
+const workPositionValues = Object.values(companies).flatMap((company) =>
+  Object.values(company.positions).map(
+    (pos) => `${company.slug}/${pos.slug}` as string,
+  ),
+);
+const workPositionEnum = z.enum(workPositionValues as [string, ...string[]]);
 
 // Custom date schema that accepts dd/mm/yyyy format
 const ddmmyyyyDate = z.string().transform((val, ctx) => {
@@ -76,7 +86,7 @@ const projects = defineCollection({
     demoURL: z.string().optional(),
     repoURL: z.string().optional(),
     tags: z.array(tagEnum).optional(),
-    workPosition: z.string().optional(),
+    workPosition: workPositionEnum.optional(),
   }),
 });
 

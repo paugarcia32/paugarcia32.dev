@@ -45,3 +45,21 @@ export const companies = {
 } as const;
 
 export type CompanyKey = keyof typeof companies;
+
+/**
+ * All valid work position IDs, derived directly from the companies object.
+ * Stays in sync automatically — adding a position to `companies` adds it here too.
+ * Example: "maat/junior-engineer" | "maat/intern" | "marsh-mclennan/cybersecurity-intern"
+ */
+type ExtractPositionIds<T> = T extends {
+  slug: infer CompanySlug;
+  positions: infer Positions;
+}
+  ? Positions extends Record<string, { slug: infer PositionSlug }>
+    ? `${CompanySlug & string}/${PositionSlug & string}`
+    : never
+  : never;
+
+export type WorkPositionId = ExtractPositionIds<
+  (typeof companies)[keyof typeof companies]
+>;
