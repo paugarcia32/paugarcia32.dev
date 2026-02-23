@@ -18,6 +18,7 @@ import {
   getCurrentPosition,
   getShowcasedContent,
   getShowcasedWork,
+  readingTime,
 } from "@lib/utils";
 import { HOMEPAGE } from "@showcases";
 
@@ -47,6 +48,8 @@ const topTags = Array.from(allTags.entries())
 const blog = getShowcasedContent(allBlog, HOMEPAGE.blog);
 const projects = getShowcasedContent(allProjects, HOMEPAGE.projects);
 const work = getShowcasedWork(allWork, HOMEPAGE.work);
+
+const SHOW_TABLE_HEADERS = false; // Toggle to show/hide column headers on homepage tables
 ---
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
@@ -121,9 +124,16 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
           </Link>
         </div>
         <div data-hover-table class="relative flex flex-col">
+          {SHOW_TABLE_HEADERS && (
+            <div class="grid grid-cols-[4rem_1fr_auto] gap-x-4 border-b border-cloud-medium/20 dark:border-cloud-medium/10 pb-1.5 mb-1 px-2">
+              <span class="text-xs text-cloud-dark dark:text-cloud-light">year</span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light">title</span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">read</span>
+            </div>
+          )}
           <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
           {blog.map(post => (
-            <BlogCard entry={post} />
+            <BlogCard entry={post} readingTimeStr={readingTime(post.body ?? "")} />
           ))}
         </div>
       </section>
@@ -193,11 +203,13 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
           </Link>
         </div>
         <div data-hover-table class="relative flex flex-col">
-          <div class="grid grid-cols-[4rem_1fr_auto] gap-x-4 border-b border-cloud-medium/20 dark:border-cloud-medium/10 pb-1.5 mb-1 px-2">
-            <span class="text-xs text-cloud-dark dark:text-cloud-light">updated</span>
-            <span class="text-xs text-cloud-dark dark:text-cloud-light">topic</span>
-            <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">items</span>
-          </div>
+          {SHOW_TABLE_HEADERS && (
+            <div class="grid grid-cols-[4rem_1fr_auto] gap-x-4 border-b border-cloud-medium/20 dark:border-cloud-medium/10 pb-1.5 mb-1 px-2">
+              <span class="text-xs text-cloud-dark dark:text-cloud-light">updated</span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light">topic</span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">items</span>
+            </div>
+          )}
           <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
           {topTags.map(({ slug, displayName, count, lastUpdated }) => (
             <a
@@ -229,6 +241,13 @@ const work = getShowcasedWork(allWork, HOMEPAGE.work);
           </Link>
         </div>
         <div data-hover-table class="relative flex flex-col">
+          {SHOW_TABLE_HEADERS && (
+            <div class="grid grid-cols-[4rem_1fr_auto] gap-x-4 border-b border-cloud-medium/20 dark:border-cloud-medium/10 pb-1.5 mb-1 px-2">
+              <span class="text-xs text-cloud-dark dark:text-cloud-light">year</span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light">title</span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">links</span>
+            </div>
+          )}
           <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
           {projects.map(project => (
             <ProjectCard entry={project} />
