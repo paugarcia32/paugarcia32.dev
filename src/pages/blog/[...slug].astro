@@ -79,56 +79,38 @@ const relatedContent =
     </article>
 
     {relatedContent.length > 0 && (
-      <div class="mt-16 space-y-4">
-        <h2 class="animate text-lg font-semibold text-slate-dark dark:text-ivory-light">
-          Related Content
-        </h2>
-        <ul class="animate flex flex-col gap-4">
+      <div class="mt-12">
+        <p class="animate text-xs uppercase tracking-widest text-cloud-dark dark:text-cloud-light mb-3">
+          Related
+        </p>
+        <ul class="animate flex flex-col">
           {relatedContent.map((item) => {
-            if (item.type === "blog") {
-              return (
-                <li>
-                  <ArrowCard entry={item.entry as any} />
-                </li>
-              );
-            } else if (item.type === "project") {
+            if (item.type === "blog" || item.type === "project") {
               return (
                 <li>
                   <ArrowCard entry={item.entry as any} />
                 </li>
               );
             } else {
-              // Work position
               const workEntry = item.entry as any;
               return (
                 <li>
                   <a
                     href={`/work#${workEntry.id.split("/")[0]}`}
-                    class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-cloud-medium/30 dark:border-cloud-medium/40 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5 hover:text-slate-dark dark:hover:text-ivory-light transition-colors duration-300 ease-in-out"
+                    data-hover-row
+                    class="relative grid grid-cols-[4rem_1fr_auto] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
                   >
-                    <div class="flex flex-col flex-1 truncate">
-                      <div class="font-semibold">{workEntry.data.role}</div>
-                      <div class="text-sm text-cloud-dark dark:text-cloud-light">
-                        {workEntry.data.description}
-                      </div>
+                    <span class="text-xs text-cloud-dark dark:text-cloud-light tabular-nums">
+                      work
+                    </span>
+                    <div class="min-w-0">
+                      <div class="text-sm font-medium truncate">{workEntry.data.role}</div>
+                      {workEntry.data.description && (
+                        <div class="text-xs text-cloud-dark dark:text-cloud-light truncate mt-0.5">
+                          {workEntry.data.description}
+                        </div>
+                      )}
                     </div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      class="absolute top-1/2 right-2 -translate-y-1/2 size-5 stroke-2 fill-none stroke-current"
-                    >
-                      <line
-                        x1="5"
-                        y1="12"
-                        x2="19"
-                        y2="12"
-                        class="translate-x-3 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"
-                      />
-                      <polyline
-                        points="12 5 19 12 12 19"
-                        class="-translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-in-out"
-                      />
-                    </svg>
                   </a>
                 </li>
               );

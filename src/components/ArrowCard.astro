@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatDateShort, normalizeEntryId, slugifyTag } from "@lib/utils";
+import { normalizeEntryId } from "@lib/utils";
 
 type Props = {
   entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
@@ -9,56 +9,25 @@ type Props = {
 const { entry } = Astro.props;
 ---
 
-<a href={`/${entry.collection}/${normalizeEntryId(entry)}`} class="arrow-card relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-cloud-medium/30 dark:border-cloud-medium/40 hover:bg-cloud-dark/5 dark:hover:bg-ivory-dark/5 hover:text-slate-dark dark:hover:text-ivory-light transition-colors duration-300 ease-in-out">
-  <div class="flex flex-col flex-1 min-w-0">
-    <div class="text-xs uppercase tracking-wide text-cloud-medium dark:text-cloud-medium mb-1">
-      {formatDateShort(entry.data.date)}
-    </div>
-    <div class="font-semibold truncate">
+<a
+  href={`/${entry.collection}/${normalizeEntryId(entry)}`}
+  data-hover-row
+  class="relative grid grid-cols-[4rem_1fr_auto] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
+>
+  <span class="text-xs text-cloud-dark dark:text-cloud-light tabular-nums">
+    {entry.data.date.getFullYear()}
+  </span>
+  <div class="min-w-0">
+    <div class="text-sm font-medium truncate">
       {entry.data.title}
     </div>
-    <div class="text-sm text-cloud-dark dark:text-cloud-light truncate">
-      {entry.data.description}
-    </div>
-    {entry.data.tags && entry.data.tags.length > 0 && (
-      <div class="flex flex-wrap gap-1.5 mt-2">
-        {entry.data.tags.map((tag) => (
-          <span
-            data-tag-url={`/tags/${slugifyTag(tag)}`}
-            class="tag-badge inline-flex items-center rounded-full border border-cloud-medium/20 bg-cloud-dark/5 px-2 py-0.5 text-xs text-cloud-dark transition-colors duration-200 hover:border-cloud-medium/40 hover:bg-cloud-dark/10 hover:text-slate-dark cursor-pointer dark:border-cloud-medium/25 dark:bg-ivory-dark/5 dark:text-cloud-light dark:hover:border-cloud-medium/50 dark:hover:bg-ivory-dark/10 dark:hover:text-ivory-light"
-          >
-            {tag}
-          </span>
-        ))}
+    {entry.data.description && (
+      <div class="text-xs text-cloud-dark dark:text-cloud-light truncate mt-0.5">
+        {entry.data.description}
       </div>
     )}
   </div>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    class="absolute top-1/2 right-2 -translate-y-1/2 size-5 stroke-2 fill-none stroke-current">
-    <line x1="5" y1="12" x2="19" y2="12" class="translate-x-3 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out" />
-    <polyline points="12 5 19 12 12 19" class="-translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-in-out" />
-  </svg>
+  <span class="text-xs text-cloud-dark dark:text-cloud-light">
+    {entry.collection === "projects" ? "project" : entry.collection}
+  </span>
 </a>
-
-<script>
-  function setupTagBadges() {
-    document.querySelectorAll('.tag-badge').forEach((badge) => {
-      badge.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const url = (e.currentTarget as HTMLElement).dataset.tagUrl;
-        if (url) {
-          window.location.href = url;
-        }
-      });
-    });
-  }
-
-  // Setup on initial load
-  setupTagBadges();
-
-  // Setup after view transitions
-  document.addEventListener('astro:after-swap', setupTagBadges);
-</script>
