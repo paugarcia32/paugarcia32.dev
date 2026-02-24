@@ -2,11 +2,8 @@
 title: "Introduction to Embedded Systems"
 description: "A practical starting point for embedded systems: setting up the environment, choosing hardware, and learning by building."
 date: "Apr 28, 2024"
-draft: false
 tags: ["IoT", "Arduino", "ESP32"]
 ---
-
-
 ## Introduction
 
 Embedded systems are everywhere. This post documents my experience getting started with them through personal projects. Nothing professional, just hands-on exploration.

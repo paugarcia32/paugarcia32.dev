@@ -174,9 +174,11 @@ function updateMarkdownFile(filePath: string, newFrontmatter: string): boolean {
   try {
     const content = fs.readFileSync(filePath, "utf-8");
 
-    // Strip ALL leading frontmatter blocks (handles accidental duplicates)
+    // Strip ALL leading frontmatter blocks (handles accidental duplicates).
+    // Only strips blocks that start at the very beginning of the string,
+    // so `---` separators inside the markdown body are never touched.
     let contentWithoutFrontmatter = content;
-    const frontmatterRegex = /^---\n[\s\S]*?\n---\n?/;
+    const frontmatterRegex = /^---\r?\n[\s\S]*?\r?\n---\r?\n?/;
     while (frontmatterRegex.test(contentWithoutFrontmatter)) {
       contentWithoutFrontmatter = contentWithoutFrontmatter.replace(frontmatterRegex, "");
     }
