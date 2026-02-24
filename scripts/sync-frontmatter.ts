@@ -38,6 +38,8 @@ interface WorkPositionConfig {
 interface WorkCompanyConfig {
   company: string;
   url?: string;
+  description?: string;
+  logo?: string;
 }
 
 /**
@@ -151,6 +153,14 @@ function generateWorkCompanyFrontmatter(config: WorkCompanyConfig): string {
 
   if (config.url) {
     lines.push(`url: "${config.url}"`);
+  }
+
+  if (config.logo) {
+    lines.push(`logo: "${config.logo}"`);
+  }
+
+  if (config.description) {
+    lines.push(`description: "${config.description}"`);
   }
 
   lines.push("---");
