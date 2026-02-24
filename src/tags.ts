@@ -25,7 +25,7 @@ export const FLASK = "Flask";
 
 // Databases
 export const MONGODB = "MongoDB";
-export const POSTGRESQL = "PostgreSQL";
+export const FIRESTORE = "Firestore";
 export const MARIADB = "MariaDB";
 
 // IoT & Hardware

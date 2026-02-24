@@ -6,12 +6,12 @@ export const config: WorkPositionConfig = {
   dateStart: new Date("2025-02-15"),
   dateEnd: new Date("2026-02-28"),
   description:
-    "Full-stack development for a SaaS platform serving martial arts academies, working with Flutter (mobile), NestJS/TypeScript (backend), and PostgreSQL.",
+    "Full-stack development for a SaaS platform serving martial arts academies, working with Flutter (mobile), NestJS/TypeScript (backend), and Firestore.",
   tags: [
     TAGS.FLUTTER,
     TAGS.NESTJS,
     TAGS.TYPESCRIPT,
-    TAGS.POSTGRESQL,
+    TAGS.FIRESTORE,
     TAGS.FULL_STACK,
   ],
 } as const;
