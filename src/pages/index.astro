@@ -117,10 +117,10 @@ const SHOW_TABLE_HEADERS = false; // Toggle to show/hide column headers on homep
       <section class="animate space-y-3">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
           <h5 class="font-semibold text-slate-dark dark:text-ivory-light">
-            Featured posts
+            Featured projects
           </h5>
-          <Link href="/blog">
-            See all posts
+          <Link href="/projects">
+            See all projects
           </Link>
         </div>
         <div data-hover-table class="relative flex flex-col">
@@ -128,12 +128,12 @@ const SHOW_TABLE_HEADERS = false; // Toggle to show/hide column headers on homep
             <div class="grid grid-cols-[4rem_1fr_auto] gap-x-4 border-b border-cloud-medium/20 dark:border-cloud-medium/10 pb-1.5 mb-1 px-2">
               <span class="text-xs text-cloud-dark dark:text-cloud-light">year</span>
               <span class="text-xs text-cloud-dark dark:text-cloud-light">title</span>
-              <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">read</span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">links</span>
             </div>
           )}
           <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
-          {blog.map(post => (
-            <BlogCard entry={post} readingTimeStr={readingTime(post.body ?? "")} showYear />
+          {projects.map(project => (
+            <ProjectCard entry={project} />
           ))}
         </div>
       </section>
@@ -193,6 +193,30 @@ const SHOW_TABLE_HEADERS = false; // Toggle to show/hide column headers on homep
         </ul>
       </section>
 
+      <section class="animate space-y-3">
+        <div class="flex flex-wrap gap-y-2 items-center justify-between">
+          <h5 class="font-semibold text-slate-dark dark:text-ivory-light">
+            Featured posts
+          </h5>
+          <Link href="/blog">
+            See all posts
+          </Link>
+        </div>
+        <div data-hover-table class="relative flex flex-col">
+          {SHOW_TABLE_HEADERS && (
+            <div class="grid grid-cols-[4rem_1fr_auto] gap-x-4 border-b border-cloud-medium/20 dark:border-cloud-medium/10 pb-1.5 mb-1 px-2">
+              <span class="text-xs text-cloud-dark dark:text-cloud-light">year</span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light">title</span>
+              <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">read</span>
+            </div>
+          )}
+          <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
+          {blog.map(post => (
+            <BlogCard entry={post} readingTimeStr={readingTime(post.body ?? "")} showYear />
+          ))}
+        </div>
+      </section>
+
       <section class="animate space-y-4">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
           <h5 class="font-semibold text-slate-dark dark:text-ivory-light">
@@ -227,30 +251,6 @@ const SHOW_TABLE_HEADERS = false; // Toggle to show/hide column headers on homep
                 {count}
               </span>
             </a>
-          ))}
-        </div>
-      </section>
-
-      <section class="animate space-y-3">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-slate-dark dark:text-ivory-light">
-            Featured projects
-          </h5>
-          <Link href="/projects">
-            See all projects
-          </Link>
-        </div>
-        <div data-hover-table class="relative flex flex-col">
-          {SHOW_TABLE_HEADERS && (
-            <div class="grid grid-cols-[4rem_1fr_auto] gap-x-4 border-b border-cloud-medium/20 dark:border-cloud-medium/10 pb-1.5 mb-1 px-2">
-              <span class="text-xs text-cloud-dark dark:text-cloud-light">year</span>
-              <span class="text-xs text-cloud-dark dark:text-cloud-light">title</span>
-              <span class="text-xs text-cloud-dark dark:text-cloud-light text-right">links</span>
-            </div>
-          )}
-          <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
-          {projects.map(project => (
-            <ProjectCard entry={project} />
           ))}
         </div>
       </section>
