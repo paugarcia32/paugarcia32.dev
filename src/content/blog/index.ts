@@ -4,6 +4,7 @@
  */
 
 // Import all blog post configs (default exports)
+import dualBootUbuntuWindows from "./dual-boot-ubuntu-windows/config";
 import introductionToEmbeddedSystems from "./introduction-to-embedded-systems/config";
 import sixMonthsLesson from "./six-moths-of-lesson/config";
 
@@ -14,6 +15,7 @@ import sixMonthsLesson from "./six-moths-of-lesson/config";
 export const blogPosts = {
   sixMonthsLesson,
   introductionToEmbeddedSystems,
+  dualBootUbuntuWindows,
 } as const;
 
 export type BlogPostKey = keyof typeof blogPosts;

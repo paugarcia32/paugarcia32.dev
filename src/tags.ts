@@ -66,6 +66,10 @@ export const DEVELOPMENT = "development";
 // Tools
 export const POWER_BI = "Power BI";
 
+// Operating Systems
+export const LINUX = "Linux";
+export const WINDOWS = "Windows";
+
 // Derive Tag type from the exported constants — stays in sync automatically
 // when new constants are added.
 type StringValues<T> = {
