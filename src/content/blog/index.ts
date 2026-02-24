@@ -4,6 +4,7 @@
  */
 
 // Import all blog post configs (default exports)
+import introductionToEmbeddedSystems from "./introduction-to-embedded-systems/config";
 import sixMonthsLesson from "./six-moths-of-lesson/config";
 
 /**
@@ -12,6 +13,7 @@ import sixMonthsLesson from "./six-moths-of-lesson/config";
  */
 export const blogPosts = {
   sixMonthsLesson,
+  introductionToEmbeddedSystems,
 } as const;
 
 export type BlogPostKey = keyof typeof blogPosts;

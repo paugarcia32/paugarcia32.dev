@@ -11,7 +11,7 @@ import type * as Types from "@types";
  * All imports have full autocomplete and type checking!
  */
 export const HOMEPAGE: Types.Showcase = {
-  blog: [blogPosts.sixMonthsLesson],
+  blog: [blogPosts.sixMonthsLesson, blogPosts.introductionToEmbeddedSystems],
   projects: [projects.iotOpenPlatform, projects.eetacGo],
   work: [{ company: companies.maat.companyConfig.company, limit: 2 }],
 };
