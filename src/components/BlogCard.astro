@@ -5,20 +5,26 @@ import { normalizeEntryId, readingTime } from "@lib/utils";
 type Props = {
   entry: CollectionEntry<"blog">;
   readingTimeStr?: string;
+  showYear?: boolean;
 };
 
-const { entry, readingTimeStr } = Astro.props;
+const { entry, readingTimeStr, showYear = false } = Astro.props;
 const href = `/blog/${normalizeEntryId(entry)}`;
 ---
 
 <a
   href={href}
   data-hover-row
-  class="relative grid grid-cols-[4rem_1fr_auto] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
+  class:list={[
+    "relative grid gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5",
+    showYear ? "grid-cols-[4rem_1fr_auto]" : "grid-cols-[1fr_auto]",
+  ]}
 >
-  <span class="text-xs text-cloud-dark dark:text-cloud-light tabular-nums">
-    {entry.data.date.getFullYear()}
-  </span>
+  {showYear && (
+    <span class="text-xs text-cloud-dark dark:text-cloud-light tabular-nums">
+      {entry.data.date.getFullYear()}
+    </span>
+  )}
   <span class="text-sm font-medium truncate">
     {entry.data.title}
   </span>

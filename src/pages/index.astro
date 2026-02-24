@@ -133,7 +133,7 @@ const SHOW_TABLE_HEADERS = false; // Toggle to show/hide column headers on homep
           )}
           <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
           {blog.map(post => (
-            <BlogCard entry={post} readingTimeStr={readingTime(post.body ?? "")} />
+            <BlogCard entry={post} readingTimeStr={readingTime(post.body ?? "")} showYear />
           ))}
         </div>
       </section>
