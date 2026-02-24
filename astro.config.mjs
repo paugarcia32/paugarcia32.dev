@@ -8,7 +8,7 @@ import nanoDark from "./src/lib/shiki-theme-dark.json";
 import nanoLight from "./src/lib/shiki-theme-light.json";
 
 export default defineConfig({
-  site: "https://astro-nano-demo.vercel.app",
+  site: "https://paugarcia32.dev",
   markdown: {
     shikiConfig: {
       themes: {
