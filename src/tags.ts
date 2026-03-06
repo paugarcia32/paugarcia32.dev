@@ -23,6 +23,11 @@ export const EXPRESS = "Express.js";
 export const NESTJS = "NestJS";
 export const FLASK = "Flask";
 
+// Backend & Architecture
+export const BACKEND = "Backend";
+export const REST_API = "REST API";
+export const SYSTEM_DESIGN = "System Design";
+
 // Databases
 export const MONGODB = "MongoDB";
 export const FIRESTORE = "Firestore";

@@ -6,6 +6,7 @@
 // Import all blog post configs (default exports)
 import dualBootUbuntuWindows from "./dual-boot-ubuntu-windows/config";
 import introductionToEmbeddedSystems from "./introduction-to-embedded-systems/config";
+import restApiDesign from "./rest-api-design/config";
 import sixMonthsLesson from "./six-moths-of-lesson/config";
 
 /**
@@ -13,6 +14,7 @@ import sixMonthsLesson from "./six-moths-of-lesson/config";
  * Use these in showcases for autocomplete and type checking
  */
 export const blogPosts = {
+  restApiDesign,
   sixMonthsLesson,
   introductionToEmbeddedSystems,
   dualBootUbuntuWindows,
