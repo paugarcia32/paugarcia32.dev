@@ -128,7 +128,7 @@ import Timeline from "../../../components/Timeline.astro";
 
 ## Heading Levels
 
-All headings in content files must start at `##` (h2). Never use `#` (h1) in body content — the page title from frontmatter serves as the h1.
+All headings in content files must start at `##` (h2). Never use `#` (h1) in body content. The page title from frontmatter serves as the h1.
 
 ```markdown
 ## Project Overview   ✓
@@ -141,12 +141,12 @@ All headings in content files must start at `##` (h2). Never use `#` (h1) in bod
 
 For consistency, project pages follow this section order:
 
-1. **Project Overview** — What it is, what it does, and context (team size, event, timeframe)
-2. **My Role** — Specific responsibilities within the project
-3. **Design Process** — Use `<Timeline>` for step-by-step breakdown
-4. **Features** — Use `<FeatureGrid>` for feature listing
-5. **Tech Stack** — Markdown table: Layer | Technology
-6. **Conclusions** — What the project taught, what the outcome was
+1. **Project Overview**: what it is, what it does, and context (team size, event, timeframe)
+2. **My Role**: specific responsibilities within the project
+3. **Design Process**: use `<Timeline>` for step-by-step breakdown
+4. **Features**: use `<FeatureGrid>` for feature listing
+5. **Tech Stack**: markdown table with Layer | Technology columns
+6. **Conclusions**: what the project taught, what the outcome was
 
 Not all sections are required. Skip sections that add no real information.
 
@@ -183,18 +183,17 @@ Brevity is valued, but never at the cost of clarity or correctness.
 
 ### Punctuation: no em dashes
 
-Do not use the em dash character (`—`) as a parenthetical separator inside sentences.
+Do not use the em dash character (`—`) anywhere in body prose. This includes parenthetical uses, transitions, elaborations, and any other mid-sentence role. Replace it with a period, comma, colon, or restructured sentence.
 
 Wrong:
 > The project was built during **HackUPC** — a 36-hour hackathon — by a team of 4 members.
+> It covers resources, verbs, and status codes — enough for a well-behaved API.
 
 Correct:
 > The project was built during **HackUPC**, a 36-hour hackathon, by a team of 4 members.
+> It covers resources, verbs, and status codes: enough for a well-behaved API.
 
-Or restructure:
-> Four people built the project during HackUPC, a 36-hour hackathon.
-
-Em dashes in Timeline titles (e.g. `"Step 1 — Problem Definition"`) are a visual formatting convention and are allowed there.
+The only exception is Timeline component titles (e.g. `"Step 1 — Problem Definition"`), where it is a visual formatting convention.
 
 ### AI writing patterns to avoid
 
@@ -219,7 +218,7 @@ Be specific, not grandiose. Instead of "a robust, cutting-edge AI system," write
 - [ ] Tags exist in `src/tags.ts`
 - [ ] `draft: true` is set if the entry is not ready to publish
 - [ ] MDX components are imported after the frontmatter block
-- [ ] All headings use `##` or deeper — never `#` in body content
+- [ ] All headings use `##` or deeper (never `#` in body content)
 - [ ] No em dashes used as parenthetical separators in body text
 - [ ] Active voice used throughout
 - [ ] No puffery or AI-pattern vocabulary
