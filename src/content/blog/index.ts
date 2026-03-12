@@ -8,12 +8,14 @@ import dualBootUbuntuWindows from "./dual-boot-ubuntu-windows/config";
 import introductionToEmbeddedSystems from "./introduction-to-embedded-systems/config";
 import restApiDesign from "./rest-api-design/config";
 import sixMonthsLesson from "./six-moths-of-lesson/config";
+import vectorDatabases from "./vector-databases/config";
 
 /**
  * Type-safe blog post references
  * Use these in showcases for autocomplete and type checking
  */
 export const blogPosts = {
+  vectorDatabases,
   restApiDesign,
   sixMonthsLesson,
   introductionToEmbeddedSystems,

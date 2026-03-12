@@ -29,6 +29,7 @@ export const REST_API = "REST API";
 export const SYSTEM_DESIGN = "System Design";
 
 // Databases
+export const DATABASES = "Databases";
 export const MONGODB = "MongoDB";
 export const FIRESTORE = "Firestore";
 export const MARIADB = "MariaDB";
