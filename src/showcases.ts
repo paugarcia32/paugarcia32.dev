@@ -14,7 +14,7 @@ export const HOMEPAGE: Types.Showcase = {
   blog: [
     blogPosts.vectorDatabases,
     blogPosts.restApiDesign,
-    blogPosts.sixMonthsLesson,
+    // blogPosts.sixMonthsLesson,
   ],
   projects: [projects.iotOpenPlatform, projects.eetacGo],
   work: [{ company: companies.maat.companyConfig.company, limit: 2 }],

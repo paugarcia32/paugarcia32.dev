@@ -4,7 +4,6 @@ description: "How vector databases store and search unstructured data using embe
 date: "Mar 12, 2026"
 tags: ["AI", "System Design", "Databases"]
 ---
-
 Relational databases handle structured data well. When the data is unstructured, images, audio, or text, they start to break down. A query like `WHERE tag = 'sunset'` cannot find images with similar color palettes. It finds images someone manually tagged as "sunset". This is the semantic gap: the distance between how computers store data and how humans understand it.
 
 Vector databases close that gap.

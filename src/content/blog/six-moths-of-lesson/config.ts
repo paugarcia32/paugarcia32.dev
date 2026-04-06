@@ -7,7 +7,7 @@ export default {
     title: "Six Months of Lessons",
     description: "What a 'Three-Week' Redesign Actually Taught Us",
     date: new Date("2026-01-18"),
-    draft: false,
+    draft: true,
     tags: [TAGS.PROJECT_MANAGEMENT, TAGS.LESSONS_LEARNED, TAGS.DEVELOPMENT],
   },
 } as const satisfies BlogPostReference;

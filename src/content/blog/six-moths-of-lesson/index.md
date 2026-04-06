@@ -2,6 +2,7 @@
 title: "Six Months of Lessons"
 description: "What a 'Three-Week' Redesign Actually Taught Us"
 date: "Jan 18, 2026"
+draft: true
 tags: ["project-management", "lessons-learned", "development"]
 ---
 Over the past six months, we worked on a large project: redesigning our mobile application.
