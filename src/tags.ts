@@ -22,17 +22,21 @@ export const UNITY = "Unity";
 export const EXPRESS = "Express.js";
 export const NESTJS = "NestJS";
 export const FLASK = "Flask";
+export const NODEJS = "NodeJs";
+export const LAMBDAS = "Lambdas";
 
 // Backend & Architecture
 export const BACKEND = "Backend";
 export const REST_API = "REST API";
 export const SYSTEM_DESIGN = "System Design";
+export const AWS = "AWS";
 
 // Databases
 export const DATABASES = "Databases";
 export const MONGODB = "MongoDB";
 export const FIRESTORE = "Firestore";
 export const MARIADB = "MariaDB";
+export const POSTGRESQL = "PostgreSQL";
 
 // IoT & Hardware
 export const IOT = "IoT";

@@ -17,7 +17,7 @@ export const HOMEPAGE: Types.Showcase = {
     // blogPosts.sixMonthsLesson,
   ],
   projects: [projects.iotOpenPlatform, projects.eetacGo],
-  work: [{ company: companies.maat.companyConfig.company, limit: 2 }],
+  work: [{ company: companies.brickken.companyConfig.company, limit: 2 }],
 };
 
 /**

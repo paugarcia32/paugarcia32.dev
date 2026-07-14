@@ -8,6 +8,10 @@ import { config as maatCompanyConfig } from "./maat/company";
 import { config as maatInternConfig } from "./maat/intern";
 import { config as maatJuniorConfig } from "./maat/junior-engineer";
 
+// Import Brickken configs
+import { config as brickkenCompanyConfig } from "./brickken/company";
+import { config as brickkenSoftwareEngineerConfig } from "./brickken/software-engineer";
+
 // Import Marsh McLennan configs
 import { config as marshCompanyConfig } from "./marsh-mclennan/company";
 import { config as marshInternConfig } from "./marsh-mclennan/cybersecurity-intern";
@@ -17,6 +21,17 @@ import { config as marshInternConfig } from "./marsh-mclennan/cybersecurity-inte
  * Use these in showcases for autocomplete and type checking
  */
 export const companies = {
+  brickken: {
+    slug: "brickken",
+    companyConfig: brickkenCompanyConfig,
+    positions: {
+      softwareEngineer: {
+        slug: "software-engineer",
+        config: brickkenSoftwareEngineerConfig,
+      },
+    },
+  },
+
   maat: {
     slug: "maat",
     companyConfig: maatCompanyConfig,
