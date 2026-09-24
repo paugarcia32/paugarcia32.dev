@@ -5,15 +5,15 @@ import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
 import { WORK } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
+import { getVisibleProjects, validateWorkReferences } from "@lib/content";
 import { dateRange, groupPositionsByCompany, normalizeEntryId } from "@lib/utils";
 
 // Get all work entries (positions and company metadata)
 const allWork = await getCollection("work");
 
 // Get all non-draft projects (drafts should never appear in work page)
-const allProjects = await getCollection("projects", ({ data }) => {
-  return data.draft !== true;
-});
+const allProjects = await getVisibleProjects();
+validateWorkReferences(await getCollection("projects"), allWork);
 
 // Group and sort
 const work = groupPositionsByCompany(allWork);
@@ -28,7 +28,7 @@ const work = groupPositionsByCompany(allWork);
       <ul class="flex flex-col space-y-8">
         {
           work.map((entry) => (
-            <li class="animate">
+            <li id={entry.slug} class="animate">
               <div class="text-sm opacity-75">{entry.totalDuration}</div>
               <CompanyCard
                 company={entry.company}

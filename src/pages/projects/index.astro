@@ -1,14 +1,13 @@
 ---
-import { getCollection } from "astro:content";
 import Container from "@components/Container.astro";
 import FilterDropdown from "@components/FilterDropdown.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import { PROJECTS } from "@consts";
 import PageLayout from "@layouts/PageLayout.astro";
+import { getVisibleProjects } from "@lib/content";
 import { normalizeEntryId, slugifyTag } from "@lib/utils";
 
-const projects = (await getCollection("projects"))
-  .filter((project) => !project.data.draft)
+const projects = (await getVisibleProjects())
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const projectUrls = projects.map((project) => `/projects/${normalizeEntryId(project)}`);
@@ -57,7 +56,7 @@ const allTags = Array.from(tagMap.entries()).sort((a, b) => a[1].localeCompare(b
           <div
             data-project-id={normalizeEntryId(project)}
             data-project-tags={(project.data.tags ?? []).map(slugifyTag).join(",")}
-            data-project-year={project.data.date.getFullYear()}
+            data-project-date={project.data.date.getTime()}
           >
             <ProjectCard entry={project} />
           </div>
@@ -128,8 +127,8 @@ const allTags = Array.from(tagMap.entries()).sort((a, b) => a[1].localeCompare(b
       }
 
       const sorted = [...items].sort((a, b) => {
-        const ya = parseInt(a.dataset.projectYear ?? "0");
-        const yb = parseInt(b.dataset.projectYear ?? "0");
+         const ya = Number(a.dataset.projectDate ?? "0");
+         const yb = Number(b.dataset.projectDate ?? "0");
         return sortAsc ? ya - yb : yb - ya;
       });
       for (const item of sorted) list!.appendChild(item);

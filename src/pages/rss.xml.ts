@@ -1,18 +1,15 @@
-import { getCollection } from "astro:content";
 import rss from "@astrojs/rss";
 import { HOME } from "@consts";
 import { normalizeEntryId } from "@lib/utils";
+import { getVisibleBlog, getVisibleProjects } from "@lib/content";
 
 type Context = {
   site: string;
 };
 
 export async function GET(context: Context) {
-  const blog = (await getCollection("blog")).filter((post) => !post.data.draft);
-
-  const projects = (await getCollection("projects")).filter(
-    (project) => !project.data.draft,
-  );
+  const blog = await getVisibleBlog();
+  const projects = await getVisibleProjects();
 
   const items = [...blog, ...projects].sort(
     (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),

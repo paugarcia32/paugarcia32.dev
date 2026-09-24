@@ -9,10 +9,10 @@ import LinkedInCard from "@components/LinkedInCard.astro";
 import ProfileCard from "@components/ProfileCard.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import { HOME, SITE, SOCIALS } from "@consts";
+import { getVisibleBlog, getVisibleProjects } from "@lib/content";
 import PageLayout from "@layouts/PageLayout.astro";
 import {
   dateRange,
-  formatDate,
   getAllTags,
   getContentByTag,
   getCurrentPosition,
@@ -20,12 +20,10 @@ import {
   getShowcasedWork,
   readingTime,
 } from "@lib/utils";
-import { HOMEPAGE } from "@showcases";
+import { CV, HOMEPAGE } from "@showcases";
 
-const allBlog = (await getCollection("blog")).filter((p) => !p.data.draft);
-const allProjects = (await getCollection("projects")).filter(
-  (p) => !p.data.draft,
-);
+const allBlog = await getVisibleBlog();
+const allProjects = await getVisibleProjects();
 const allWork = await getCollection("work");
 
 const currentPosition = getCurrentPosition(allWork);
@@ -48,6 +46,9 @@ const topTags = Array.from(allTags.entries())
 const blog = getShowcasedContent(allBlog, HOMEPAGE.blog);
 const projects = getShowcasedContent(allProjects, HOMEPAGE.projects);
 const work = getShowcasedWork(allWork, HOMEPAGE.work);
+// Validate future showcases too, even when they are not rendered yet.
+getShowcasedContent(allProjects, CV.projects);
+getShowcasedWork(allWork, CV.work);
 
 const SHOW_TABLE_HEADERS = false; // Toggle to show/hide column headers on homepage tables
 ---

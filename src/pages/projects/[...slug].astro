@@ -8,11 +8,11 @@ import Link from "@components/Link.astro";
 import LatestGitHubRelease from "@components/LatestGitHubRelease.astro";
 import TagList from "@components/TagList.astro";
 import PageLayout from "@layouts/PageLayout.astro";
+import { getVisibleBlog, getVisibleProjects, validateWorkReferences } from "@lib/content";
 import { getContentByTag, getWorkPositionById, normalizeEntryId, readingTime } from "@lib/utils";
 
 export async function getStaticPaths() {
-  const projects = (await getCollection("projects"))
-    .filter((post) => !post.data.draft)
+  const projects = (await getVisibleProjects())
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   return projects.map((project) => ({
     params: { slug: normalizeEntryId(project) },
@@ -25,19 +25,16 @@ const project = Astro.props;
 const { Content } = await render(project);
 
 // Get related content based on first tag
-const allBlog = await getCollection("blog", ({ data }) => {
-  return import.meta.env.PROD ? data.draft !== true : true;
-});
-const allProjects = await getCollection("projects", ({ data }) => {
-  return import.meta.env.PROD ? data.draft !== true : true;
-});
+const allBlog = await getVisibleBlog();
+const allProjects = await getVisibleProjects();
 const allWork = await getCollection("work");
+validateWorkReferences(await getCollection("projects"), allWork);
 
 const relatedContent =
   project.data.tags && project.data.tags.length > 0
     ? getContentByTag(project.data.tags[0], allBlog, allProjects, allWork)
         .filter(
-          (item) => normalizeEntryId(item.entry) !== normalizeEntryId(project),
+          (item) => item.type !== "project" || item.entry.id !== project.id,
         )
         .slice(0, 3)
     : [];
@@ -125,11 +122,11 @@ const linkedPosition = project.data.workPosition
             if (item.type === "blog" || item.type === "project") {
               return (
                 <li>
-                  <ArrowCard entry={item.entry as any} />
+                   <ArrowCard entry={item.entry} />
                 </li>
               );
             } else {
-              const workEntry = item.entry as any;
+               const workEntry = item.entry;
               return (
                 <li>
                   <a

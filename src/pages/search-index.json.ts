@@ -1,5 +1,6 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import { getAllTags, normalizeEntryId } from "@lib/utils";
+import { getVisibleBlog, getVisibleProjects } from "@lib/content";
 import type { APIRoute } from "astro";
 
 interface SearchItem {
@@ -40,9 +41,7 @@ export const GET: APIRoute = async () => {
   const searchItems: SearchItem[] = [];
 
   // Get all blog posts (exclude drafts)
-  const blogPosts = await getCollection("blog", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
+  const blogPosts = await getVisibleBlog();
 
   for (const post of blogPosts) {
     searchItems.push({
@@ -58,9 +57,7 @@ export const GET: APIRoute = async () => {
   }
 
   // Get all projects (exclude drafts)
-  const projects = await getCollection("projects", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
+  const projects = await getVisibleProjects();
 
   for (const project of projects) {
     searchItems.push({

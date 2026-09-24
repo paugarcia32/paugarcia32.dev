@@ -7,11 +7,11 @@ import FormattedDate from "@components/FormattedDate.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import TagList from "@components/TagList.astro";
 import PageLayout from "@layouts/PageLayout.astro";
+import { getVisibleBlog, getVisibleProjects } from "@lib/content";
 import { getContentByTag, normalizeEntryId, readingTime } from "@lib/utils";
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("blog"))
-    .filter((post) => !post.data.draft)
+  const posts = (await getVisibleBlog())
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   return posts.map((post) => ({
     params: { slug: normalizeEntryId(post) },
@@ -24,19 +24,15 @@ const post = Astro.props;
 const { Content, headings } = await render(post);
 
 // Get related content based on first tag
-const allBlog = await getCollection("blog", ({ data }) => {
-  return import.meta.env.PROD ? data.draft !== true : true;
-});
-const allProjects = await getCollection("projects", ({ data }) => {
-  return import.meta.env.PROD ? data.draft !== true : true;
-});
+const allBlog = await getVisibleBlog();
+const allProjects = await getVisibleProjects();
 const allWork = await getCollection("work");
 
 const relatedContent =
   post.data.tags && post.data.tags.length > 0
     ? getContentByTag(post.data.tags[0], allBlog, allProjects, allWork)
         .filter(
-          (item) => normalizeEntryId(item.entry) !== normalizeEntryId(post),
+          (item) => item.type !== "blog" || item.entry.id !== post.id,
         )
         .slice(0, 3)
     : [];
@@ -88,11 +84,11 @@ const relatedContent =
             if (item.type === "blog" || item.type === "project") {
               return (
                 <li>
-                  <ArrowCard entry={item.entry as any} />
+                   <ArrowCard entry={item.entry} />
                 </li>
               );
             } else {
-              const workEntry = item.entry as any;
+               const workEntry = item.entry;
               return (
                 <li>
                   <a

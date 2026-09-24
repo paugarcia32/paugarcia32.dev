@@ -1,18 +1,14 @@
 ---
 import { getCollection } from "astro:content";
 import Container from "@components/Container.astro";
-import Link from "@components/Link.astro";
 import PageLayout from "@layouts/PageLayout.astro";
-import { dateRange, formatDate, getAllTags, getContentByTag } from "@lib/utils";
+import { getVisibleBlog, getVisibleProjects } from "@lib/content";
+import { getAllTags, getContentByTag, normalizeEntryId } from "@lib/utils";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async () => {
-  const blogPosts = await getCollection("blog", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-  const projects = await getCollection("projects", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
+  const blogPosts = await getVisibleBlog();
+  const projects = await getVisibleProjects();
   const allWork = await getCollection("work");
 
   const allTags = getAllTags(blogPosts, projects, allWork);
@@ -49,10 +45,10 @@ const workContent = taggedContent.filter((item) => item.type === "work");
           <div data-hover-table class="relative flex flex-col">
             <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
             {blogContent.map((item) => {
-              const entry = item.entry as any;
+               const entry = item.entry;
               return (
                 <a
-                  href={`/blog/${entry.id}`}
+                   href={`/blog/${normalizeEntryId(entry)}`}
                   data-hover-row
                   class="relative grid grid-cols-[4rem_1fr] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
                 >
@@ -75,10 +71,10 @@ const workContent = taggedContent.filter((item) => item.type === "work");
           <div data-hover-table class="relative flex flex-col">
             <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
             {projectContent.map((item) => {
-              const entry = item.entry as any;
+               const entry = item.entry;
               return (
                 <a
-                  href={`/projects/${entry.id}`}
+                   href={`/projects/${normalizeEntryId(entry)}`}
                   data-hover-row
                   class="relative grid grid-cols-[4rem_1fr] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
                 >
@@ -101,7 +97,7 @@ const workContent = taggedContent.filter((item) => item.type === "work");
           <div data-hover-table class="relative flex flex-col">
             <div data-hover-highlight class="pointer-events-none absolute left-0 right-0 rounded-md bg-cloud-medium/10 dark:bg-cloud-medium/10 opacity-0" style="height: 0px; top: 0px;"></div>
             {workContent.map((item) => {
-              const position = item.entry as any;
+               const position = item.entry;
               const companyFolder = position.id.split("/")[0];
               const companyEntry = allWork.find(
                 (e) => e.id.startsWith(companyFolder + "/") && e.data.type === "company"
@@ -112,7 +108,7 @@ const workContent = taggedContent.filter((item) => item.type === "work");
                   : companyFolder;
               return (
                 <a
-                  href="/work"
+                   href={`/work#${companyFolder}`}
                   data-hover-row
                   class="relative grid grid-cols-[4rem_1fr_auto] gap-x-4 items-baseline py-2 px-2 border-b border-cloud-medium/10 dark:border-cloud-medium/5"
                 >

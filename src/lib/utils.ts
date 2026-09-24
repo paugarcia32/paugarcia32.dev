@@ -19,15 +19,6 @@ export function normalizeEntryId(entry: { id: string }): string {
 // Date parsing and formatting utilities
 
 /**
- * Parse a date string in dd/mm/yyyy format to a Date object
- * Used by content collections for work experience dates
- */
-export function parseDDMMYYYY(dateString: string): Date {
-  const [day, month, year] = dateString.split("/").map(Number);
-  return new Date(year, month - 1, day);
-}
-
-/**
  * Format a Date object to dd/mm/yyyy format
  * Example: 15/02/2026
  */
@@ -135,7 +126,12 @@ export type WorkPosition = CollectionEntry<"work"> & {
   data: { type: "position" };
 };
 
+export function isWorkPosition(entry: CollectionEntry<"work">): entry is WorkPosition {
+  return entry.data.type === "position";
+}
+
 export interface CompanyWithPositions {
+  slug: string;
   company: string;
   url?: string;
   description?: string;
@@ -149,9 +145,7 @@ export function groupPositionsByCompany(
   allWork: CollectionEntry<"work">[],
 ): CompanyWithPositions[] {
   // Separate positions and companies by type
-  const positions = allWork.filter(
-    (entry): entry is WorkPosition => entry.data.type === "position",
-  );
+  const positions = allWork.filter(isWorkPosition);
   const companies = allWork.filter((entry) => entry.data.type === "company");
 
   // Group positions by company folder
@@ -179,6 +173,7 @@ export function groupPositionsByCompany(
       );
 
       return {
+        slug: folder,
         company:
           companyMeta?.data.type === "company"
             ? companyMeta.data.company
@@ -230,6 +225,18 @@ export function slugifyTag(tag: string): string {
     .replace(/[^a-z0-9-]/g, "");
 }
 
+// Fail early if two tag labels would share a URL (or yield an empty URL).
+export function validateTagSlugs(tags: readonly string[]): void {
+  const seen = new Set<string>();
+  for (const tag of tags) {
+    const slug = slugifyTag(tag);
+    if (!slug || seen.has(slug)) {
+      throw new Error(`Duplicate or empty tag URL: ${tag}`);
+    }
+    seen.add(slug);
+  }
+}
+
 /**
  * Extracts all unique tags from blog posts, projects, and work positions
  * Returns a Map of slug -> displayName
@@ -273,11 +280,10 @@ export function getAllTags(
   return tagMap;
 }
 
-export interface TaggedContent {
-  type: "blog" | "project" | "work";
-  entry: CollectionEntry<"blog"> | CollectionEntry<"projects"> | WorkPosition;
-  date: Date;
-}
+export type TaggedContent =
+  | { type: "blog"; entry: CollectionEntry<"blog">; date: Date }
+  | { type: "project"; entry: CollectionEntry<"projects">; date: Date }
+  | { type: "work"; entry: WorkPosition; date: Date };
 
 /**
  * Filters all content that has a specific tag
@@ -322,10 +328,10 @@ export function getContentByTag(
 
   // Filter work positions
   for (const entry of work) {
-    if (entry.data.type === "position" && hasTag(entry.data.tags)) {
+    if (isWorkPosition(entry) && hasTag(entry.data.tags)) {
       results.push({
         type: "work",
-        entry: entry as WorkPosition,
+        entry,
         date: entry.data.dateStart,
       });
     }
@@ -352,9 +358,7 @@ export function getCurrentPosition(
 ): CurrentPosition | null {
   const now = new Date();
 
-  const positions = allWork.filter(
-    (entry): entry is WorkPosition => entry.data.type === "position",
-  );
+  const positions = allWork.filter(isWorkPosition);
   const companies = allWork.filter((entry) => entry.data.type === "company");
 
   const active = positions.find((p) => {
@@ -390,8 +394,7 @@ export function getWorkPositionById(
   positionId: string,
 ): { position: WorkPosition; companyName: string; companyUrl?: string } | null {
   const position = allWork.find(
-    (e): e is WorkPosition =>
-      e.data.type === "position" && e.id === positionId,
+    (e): e is WorkPosition => isWorkPosition(e) && e.id === positionId,
   );
   if (!position) return null;
 
@@ -412,13 +415,12 @@ export function getWorkPositionById(
 
 /**
  * Get content items based on showcase configuration
- * Filters by slug and handles missing items gracefully
+ * Fails on missing items so broken showcase references cannot ship.
  * Order is determined by array position in showcase
- * Works with both new config.ts system and legacy frontmatter
  */
 export function getShowcasedContent<
   T extends CollectionEntry<"blog" | "projects">,
->(collection: T[], showcase?: Types.ShowcaseItem[]): T[] {
+>(collection: T[], showcase?: readonly string[]): T[] {
   if (!showcase || showcase.length === 0) return [];
 
   const slugMap = new Map(
@@ -426,21 +428,16 @@ export function getShowcasedContent<
   );
 
   return showcase
-    .map(({ slug, config }) => {
+    .map((slug) => {
       const entry = slugMap.get(slug);
-      if (!entry) return null;
-
-      // Check draft status - prefer config.ts over frontmatter
-      const isDraft = config?.draft ?? entry.data.draft ?? false;
-
-      return isDraft ? null : entry;
-    })
-    .filter((entry): entry is T => entry !== null);
+      if (!entry) throw new Error(`Missing or unpublished showcase entry: ${slug}`);
+      return entry;
+    });
 }
 
 /**
  * Get work companies based on showcase configuration
- * Supports filtering by company name and limiting positions
+ * Supports filtering by company slug and limiting positions
  * Order is determined by array position in showcase
  */
 export function getShowcasedWork(
@@ -454,9 +451,9 @@ export function getShowcasedWork(
   return showcase
     .map((item) => {
       const company = allCompanies.find(
-        (c) => c.company.toLowerCase() === item.company.toLowerCase(),
+        (c) => c.slug === item.slug,
       );
-      if (!company) return null;
+      if (!company) throw new Error(`Missing showcase company: ${item.slug}`);
 
       if (item.limit && company.sortedPositions.length > item.limit) {
         return {
@@ -465,6 +462,5 @@ export function getShowcasedWork(
         };
       }
       return company;
-    })
-    .filter((item): item is CompanyWithPositions => item !== null);
+    });
 }

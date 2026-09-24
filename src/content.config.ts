@@ -1,45 +1,47 @@
 import { defineCollection } from "astro:content";
-import { parseDDMMYYYY } from "@lib/utils";
 import * as TAGS from "@tags";
+import type { Tag } from "@tags";
+import { validateTagSlugs } from "@lib/utils";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
-import { companies } from "./content/work/index";
 
 // Derive Zod enum from tags.ts — adding a tag constant there automatically
 // makes it valid in frontmatter. astro check will fail on unknown tags.
-const tagValues = Object.values(TAGS).filter(
-  (v) => typeof v === "string",
-) as string[];
-const tagEnum = z.enum(tagValues as [string, ...string[]]);
-
-// Derive valid work position IDs from companies — stays in sync automatically.
-// Adding a new position to work/index.ts makes it valid here too.
-const workPositionValues = Object.values(companies).flatMap((company) =>
-  Object.values(company.positions).map(
-    (pos) => `${company.slug}/${pos.slug}` as string,
-  ),
-);
-const workPositionEnum = z.enum(workPositionValues as [string, ...string[]]);
+const tagValues = Object.values(TAGS);
+validateTagSlugs(tagValues);
+if (tagValues.length === 0 || new Set(tagValues).size !== tagValues.length) {
+  throw new Error("Tags must have unique values and at least one entry");
+}
+const tagEnum = z.enum(tagValues as [Tag, ...Tag[]]);
 
 // Custom date schema that accepts dd/mm/yyyy format
 const ddmmyyyyDate = z.string().transform((val, ctx) => {
-  try {
-    const date = parseDDMMYYYY(val);
-    if (isNaN(date.getTime())) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Invalid date format. Use dd/mm/yyyy",
-      });
-      return z.NEVER;
+  const match = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(val);
+  if (match) {
+    const [, day, month, year] = match.map(Number);
+    const date = new Date(year, month - 1, day);
+    if (
+      date.getDate() === day &&
+      date.getMonth() === month - 1 &&
+      date.getFullYear() === year
+    ) {
+      return date;
     }
-    return date;
-  } catch {
-    ctx.addIssue({
-      code: "custom",
-      message: "Invalid date format. Use dd/mm/yyyy",
-    });
-    return z.NEVER;
   }
+  ctx.addIssue({ code: "custom", message: "Invalid date. Use dd/mm/yyyy" });
+  return z.NEVER;
+});
+
+const positionSchema = z.object({
+  type: z.literal("position"),
+  role: z.string(),
+  dateStart: ddmmyyyyDate,
+  dateEnd: z.union([ddmmyyyyDate, z.literal("Present")]),
+  description: z.string(),
+  tags: z.array(tagEnum).optional(),
+}).refine((data) => typeof data.dateEnd === "string" || data.dateEnd >= data.dateStart, {
+  message: "End date must not precede start date",
+  path: ["dateEnd"],
 });
 
 const blog = defineCollection({
@@ -48,7 +50,7 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),
-    draft: z.boolean().optional(),
+      draft: z.boolean().default(false),
     tags: z.array(tagEnum).optional(),
   }),
 });
@@ -63,14 +65,7 @@ const work = defineCollection({
       description: z.string().optional(),
       logo: z.string().optional(),
     }),
-    z.object({
-      type: z.literal("position"),
-      role: z.string(),
-      dateStart: ddmmyyyyDate,
-      dateEnd: z.union([ddmmyyyyDate, z.string()]),
-      description: z.string(),
-      tags: z.array(tagEnum).optional(),
-    }),
+      positionSchema,
   ]),
 });
 
@@ -83,11 +78,11 @@ const projects = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),
-    draft: z.boolean().optional(),
+    draft: z.boolean().default(false),
     demoURL: z.url().optional(),
     repoURL: z.url().optional(),
     tags: z.array(tagEnum).optional(),
-    workPosition: workPositionEnum.optional(),
+    workPosition: z.string().regex(/^[a-z0-9-]+\/[a-z0-9-]+$/).optional(),
   }),
 });
 

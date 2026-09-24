@@ -1,30 +1,14 @@
-import { blogPosts } from "@content/blog";
-import { projects } from "@content/projects";
-import { companies } from "@content/work";
-import type * as Types from "@types";
+import type { Showcase } from "@types";
 
-/**
- * Homepage showcase configuration
- * Uses type-safe content references with config.ts files
- * Order is determined by array position
- *
- * All imports have full autocomplete and type checking!
- */
-export const HOMEPAGE: Types.Showcase = {
-  blog: [
-    blogPosts.vectorDatabases,
-    blogPosts.restApiDesign,
-    // blogPosts.sixMonthsLesson,
-  ],
-  projects: [projects.pulseNotch, projects.iotOpenPlatform],
-  work: [{ company: companies.brickken.companyConfig.company, limit: 2 }],
-};
+// Entries are referenced by their content folder, and checked against the
+// collections when the pages are built. Order determines display order.
+export const HOMEPAGE = {
+  blog: ["vector-databases", "rest-api-design"],
+  projects: ["pulse-notch", "iot-open-platform-connectivity-solutions"],
+  work: [{ slug: "brickken", limit: 2 }],
+} satisfies Showcase;
 
-/**
- * CV showcase configuration
- * Add more content when CV page is created
- */
-export const CV: Types.Showcase = {
-  projects: [projects.realTimeSensoringIot],
-  work: [{ company: companies.maat.companyConfig.company }],
-};
+export const CV = {
+  projects: ["real-time-sensoring-iot"],
+  work: [{ slug: "maat" }],
+} satisfies Showcase;

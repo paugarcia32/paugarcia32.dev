@@ -3,17 +3,15 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "dev": "concurrently --names \"ASTRO,WATCH\" --prefix-colors \"cyan,magenta\" \"astro dev\" \"tsx scripts/watch-frontmatter.ts\"",
-    "dev:no-sync": "astro dev",
-    "dev:network": "concurrently --names \"ASTRO,WATCH\" --prefix-colors \"cyan,magenta\" \"astro dev --host\" \"tsx scripts/watch-frontmatter.ts\"",
-    "build": "pnpm sync-frontmatter && astro check && astro build",
+    "dev": "astro dev",
+    "dev:network": "astro dev --host",
+    "build": "astro check && astro build",
     "preview": "astro preview",
     "preview:network": "astro preview --host",
     "astro": "astro",
     "lint": "biome lint .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
-    "sync-frontmatter": "tsx scripts/sync-frontmatter.ts",
     "create-content": "tsx scripts/create-content.ts"
   },
   "dependencies": {
@@ -43,8 +41,6 @@
     "@biomejs/biome": "2.3.15",
     "@inquirer/prompts": "^8.2.1",
     "@types/node": "^25.2.3",
-    "chokidar": "^5.0.0",
-    "concurrently": "^9.2.1",
     "glob": "^13.0.3",
     "tsx": "^4.21.0"
   }

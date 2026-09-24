@@ -1,8 +1,9 @@
 ---
 import { slugifyTag } from "@lib/utils";
+import type { Tag } from "@tags";
 
 type Props = {
-  tags: string[];
+  tags: Tag[];
   class?: string;
   clickable?: boolean;
 };

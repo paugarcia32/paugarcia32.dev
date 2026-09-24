@@ -73,11 +73,11 @@ Recommended extensions (in `.zed/extensions.json`):
 
 ### Content Collections
 
-Three content collections are defined in `src/content/config.ts`:
+Three content collections are defined in `src/content.config.ts`. Frontmatter is the single source of truth; content is discovered automatically:
 
 1. **blog**: Blog posts with title, description, date, and optional draft flag
-2. **work**: Work experience with company, role, dateStart, and dateEnd (date or string)
-3. **projects**: Projects with title, description, date, optional draft, demoURL, and repoURL
+2. **work**: Work experience with company, role, dateStart, and dateEnd (date or "Present")
+3. **projects**: Projects with title, description, date, optional draft, demoURL, repoURL, tags, and workPosition
 
 Content files live in:
 - `src/content/blog/`
@@ -92,6 +92,8 @@ Content files live in:
 - `SOCIALS`: Social media links array
 
 To update site information, edit this file.
+
+Featured entries are selected by content folder slug in `src/showcases.ts`. Tags are defined in `src/tags.ts`; work positions can be linked using `company-slug/position-slug`. Use `pnpm create-content` to generate entries. Do not create separate per-entry TypeScript configs or run frontmatter synchronization.
 
 ### Path Aliases
 
