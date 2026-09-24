@@ -67,3 +67,7 @@ export const HOMEPAGE = {
 - `astro.config.mjs`: site URL and integrations.
 
 The site includes full-text search with Fuse.js, RSS, a sitemap, dark mode and Mermaid diagrams in Markdown/MDX. The production build is static and can be hosted on any static hosting platform; set its build command to `pnpm build` and output directory to `dist`.
+
+## GitHub Pages deployment
+
+`.github/workflows/deploy.yml` builds and deploys `dist/` on pushes to `main`. In the repository's **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions** after pushing the workflow. A branch-based source uses Jekyll and cannot build Astro files. The custom domain is `paugarcia32.dev` (see `public/CNAME`).
