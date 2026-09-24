@@ -1,3 +1,4 @@
+import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
@@ -10,6 +11,7 @@ import nanoLight from "./src/lib/shiki-theme-light.json";
 export default defineConfig({
   site: "https://paugarcia32.dev",
   markdown: {
+    processor: unified(),
     shikiConfig: {
       themes: {
         light: nanoLight,

@@ -1,8 +1,9 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 import { parseDDMMYYYY } from "@lib/utils";
 import * as TAGS from "@tags";
 import { glob } from "astro/loaders";
-import { companies } from "./work/index";
+import { z } from "astro/zod";
+import { companies } from "./content/work/index";
 
 // Derive Zod enum from tags.ts — adding a tag constant there automatically
 // makes it valid in frontmatter. astro check will fail on unknown tags.
@@ -26,7 +27,7 @@ const ddmmyyyyDate = z.string().transform((val, ctx) => {
     const date = parseDDMMYYYY(val);
     if (isNaN(date.getTime())) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: "Invalid date format. Use dd/mm/yyyy",
       });
       return z.NEVER;
@@ -34,7 +35,7 @@ const ddmmyyyyDate = z.string().transform((val, ctx) => {
     return date;
   } catch {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Invalid date format. Use dd/mm/yyyy",
     });
     return z.NEVER;
@@ -58,7 +59,7 @@ const work = defineCollection({
     z.object({
       type: z.literal("company"),
       company: z.string(),
-      url: z.string().url().optional(),
+      url: z.url().optional(),
       description: z.string().optional(),
       logo: z.string().optional(),
     }),
@@ -83,8 +84,8 @@ const projects = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     draft: z.boolean().optional(),
-    demoURL: z.string().url().optional(),
-    repoURL: z.string().url().optional(),
+    demoURL: z.url().optional(),
+    repoURL: z.url().optional(),
     tags: z.array(tagEnum).optional(),
     workPosition: workPositionEnum.optional(),
   }),
