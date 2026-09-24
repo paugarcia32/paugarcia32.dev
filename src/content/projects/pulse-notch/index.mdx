@@ -1,0 +1,45 @@
+---
+title: "Pulse Notch"
+description: "A MacBook notch app for coding agents, GitHub activity, and your next event."
+date: "Jul 27, 2026"
+repoURL: "https://github.com/paugarcia32/pulse-notch"
+tags: ["Swift", "SwiftUI", "macOS"]
+---
+import FeatureGrid from "../../../components/FeatureGrid.astro";
+import PulseNotchDemo from "../../../components/PulseNotchDemo.astro";
+
+## Project Overview
+
+Pulse Notch is a native macOS app that turns the MacBook notch into a compact activity surface. I built it for my own workflow: I wanted to know when a coding agent or GitHub Action finished and keep my next calendar event nearby without adding more notifications. The surface stays small until expanded, and it also works on Macs and external displays without a physical notch.
+
+<PulseNotchDemo />
+
+## Features
+
+<FeatureGrid
+  columns={3}
+  items={[
+    { icon: "cpu-chip", title: "Coding agents", description: "Shows running and recently completed Codex, Claude Code, Cursor Agent, Antigravity, and OpenCode sessions." },
+    { icon: "github", title: "GitHub activity", description: "Tracks pull requests, reviews, checks, and Actions for repositories selected in Settings." },
+    { icon: "calendar", title: "Calendar", description: "Shows upcoming events, meeting links, and configurable reminders." },
+    { icon: "tv", title: "Media controls", description: "Displays artwork and playback progress with Now Playing controls." },
+    { icon: "bolt", title: "System activity", description: "Surfaces downloads, Homebrew operations, charging, volume, and Bluetooth-headphone activity." },
+    { icon: "clock", title: "Timers", description: "Keeps stopwatch and timer activity visible in the notch." },
+  ]}
+/>
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| App and interface | Swift 6, SwiftUI, AppKit |
+| Build and tests | Swift Package Manager, Swift Testing |
+| GitHub integration | Authenticated GitHub CLI (`gh`) |
+
+Domain behavior lives in `PulseNotchCore`, while `PulseNotchApp` contains the macOS interface and integrations. The project uses Swift 6 strict concurrency checking.
+
+## Privacy and Availability
+
+Pulse Notch processes activity locally and includes no telemetry. Agent detection reads process and session metadata rather than conversation contents. GitHub activity uses the authenticated `gh` CLI, and integrations can be disabled individually in Settings.
+
+It runs on macOS 14 Sonoma or newer. Apple Silicon builds are available through [Homebrew](https://github.com/paugarcia32/pulse-notch#installation) and the [latest GitHub release](https://github.com/paugarcia32/pulse-notch/releases/latest).

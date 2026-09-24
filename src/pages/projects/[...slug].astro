@@ -5,6 +5,7 @@ import BackToPrev from "@components/BackToPrev.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
 import Link from "@components/Link.astro";
+import LatestGitHubRelease from "@components/LatestGitHubRelease.astro";
 import TagList from "@components/TagList.astro";
 import PageLayout from "@layouts/PageLayout.astro";
 import { getContentByTag, getWorkPositionById, normalizeEntryId, readingTime } from "@lib/utils";
@@ -98,6 +99,11 @@ const linkedPosition = project.data.workPosition
             </Link>
           )}
         </nav>
+      )}
+      {normalizeEntryId(project) === "pulse-notch" && (
+        <div class="animate text-xs text-cloud-dark dark:text-cloud-light">
+          <LatestGitHubRelease owner="paugarcia32" repo="pulse-notch" />
+        </div>
       )}
       {project.data.tags && project.data.tags.length > 0 && (
         <div class="animate">

@@ -1,0 +1,43 @@
+---
+interface Props {
+  owner: string;
+  repo: string;
+}
+
+const { owner, repo } = Astro.props;
+---
+
+<span data-latest-release data-owner={owner} data-repo={repo} hidden>
+  <a
+    href={`https://github.com/${owner}/${repo}/releases/latest`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="hover:text-slate-dark hover:underline dark:hover:text-ivory-light"
+  ></a>
+</span>
+
+<script>
+  async function loadLatestReleases() {
+    for (const container of document.querySelectorAll<HTMLElement>("[data-latest-release]")) {
+      const { owner, repo } = container.dataset;
+      if (!owner || !repo) continue;
+
+      try {
+        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases/latest`);
+        if (!response.ok) continue;
+
+        const release: { tag_name?: string; html_url?: string } = await response.json();
+        const link = container.querySelector("a");
+        if (!link || !release.tag_name || !release.html_url) continue;
+
+        link.href = release.html_url;
+        link.textContent = `Latest release: ${release.tag_name}`;
+        container.hidden = false;
+      } catch {
+        // Keep the release label hidden if GitHub is unavailable.
+      }
+    }
+  }
+
+  document.addEventListener("astro:page-load", loadLatestReleases);
+</script>

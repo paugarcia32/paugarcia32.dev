@@ -9,6 +9,7 @@ export const JAVASCRIPT = "JavaScript";
 export const TYPESCRIPT = "TypeScript";
 export const JAVA = "Java";
 export const CPP = "C++";
+export const SWIFT = "Swift";
 
 // Frameworks & Libraries - Frontend
 export const REACT = "React";
@@ -17,6 +18,7 @@ export const NEXTJS = "NextJS";
 export const ASTRO = "Astro";
 export const FLUTTER = "Flutter";
 export const UNITY = "Unity";
+export const SWIFTUI = "SwiftUI";
 
 // Frameworks & Libraries - Backend
 export const EXPRESS = "Express.js";
@@ -79,6 +81,7 @@ export const POWER_BI = "Power BI";
 // Operating Systems
 export const LINUX = "Linux";
 export const WINDOWS = "Windows";
+export const MACOS = "macOS";
 
 // Derive Tag type from the exported constants — stays in sync automatically
 // when new constants are added.

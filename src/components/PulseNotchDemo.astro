@@ -1,0 +1,21 @@
+---
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
+const demoPath = "/projects/pulse-notch-demo.gif";
+const hasDemo = existsSync(join(process.cwd(), "public", demoPath));
+---
+
+{hasDemo && (
+  <figure class="not-prose my-8">
+    <img
+      src={demoPath}
+      alt="Pulse Notch showing activity in the MacBook notch"
+      loading="lazy"
+      class="w-full rounded-lg"
+    />
+    <figcaption class="mt-2 text-center text-sm text-cloud-dark dark:text-cloud-light">
+      Pulse Notch in action
+    </figcaption>
+  </figure>
+)}

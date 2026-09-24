@@ -16,7 +16,7 @@ export const HOMEPAGE: Types.Showcase = {
     blogPosts.restApiDesign,
     // blogPosts.sixMonthsLesson,
   ],
-  projects: [projects.iotOpenPlatform, projects.eetacGo],
+  projects: [projects.pulseNotch, projects.iotOpenPlatform],
   work: [{ company: companies.brickken.companyConfig.company, limit: 2 }],
 };
 
